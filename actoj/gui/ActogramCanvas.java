@@ -139,6 +139,8 @@ public class ActogramCanvas extends JComponent
 	public void mouseClicked(MouseEvent e) {
 		start = null;
 		curr = null;
+		if(feedback != null)
+			feedback.periodChanged(getPeriodString());
 		repaint();
 	}
 
