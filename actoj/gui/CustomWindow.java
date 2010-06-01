@@ -64,7 +64,7 @@ public class CustomWindow extends JFrame
 
 	public void setZoom(int zoom) {
 		this.zoomf = zoom;
-		selectionChanged();
+		updateCanvas();
 	}
 
 	public int getPeriodsPerLine() {
@@ -73,7 +73,7 @@ public class CustomWindow extends JFrame
 
 	public void setPeriodsPerLine(int ppl) {
 		this.ppl = ppl;
-		selectionChanged();
+		updateCanvas();
 	}
 
 	public float getUpperLimit() {
@@ -82,7 +82,7 @@ public class CustomWindow extends JFrame
 
 	public void setUpperLimit(float uLimit) {
 		this.uLimit = uLimit;
-		selectionChanged();
+		updateCanvas();
 	}
 
 	public int getNumColumns() {
@@ -91,10 +91,10 @@ public class CustomWindow extends JFrame
 
 	public void setNumColumns(int n) {
 		canvas.setMaxColumns(n);
-		selectionChanged();
+		updateCanvas();
 	}
 
-	public void selectionChanged() {
+	public void updateCanvas() {
 		canvas.clear();
 
 		List<Actogram> selected = tree.getSelected();
@@ -110,6 +110,10 @@ public class CustomWindow extends JFrame
 		invalidate();
 		validateTree();
 		doLayout();
+	}
+
+	public void selectionChanged() {
+		updateCanvas();
 	}
 
 	public void positionChanged(String pos) {
