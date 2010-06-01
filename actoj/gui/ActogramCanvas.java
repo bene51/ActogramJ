@@ -53,10 +53,14 @@ public class ActogramCanvas extends JComponent
 	}
 
 	public TimeInterval getFreerunningPeriod() {
-		int dy = Math.abs(curr.y - start.y) / processor.baselineDist; // in periods
+		if(start == null || curr == null)
+			return null;
+		Point st = upper();
+		Point cu = lower();
+		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
 		if(dy == 0)
 			return null;
-		int dx = Math.abs(curr.x - start.x);
+		int dx = cu.x - st.x;
 
 		long i = processor.downsampled.interval.millis;
 		int spp = processor.downsampled.SAMPLES_PER_PERIOD;
@@ -64,10 +68,8 @@ public class ActogramCanvas extends JComponent
 	}
 
 	public String getPeriodString() {
-		if(start == null || curr == null)
-			return "";
 		TimeInterval tv = getFreerunningPeriod();
-		return tv == null ? null : Float.toString(
+		return tv == null ? "" : Float.toString(
 			tv.intervalIn(processor.downsampled.unit));
 	}
 
@@ -82,19 +84,21 @@ public class ActogramCanvas extends JComponent
 
 
 		if(start != null) {
-			int sIdx = processor.getIndex(start.x, start.y);
+			Point st = upper();
+			Point cu = lower();
+			int sIdx = processor.getIndex(st.x, st.y);
 			if(sIdx < 0) return;
-			int cIdx = processor.getIndex(curr.x, curr.y);
+			int cIdx = processor.getIndex(cu.x, cu.y);
 			if(cIdx < 0) return;
 
 			Graphics2D g2d = (Graphics2D)g;
 			g2d.setColor(color);
 			g2d.setStroke(stroke);
-			g2d.drawLine(start.x, start.y, curr.x,  curr.y);
-			g2d.drawLine(start.x, start.y, start.x, curr.y);
-			g2d.drawLine(start.x, curr.y,  curr.x,  curr.y);
-			int dy = Math.abs(curr.y - start.y) / processor.baselineDist; // in periods
-			int dx = Math.abs(curr.x - start.x);
+			g2d.drawLine(st.x, st.y, cu.x,  cu.y);
+			g2d.drawLine(st.x, st.y, st.x, cu.y);
+			g2d.drawLine(st.x, cu.y,  cu.x,  cu.y);
+			int dy = (cu.y - st.y) / processor.baselineDist; // in periods
+			int dx = Math.abs(cu.x - st.x);
 			dx *= processor.downsampled.interval.millis;
 			String v = dy + "periods";
 			String h = new TimeInterval(dx).toString();
@@ -104,8 +108,8 @@ public class ActogramCanvas extends JComponent
 
 			// v string
 			Rectangle vr = new Rectangle(
-				start.x - fm.stringWidth(v) - 2,
-				(start.y + curr.y + fh) / 2,
+				st.x - fm.stringWidth(v) - 2,
+				(st.y + cu.y + fh) / 2,
 				fm.stringWidth(v), fh);
 			g2d.setColor(color);
 			g2d.fillRect(vr.x, vr.y - fh + 2, vr.width, vr.height);
@@ -114,8 +118,8 @@ public class ActogramCanvas extends JComponent
 
 			// h string
 			Rectangle hr = new Rectangle(
-				(start.x + curr.x - fm.stringWidth(h)) / 2,
-				curr.y + fh + 2,
+				(st.x + cu.x - fm.stringWidth(h)) / 2,
+				cu.y + fh + 2,
 				fm.stringWidth(h), fh);
 			g2d.setColor(color);
 			g2d.fillRect(hr.x, hr.y - fh + 2, hr.width, hr.height);
@@ -128,6 +132,18 @@ public class ActogramCanvas extends JComponent
 		int bd = processor.baselineDist;
 		int idx = in.y / bd;
 		return new Point(in.x, (idx + 1) * bd);
+	}
+
+	private Point upper() {
+		if(start == null || curr == null)
+			return null;
+		return start.y <= curr.y ? start : curr;
+	}
+
+	private Point lower() {
+		if(start == null || curr == null)
+			return null;
+		return start.y <= curr.y ? curr : start;
 	}
 
 	private Point start = null;
