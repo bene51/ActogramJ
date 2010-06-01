@@ -5,6 +5,7 @@ import actoj.io.ActogramReader;
 import actoj.gui.ActogramProcessor;
 import actoj.gui.ATreeSelectionListener;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,7 +114,28 @@ public class CustomWindow extends JFrame
 	}
 
 	public void selectionChanged() {
-		updateCanvas();
+		List<Actogram> selected = tree.getSelected();
+		if(selected.size() == 0)
+			return;
+
+		HashMap<Actogram, ActogramCanvas> displayed
+			= new HashMap<Actogram, ActogramCanvas>();
+		for(ActogramCanvas a : canvas.getActograms())
+			displayed.put(a.processor.original, a);
+
+		canvas.clear();
+		List<ActogramCanvas> ac = new ArrayList<ActogramCanvas>();
+		for(Actogram a : selected) {
+			if(displayed.containsKey(a))
+				ac.add(displayed.get(a));
+			else
+				ac.add(new ActogramCanvas(
+					a, zoomf, uLimit, ppl, this));
+		}
+		canvas.addAll(ac);
+		invalidate();
+		validateTree();
+		doLayout();
 	}
 
 	public void positionChanged(String pos) {
