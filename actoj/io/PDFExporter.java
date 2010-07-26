@@ -20,13 +20,31 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 
+/**
+ * Class to export the actograms of an image canvas to pdf.
+ */
 public class PDFExporter {
 
+	/**
+	 * Line width.
+	 */
+	private static final float LINE_WIDTH = 0.3f;
+
+	/** The ImageCanvas whose actograms are to be exported. */
 	private final ImageCanvas ic;
+
+	/** The width of the final pdf. */
 	private final float w;
+
+	/** The height of the final pdf. */
 	private final float h;
+
+	/** The output file. */
 	private final String file;
 
+	/**
+	 * Constructor.
+	 */
 	public PDFExporter(ImageCanvas ic, String file, float w, float h) {
 		this.ic = ic;
 		this.w = w;
@@ -34,6 +52,10 @@ public class PDFExporter {
 		this.file = file;
 	}
 
+	/**
+	 * Constructor;
+	 * Output dimensions are set to A4.
+	 */
 	public PDFExporter(ImageCanvas ic, String file) {
 		this.ic = ic;
 		Rectangle r = PageSize.A4;
@@ -42,6 +64,9 @@ public class PDFExporter {
 		this.file = file;
 	}
 
+	/**
+	 * Export function.
+	 */
 	public void export() throws IOException, DocumentException {
 
 		ArrayList<ActogramCanvas> canvasses = ic.getActograms();
@@ -107,8 +132,9 @@ System.out.println("rowsOnPage = " + rowsOnPage);
 		document.close();
 	}
 
-	private static final float LINE_WIDTH = 0.3f;
-
+	/**
+	 * Method to draw a single actogram.
+	 */
 	public void drawActogram(PdfContentByte content, ActogramProcessor ap, float ax, float ay, float aw, float ah) {
 		Actogram acto = ap.downsampled;
 		int mpd = acto.SAMPLES_PER_PERIOD;

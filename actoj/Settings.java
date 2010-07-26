@@ -4,19 +4,32 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.io.*;
 
+/**
+ * Class to store various settings.
+ */
 public class Settings {
 
+	/**
+	 * Path to the settings' file.
+	 */
 	public static final String PROPERTY_FILE =
 		System.getProperty("user.home") +
 		File.separator +
 		".ActogramJ.props";
 
+	/** Default start column */
 	public static final int DEFAULT_START_COL = 11;
+	/** Default column count */
 	public static final int DEFAULT_COL_COUNT = 32;
+	/** Default start row */
 	public static final int DEFAULT_START_ROW = 1;
+	/** Default row count */
 	public static final int DEFAULT_ROW_COUNT = -1;
+	/** Default samples per period */
 	public static final int DEFAULT_SPP       = 24 * 60;
+	/** Default interval value */
 	public static final int DEFAULT_CAL_VALUE = 1;
+	/** Default interval unit */
 	public static final int DEFAULT_CAL_UNIT  = 2; // MINUTES
 
 	public static final String START_COL = "start_column";

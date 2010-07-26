@@ -2,19 +2,41 @@ package actoj.core;
 
 import java.util.Collection;
 
+/**
+ * Representation of the data of one actogram.
+ */
 public class Actogram {
 
+	/**
+	 * A name for this actogram.
+	 */
+	public final String name;
+
+	/**
+	 * The raw data of this actogram.
+	 */
 	private float[] data;
 
 	/**
-	 * Measurements per day
+	 * Measurements per period.
+	 * The period may e.g. be one day. Having an measurements' interval
+	 * of 1 minute, SAMPLES_PER_PERIOD would be 1440.
 	 */
 	public final int SAMPLES_PER_PERIOD;
 
-	public final String name;
+	/**
+	 * The time interval between individual measurements.
+	 */
 	public final TimeInterval interval;
+
+	/**
+	 * The units of the time interval.
+	 */
 	public final TimeInterval.Units unit;
 
+	/**
+	 * Constructur.
+	 */
 	public Actogram(String name, float[] data, int SPP, TimeInterval interval, TimeInterval.Units unit) {
 		this.name = name;
 		this.data = data;
@@ -23,34 +45,61 @@ public class Actogram {
 		this.unit = unit;
 	}
 
+	/**
+	 * Returns a reference to the data array.
+	 */
 	public float[] getData() {
 		return data;
 	}
 
+	/**
+	 * Returns the data at the specified index.
+	 */
 	public float get(int idx) {
 		return data[idx];
 	}
 
+	/**
+	 * Returns the size of the data array.
+	 */
 	public int size() {
 		return data.length;
 	}
 
+	/**
+	 * Returns the time for the specified index.
+	 * This is the start time of the corresponding interval.
+	 */
 	public TimeInterval getTimeForIndex(int idx) {
 		return new TimeInterval(idx * interval.millis);
 	}
 
+	/**
+	 * Returns a String representation for the time for the
+	 * given index.
+	 */
 	public String getTimeStringForIndex(int idx) {
 		return getTimeForIndex(idx).toString();
 	}
 
 	/**
-	 * If the number of measurements is odd, the last measurement
-	 * is cut off.
+	 * Calls downsample(2).
 	 */
 	public Actogram downsample() {
 		return downsample(2);
 	}
 
+	/**
+	 * Downsamples the data array by the given factor, and thus returns
+	 * a new actogram with length original_length / f;
+	 * Calculates for each entry in the new array the average of the
+	 * corresponding f entries in the old array;
+	 * Consequently, the SAMPLES_PER_PERIOD variable of the new actogram
+	 * is the old value, devided by f, and the interval variable of the
+	 * new actogram is the old value, multiplied by f;
+	 * if the number of measurements is not devidable by the given factor,
+	 * the last measurements is cut off.
+	 */
 	public Actogram downsample(int f) {
 		if(SAMPLES_PER_PERIOD % f != 0)
 			return null;
@@ -67,6 +116,11 @@ public class Actogram {
 		return new Actogram(name, newdata, SAMPLES_PER_PERIOD / f, interval.mul(f), unit);
 	}
 
+	/**
+	 * Calculates the sum of the specified actograms.
+	 * @throws IllegalArgumentException if the given actograms don't agree in
+	 *         SAMPLES_PER_PERIOD, interval and interval unit.
+	 */
 	public static Actogram sum(Collection<Actogram> actograms) {
 		// TODO start time?
 		int n = 0;
@@ -102,17 +156,27 @@ public class Actogram {
 		return new Actogram("#sum", res, spp, interval, unit);
 	}
 
+	/**
+	 * Devides each data value by the given value.
+	 */
 	public static void devide(Actogram actogram, float s) {
 		for(int i = 0; i < actogram.data.length; i++)
 			actogram.data[i] /= s;
 	}
 
+	/**
+	 * Convenience method, equivalent to
+	 * devide(sum(actograms), actograms.size()).
+	 */
 	public static Actogram average(Collection<Actogram> actograms) {
 		Actogram res = sum(actograms);
 		devide(res, actograms.size());
 		return res;
 	}
 
+	/**
+	 * Returns the name of this actogram.
+	 */
 	public String toString() {
 		return name;
 	}

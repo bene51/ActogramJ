@@ -20,6 +20,10 @@ import java.awt.event.MouseMotionListener;
 
 import ij.process.ImageProcessor;
 
+/**
+ * A JComponent representing one actogram plus accompanying data, like
+ * calibration. It uses a ActogramProcessor to draw the actogram itself.
+ */
 public class ActogramCanvas extends JComponent
 			implements MouseMotionListener, MouseListener {
 	
