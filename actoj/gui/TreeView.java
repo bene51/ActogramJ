@@ -13,6 +13,7 @@ import javax.swing.tree.TreeModel;
 
 import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.event.*;
 
 public class TreeView extends JPanel implements TreeSelectionListener {
 
@@ -39,6 +40,47 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		setLayout(new BorderLayout());
 		add(tree, BorderLayout.WEST);
+
+		createPopup();
+	}
+
+	private ActogramGroup popupClicked = null;
+
+	private void createPopup() {
+		final JPopupMenu popup = new JPopupMenu();
+		JMenuItem item = new JMenuItem("Remove");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(popupClicked != null) {
+					remove(popupClicked);
+					popupClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+
+
+		tree.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				maybeShowPopup(e);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				maybeShowPopup(e);
+			}
+
+			private void maybeShowPopup(MouseEvent e) {
+				TreePath p = tree.getPathForLocation(e.getX(), e.getY());
+				if(p == null)
+					return;
+				Object o = p.getLastPathComponent();
+				if(o != null && o instanceof ActogramGroup && e.isPopupTrigger()) {
+					popupClicked = (ActogramGroup)o;
+					popup.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+
+		});
 	}
 
 	public void add(ActogramGroup group) {
@@ -48,6 +90,18 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		int[] indices = new int[] {actogroups.size() - 1};
 		Object[] children = new Object[] {group};
 		model.fireInserted(src, path, indices, children);
+	}
+
+	public void remove(ActogramGroup group) {
+		int idx = actogroups.indexOf(group);
+		if(idx == -1)
+			return;
+		actogroups.remove(idx);
+		Object[] path = new Object[] {model.root};
+		int[] indices = new int[] {idx};
+		Object[] children = new Object[] {group};
+		model.fireDeleted(this, path, indices, children);
+		fireSelectionChanged();
 	}
 
 	public List<Actogram> getSelected() {
@@ -132,6 +186,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			TreeModelEvent e = new TreeModelEvent(src, path, indices, children);
 			for(TreeModelListener l : listeners)
 				l.treeNodesInserted(e);
+		}
+
+		void fireDeleted(Object src, Object[] path, int[] indices, Object[] children) {
+			TreeModelEvent e = new TreeModelEvent(src, path, indices, children);
+			for(TreeModelListener l : listeners)
+				l.treeNodesRemoved(e);
 		}
 	}
 }
