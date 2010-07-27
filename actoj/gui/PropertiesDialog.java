@@ -11,7 +11,7 @@ public class PropertiesDialog {
 		int subd = win.getCalibrationSubdivisions();
 
 		GenericDialog gd = new GenericDialog("Edit Properties");
-		gd.addNumericField("Number of periods per line", ppl, 0);
+		gd.addNumericField("Number of plots", ppl, 0);
 		gd.addNumericField("Upper limit", ul, 1);
 		gd.addNumericField("Max. number of columns on sheet", cols, 0);
 		gd.addNumericField("Number of calibration subdivisions", subd, 0);
