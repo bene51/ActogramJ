@@ -41,7 +41,6 @@ public class StatusBar extends JPanel {
 			}
 		};
 		add(posLabel);
-		periodLabel.setForeground(Color.GREEN);
 		add(periodLabel);
 	}
 
