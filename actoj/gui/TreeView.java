@@ -70,10 +70,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		TreePath[] paths = tree.getSelectionPaths();
 		selected.clear();
-		for(int i = 0; i < paths.length; i++) {
-			Object l = paths[i].getLastPathComponent();
-			if(l instanceof Actogram)
-				selected.add((Actogram)l);
+		if(paths != null) {
+			for(int i = 0; i < paths.length; i++) {
+				Object l = paths[i].getLastPathComponent();
+				if(l instanceof Actogram)
+					selected.add((Actogram)l);
+			}
 		}
 		fireSelectionChanged();
 	}
