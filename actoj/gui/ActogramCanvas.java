@@ -143,7 +143,7 @@ public class ActogramCanvas extends JPanel
 		g.drawImage(ip.createImage(), INT_LEFT, INT_TOP, null);
 
 
-		if(start != null) {
+		if(start != null && curr != null) {
 			Point st = upper();
 			Point cu = lower();
 			int sIdx = processor.getIndex(st.x, st.y);
@@ -254,12 +254,11 @@ public class ActogramCanvas extends JPanel
 			feedback.positionChanged(
 				getPositionString(e.getX(), e.getY()));
 		Point tmp = snap(e.getPoint());
-		if(!tmp.equals(curr)) {
-			curr = tmp;
-			if(feedback != null)
-				feedback.periodChanged(getPeriodString());
-			repaint();
-		}
+
+		curr = tmp;
+		if(feedback != null)
+			feedback.periodChanged(getPeriodString());
+		repaint();
 	}
 
 	public static interface Feedback {
