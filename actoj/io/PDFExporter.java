@@ -98,7 +98,6 @@ public class PDFExporter {
 		// r * aHeightInMM + r * gapInMM <= h
 		// --> r <= h / (aHeightInMM + gapInMM);
 		int rowsOnPage = (int)Math.floor(h / (aHeightInMM + gapInMM));
-System.out.println("rowsOnPage = " + rowsOnPage);
 
 
 		Document document = new Document(new Rectangle(0, 0, w, h));
