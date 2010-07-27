@@ -21,7 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 
-public class CustomWindow extends JFrame 
+public class CustomWindow extends JFrame
 		implements ATreeSelectionListener, ActogramCanvas.Feedback {
 
 	final ImageCanvas canvas;
@@ -95,6 +95,14 @@ public class CustomWindow extends JFrame
 		updateCanvas();
 	}
 
+	public void setCalibrationSubdivisions(int n) {
+		canvas.setCalibrationSubdivisions(n);
+	}
+
+	public int getCalibrationSubdivisions() {
+		return canvas.getCalibrationSubdivisions();
+	}
+
 	public void updateCanvas() {
 		canvas.clear();
 
@@ -105,7 +113,8 @@ public class CustomWindow extends JFrame
 		List<ActogramCanvas> ac = new ArrayList<ActogramCanvas>();
 		for(Actogram a : selected)
 			ac.add(new ActogramCanvas(
-				a, zoomf, uLimit, ppl, this));
+				a, zoomf, uLimit, ppl,
+				canvas.getCalibrationSubdivisions(), this));
 
 		canvas.addAll(ac);
 		invalidate();
@@ -127,7 +136,8 @@ public class CustomWindow extends JFrame
 				ac.add(displayed.get(a));
 			else
 				ac.add(new ActogramCanvas(
-					a, zoomf, uLimit, ppl, this));
+					a, zoomf, uLimit, ppl,
+					canvas.getCalibrationSubdivisions(), this));
 		}
 		canvas.addAll(ac);
 		invalidate();

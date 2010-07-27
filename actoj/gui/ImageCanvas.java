@@ -21,6 +21,8 @@ public class ImageCanvas extends JPanel {
 	private int nRows = 0;
 	private int nCols = 0;
 
+	private int nSubdivisions = 8;
+
 	private GridBagLayout gridbag = new GridBagLayout();
 	private GridBagConstraints c = new GridBagConstraints();
 
@@ -48,6 +50,16 @@ public class ImageCanvas extends JPanel {
 
 	public void setMaxColumns(int n) {
 		this.maxColumns = n;
+	}
+
+	public void setCalibrationSubdivisions(int n) {
+		this.nSubdivisions = n;
+		for(ActogramCanvas c : actograms)
+			c.setNSubdivisions(n);
+	}
+
+	public int getCalibrationSubdivisions() {
+		return nSubdivisions;
 	}
 
 	public void addActogram(ActogramCanvas a) {

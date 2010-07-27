@@ -82,16 +82,20 @@ public class ActogramCanvas extends JPanel
 	/** Background color for the canvas */
 	private final Color background = new Color(139, 142, 255);
 
+	private int nSubdivisions = 8;
+
 
 	public ActogramCanvas(
 				Actogram actogram,
 				int zoom,
 				float uLimit,
 				int ppl,
+				int subd,
 				Feedback f) {
 		super();
 		this.processor = new ActogramProcessor(actogram, zoom, uLimit, ppl);
 		this.feedback = f;
+		this.nSubdivisions = subd;
 
 		ImageProcessor ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
@@ -102,6 +106,11 @@ public class ActogramCanvas extends JPanel
 		addMouseMotionListener(this);
 
 		setBackground(background);
+	}
+
+	public void setNSubdivisions(int n) {
+		this.nSubdivisions = n;
+		repaint();
 	}
 
 	// x and y are coordinates within this component
@@ -190,7 +199,7 @@ public class ActogramCanvas extends JPanel
 			g2d.drawString(h, hr.x, hr.y);
 		}
 
-		drawCalibration(g, 8);
+		drawCalibration(g, nSubdivisions);
 	}
 
 	private void drawCalibration(Graphics gr, int subd) {
