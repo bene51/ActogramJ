@@ -69,6 +69,7 @@ public class ActogramProcessor {
 		int w = ppl * spp;
 		int h = (periods + 1) * baselineDist;
 		ByteProcessor p = new ByteProcessor(w, h);
+		Style style = new Histogram(p);
 
 		p.setValue(155);
 		p.drawRect(0, 0, w, h);
@@ -86,10 +87,12 @@ public class ActogramProcessor {
 			// draw baseline
 			p.drawLine(x, y, x + length, y);
 			// draw signal
+			style.newline(x, y);
 			for(int i = offs; i < offs + length; i++, x++) {
 				float v = downsampled.get(i);
 				int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
-				p.drawLine(x, y, x, y - sh);
+				style.newData(sh);
+// 				p.drawLine(x, y, x, y - sh);
 			}
 
 			// rest
@@ -100,15 +103,68 @@ public class ActogramProcessor {
 				// draw baseline
 				p.drawLine(x, y, x + length, y);
 				// draw signal
+				style.newline(x, y);
 				for(int i = offs; i < offs + length; i++, x++) {
 					float v = downsampled.get(i);
 					int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
-					p.drawLine(x, y, x, y - sh);
+					style.newData(sh);
+// 					p.drawLine(x, y, x, y - sh);
 				}
 			}
 		}
 		p.invert();
 		return p;
+	}
+
+	private interface Style {
+		public void newline(int x, int y);
+		public void newData(int d);
+	}
+
+	private class Histogram implements Style {
+
+		int x, y;
+		final ImageProcessor p;
+
+		public Histogram(ImageProcessor p) {
+			this.p = p;
+		}
+
+		public void newline(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public void newData(int d) {
+			p.drawLine(x, y, x, y - d);
+			this.x++;
+		}
+	}
+
+	private class Lines implements Style {
+
+		int last = -1;
+
+		int x, y;
+		final ImageProcessor p;
+
+		public Lines(ImageProcessor p) {
+			this.p = p;
+		}
+
+		public void newline(int x, int y) {
+			this.x = x;
+			this.y = y;
+			last = -1;
+		}
+
+		public void newData(int d) {
+			if(last == -1)
+				last = d;
+			p.drawLine(x-1, y - last, x, y - d);
+			last = d;
+			this.x++;
+		}
 	}
 }
 
