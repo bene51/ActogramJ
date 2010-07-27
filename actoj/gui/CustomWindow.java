@@ -115,9 +115,6 @@ public class CustomWindow extends JFrame
 
 	public void selectionChanged() {
 		List<Actogram> selected = tree.getSelected();
-		if(selected.size() == 0)
-			return;
-
 		HashMap<Actogram, ActogramCanvas> displayed
 			= new HashMap<Actogram, ActogramCanvas>();
 		for(ActogramCanvas a : canvas.getActograms())
