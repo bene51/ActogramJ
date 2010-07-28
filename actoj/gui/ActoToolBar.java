@@ -11,6 +11,7 @@ public class ActoToolBar extends JToolBar {
 		add(new OpenAction(win.tree));
 		add(new ExportPDF(win.canvas));
 		add(new PropertiesAction(win));
+		add(new CalculateAction(win));
 	}
 }
 

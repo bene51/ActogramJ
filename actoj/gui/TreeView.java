@@ -28,6 +28,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	
 	private final ArrayList<Actogram> selected = new ArrayList<Actogram>();
 
+	private boolean hasCalculated = false;
+
 	public TreeView() {
 		super();
 		setBackground(Color.WHITE);
@@ -83,11 +85,23 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 	}
 
+	public void addCalculated(Actogram a) {
+		if(!hasCalculated) {
+			ActogramGroup ag = new ActogramGroup("Calculated");
+			add(ag);
+			hasCalculated = true;
+		}
+		actogroups.get(actogroups.size() - 1).add(a);
+	}
+
 	public void add(ActogramGroup group) {
-		actogroups.add(group);
+		if(!hasCalculated)
+			actogroups.add(group);
+		else
+			actogroups.add(actogroups.size() - 1, group);
 		Object src = this;
 		Object[] path = new Object[] {model.root};
-		int[] indices = new int[] {actogroups.size() - 1};
+		int[] indices = new int[] {hasCalculated ? actogroups.size() - 2 : actogroups.size() - 1};
 		Object[] children = new Object[] {group};
 		model.fireInserted(src, path, indices, children);
 	}
@@ -102,6 +116,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		Object[] children = new Object[] {group};
 		model.fireDeleted(this, path, indices, children);
 		fireSelectionChanged();
+		if(hasCalculated && idx == actogroups.size())
+			hasCalculated = false;
 	}
 
 	public List<Actogram> getSelected() {
