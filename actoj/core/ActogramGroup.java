@@ -19,7 +19,7 @@ public class ActogramGroup {
 	/**
 	 * An array of the individual actograms.
 	 */
-	private final Actogram[] actograms;
+	private Actogram[] actograms;
 
 	/**
 	 * Constructor.
@@ -71,7 +71,8 @@ public class ActogramGroup {
 		Actogram[] n = new Actogram[length + 1];
 		System.arraycopy(actograms, 0, n, 0, length);
 		n[length] = a;
-		length++;
+		this.actograms = n;
+		this.length++;
 	}
 
 	/**
