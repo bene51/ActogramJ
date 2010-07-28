@@ -14,12 +14,21 @@ public class ActogramGroup {
 	/**
 	 * The number of individual actograms.
 	 */
-	public final int length;
+	private int length;
 
 	/**
 	 * An array of the individual actograms.
 	 */
 	private final Actogram[] actograms;
+
+	/**
+	 * Constructor.
+	 */
+	public ActogramGroup(String name) {
+		this.name = name;
+		this.actograms = new Actogram[0];
+		this.length = 0;
+	}
 
 	/**
 	 * Constructor.
@@ -53,6 +62,16 @@ public class ActogramGroup {
 	 */
 	public Actogram get(int idx) {
 		return actograms[idx];
+	}
+
+	/**
+	 * Adds an actogram to the end of the group.
+	 */
+	public void add(Actogram a) {
+		Actogram[] n = new Actogram[length + 1];
+		System.arraycopy(actograms, 0, n, 0, length);
+		n[length] = a;
+		length++;
 	}
 
 	/**
