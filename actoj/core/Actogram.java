@@ -37,6 +37,18 @@ public class Actogram {
 	/**
 	 * Constructur.
 	 */
+	public Actogram(String name, Actogram a) {
+		this.name = name;
+		this.data = new float[a.data.length];
+		System.arraycopy(a.data, 0, this.data, 0, a.data.length);
+		this.interval = a.interval;
+		this.SAMPLES_PER_PERIOD = a.SAMPLES_PER_PERIOD;
+		this.unit = a.unit;
+	}
+
+	/**
+	 * Constructur.
+	 */
 	public Actogram(String name, float[] data, int SPP, TimeInterval interval, TimeInterval.Units unit) {
 		this.name = name;
 		this.data = data;
@@ -171,7 +183,7 @@ public class Actogram {
 	public static Actogram average(Collection<Actogram> actograms) {
 		Actogram res = sum(actograms);
 		devide(res, actograms.size());
-		return res;
+		return new Actogram("#average", res);
 	}
 
 	/**
