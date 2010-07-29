@@ -19,7 +19,7 @@ public class FloatArray {
 	 */
 	public FloatArray() {
 		data = new float[INITIAL_LENGTH];
-		length = INITIAL_LENGTH;
+		length = 0;
 	}
 
 	/**
