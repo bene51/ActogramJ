@@ -121,7 +121,8 @@ public class ActogramCanvas extends JPanel
 		if(idx < 0)
 			return "outside";
 		Actogram a = processor.downsampled;
-		return a.name + ": " + a.getTimeStringForIndex(idx);
+		return a.name + ": " + a.getTimeStringForIndex(idx) + " ("
+			+ a.get(idx) + ")";
 	}
 
 	public TimeInterval getFreerunningPeriod() {
