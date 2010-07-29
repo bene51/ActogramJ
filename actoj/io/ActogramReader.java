@@ -42,11 +42,23 @@ public class ActogramReader {
 			arr[i] = new FloatArray();
 
 		int l = 0;
+		int checkCols = -1;
 		while((line = bf.readLine()) != null && l < numLines) {
 			String[] sp = line.split("\t");
+			if(checkCols == -1)
+				checkCols = sp.length;
+			else if(checkCols != sp.length)
+				throw new IllegalArgumentException(
+					"Attempted to read lines with " +
+					"different number of columns");
 			for(int i = 0; i < numCols && i + fromCol < sp.length; i++) {
-				// TODO catch NumberFormatException
-				arr[i].add(Float.parseFloat(sp[i + fromCol]));
+				try {
+					arr[i].add(Float.parseFloat(sp[i + fromCol]));
+				} catch(NumberFormatException e) {
+					throw new IllegalArgumentException(
+						"Line " + (l + 1) + ": Cannot convert "
+						+ sp[i + fromCol] + " to a number");
+				}
 			}
 			l++;
 		}
