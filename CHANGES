@@ -1,0 +1,17 @@
+Version v0.2:
+-------------
+* Calibration bar with adjustable number of subdivisions
+  The number of subdivisions can be adjusted by clicking on the
+  'Preferences' icon.
+* Allow to remove files from the display by right-clicking.
+* 'Freerunning period' is in black now.
+* In the 'Preferences' dialog, 'number of periods per line' is changed to
+  'number of plots'.
+* Simple calculations of actograms, invoked by clicking on the 'Calculate' icon.
+  - Summing or averaging the displayed/selected actograms.
+  - Smoothing individual actograms.
+  The results of the calculations are displayed under the tree entry
+  'Calculated'.
+* The preview table in the open dialog does not crash any more when
+  the file to open contains plain text at the beginning.
+* Fix the constant shift at the beginning of the actograms.

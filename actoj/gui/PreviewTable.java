@@ -26,8 +26,9 @@ public class PreviewTable extends JTable {
 		public PreviewTableModel(String[] lines) {
 			this.lines = lines;
 			int cols = 0;
-			for(String st : lines) {
-				int c = occurences(st, '\t') + 1;
+			for(int i = 0; i < lines.length; i++) {
+				lines[i] = lines[i] + "\t";
+				int c = occurences(lines[i], '\t');
 				if(c > cols)
 					cols = c;
 			}
@@ -59,8 +60,9 @@ public class PreviewTable extends JTable {
 				return Integer.toString(row + 1);
 			String line = lines[row];
 			int start = col == 1 ? 0 : nthIndexOf(line, '\t', col - 1);
-			int end   = col == columnCount ? line.length() : nthIndexOf(line, '\t', col);
-			return line.substring(start, end);
+			int end   = nthIndexOf(line, '\t', col);
+			return start == -1 || end == -1 ? "" :
+				line.substring(start, end);
 		}
 
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
