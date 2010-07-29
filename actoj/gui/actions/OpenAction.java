@@ -245,9 +245,9 @@ public class OpenAction extends AbstractAction {
 				saveDefaults();
 				try {
 					readFile();
-				} catch(IOException ex) {
+				} catch(Exception ex) {
 					IJ.error("Error reading " + file + "\n"
-						+ ex.getMessage());
+						+ ex.getClass() + ": " + ex.getMessage());
 					ex.printStackTrace();
 				}
 				dispose();
