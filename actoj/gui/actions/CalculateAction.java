@@ -26,7 +26,7 @@ public class CalculateAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Calculate");
 		putValue(NAME, "Calculate");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/properties.png")));
+			ActogramJ_.class.getResource("icons/calculate.png")));
 	}
 
 	public void actionPerformed(ActionEvent e) {

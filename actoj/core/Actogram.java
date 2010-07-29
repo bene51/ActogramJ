@@ -187,6 +187,27 @@ public class Actogram {
 	}
 
 	/**
+	 * Convolve the actogram with the given kernel.
+	 */
+	public Actogram convolve(float[] kernel) {
+		int dl = data.length;
+		int kl = kernel.length;
+
+		float[] n = new float[data.length];
+
+		for(int i = 0; i < dl; i++) {
+			n[i] = 0;
+			for(int j = 0; j < kl; j++) {
+				int idx = i + j - kl/2;
+				float v = (idx < 0 || idx >= dl) ? 0 : data[idx];
+				n[i] += kernel[j] * v;
+			}
+		}
+		return new Actogram(name + "_convolved", n,
+			SAMPLES_PER_PERIOD, interval, unit);
+	}
+
+	/**
 	 * Returns the name of this actogram.
 	 */
 	public String toString() {

@@ -91,7 +91,14 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			add(ag);
 			hasCalculated = true;
 		}
-		actogroups.get(actogroups.size() - 1).add(a);
+		ActogramGroup par = actogroups.get(actogroups.size() - 1);
+		par.add(a);
+
+		Object src = this;
+		Object[] path = new Object[] {model.root, par};
+		int[] indices = new int[] {par.size() - 1};
+		Object[] children = new Object[] {a};
+		model.fireInserted(src, path, indices, children);
 	}
 
 	public void add(ActogramGroup group) {
