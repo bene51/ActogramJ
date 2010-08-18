@@ -36,6 +36,7 @@ public class ActogramProcessor {
 		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 		this.processor = createProcessor();
+		drawInto(processor, downsampled);
 	}
 
 	public int getIndex(int x, int y) {
@@ -74,12 +75,16 @@ public class ActogramProcessor {
 		p.setValue(155);
 		p.drawRect(0, 0, w, h);
 		p.setValue(255);
+	}
+
+	private void drawInto(ImageProcessor ip, Actogram actogram) {
+		int spp = actogram.SAMPLES_PER_PERIOD;
 
 		int offs = 0;
 		for(int d = 0; d < periods; d++) {
 			offs = spp * d;
-			int length = offs + spp < downsampled.size() ?
-					spp : downsampled.size() - offs;
+			int length = offs + spp < actogram.size() ?
+					spp : actogram.size() - offs;
 
 			// first half
 			int y = (d + 1) * baselineDist;
@@ -89,7 +94,7 @@ public class ActogramProcessor {
 			// draw signal
 			style.newline(x, y);
 			for(int i = offs; i < offs + length; i++, x++) {
-				float v = downsampled.get(i);
+				float v = actogram.get(i);
 				int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
 				style.newData(sh);
 // 				p.drawLine(x, y, x, y - sh);
@@ -105,7 +110,7 @@ public class ActogramProcessor {
 				// draw signal
 				style.newline(x, y);
 				for(int i = offs; i < offs + length; i++, x++) {
-					float v = downsampled.get(i);
+					float v = actogram.get(i);
 					int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
 					style.newData(sh);
 // 					p.drawLine(x, y, x, y - sh);
