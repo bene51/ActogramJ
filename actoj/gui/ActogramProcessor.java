@@ -36,6 +36,7 @@ public class ActogramProcessor {
 		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 		this.processor = createProcessor();
+		drawInto(processor, downsampled);
 	}
 
 	public int getIndex(int x, int y) {
@@ -69,27 +70,33 @@ public class ActogramProcessor {
 		int w = ppl * spp;
 		int h = (periods + 1) * baselineDist;
 		ByteProcessor p = new ByteProcessor(w, h);
-		Style style = new Histogram(p);
 
 		p.setValue(155);
 		p.drawRect(0, 0, w, h);
 		p.setValue(255);
 
+		return p;
+	}
+
+	private void drawInto(ImageProcessor ip, Actogram actogram) {
+		Style style = new Histogram(ip);
+		int spp = actogram.SAMPLES_PER_PERIOD;
+
 		int offs = 0;
 		for(int d = 0; d < periods; d++) {
 			offs = spp * d;
-			int length = offs + spp < downsampled.size() ?
-					spp : downsampled.size() - offs;
+			int length = offs + spp < actogram.size() ?
+					spp : actogram.size() - offs;
 
 			// first half
 			int y = (d + 1) * baselineDist;
 			int x = (ppl - 1) * spp;
 			// draw baseline
-			p.drawLine(x, y, x + length, y);
+			ip.drawLine(x, y, x + length, y);
 			// draw signal
 			style.newline(x, y);
 			for(int i = offs; i < offs + length; i++, x++) {
-				float v = downsampled.get(i);
+				float v = actogram.get(i);
 				int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
 				style.newData(sh);
 // 				p.drawLine(x, y, x, y - sh);
@@ -101,19 +108,18 @@ public class ActogramProcessor {
 			for(int r = 1; r < ppl; r++) {
 				x = (r - 1) * spp;
 				// draw baseline
-				p.drawLine(x, y, x + length, y);
+				ip.drawLine(x, y, x + length, y);
 				// draw signal
 				style.newline(x, y);
 				for(int i = offs; i < offs + length; i++, x++) {
-					float v = downsampled.get(i);
+					float v = actogram.get(i);
 					int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
 					style.newData(sh);
 // 					p.drawLine(x, y, x, y - sh);
 				}
 			}
 		}
-		p.invert();
-		return p;
+		ip.invert();
 	}
 
 	private interface Style {
