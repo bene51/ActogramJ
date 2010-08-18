@@ -5,10 +5,11 @@ import ij.gui.GenericDialog;
 public class PropertiesDialog {
 
 	public static final void changeProperties(CustomWindow win) {
-		int ppl  = win.getPeriodsPerLine();
-		float ul = win.getUpperLimit();
-		int cols = win.getNumColumns();
-		int subd = win.getCalibrationSubdivisions();
+		ImageCanvas ic = win.canvas;
+		int ppl  = ic.getPeriodsPerLine();
+		float ul = ic.getUpperLimit();
+		int cols = ic.getMaxColumns();
+		int subd = ic.getCalibrationSubdivisions();
 
 		GenericDialog gd = new GenericDialog("Edit Properties");
 		gd.addNumericField("Number of plots", ppl, 0);
@@ -24,10 +25,10 @@ public class PropertiesDialog {
 		cols = (int)gd.getNextNumber(); 
 		subd = (int)gd.getNextNumber();
 
-		win.setPeriodsPerLine(ppl);
-		win.setUpperLimit(ul);
-		win.setNumColumns(cols);
-		win.setCalibrationSubdivisions(subd);
+		ic.setPeriodsPerLine(ppl);
+		ic.setUpperLimit(ul);
+		ic.setMaxColumns(cols);
+		ic.setCalibrationSubdivisions(subd);
 	}
 }
 

@@ -8,10 +8,10 @@ public class Zoom {
 	public static final int DEFAULT_ZOOM = 9; // i.e. LEVELS[9] = 8
 	
 	private int current = DEFAULT_ZOOM;
-	private final CustomWindow window;
+	private final ImageCanvas canvas;
 
-	public Zoom(CustomWindow window) {
-		this.window = window;
+	public Zoom(ImageCanvas canvas) {
+		this.canvas = canvas;
 	}
 
 	public void zoomIn() {
@@ -35,7 +35,7 @@ public class Zoom {
 
 	private void updateCanvas() {
 		int zoom = LEVELS[current];
-		window.setZoom(zoom);
+		canvas.setZoom(zoom);
 	}
 }
 
