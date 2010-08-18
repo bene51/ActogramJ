@@ -74,10 +74,6 @@ public class ActogramProcessor {
 		p.setValue(155);
 		p.drawRect(0, 0, w, h);
 		p.setValue(255);
-	}
-
-	private void drawInto(ImageProcessor ip, Actogram actogram) {
-		int spp = actogram.SAMPLES_PER_PERIOD;
 
 		return p;
 	}
