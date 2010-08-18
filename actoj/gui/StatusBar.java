@@ -27,7 +27,7 @@ public class StatusBar extends JPanel {
 		zoomBox.setSelectedIndex(Zoom.DEFAULT_ZOOM);
 		zoomBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				win.getZoom().zoom(zoomBox.getSelectedIndex());
+				win.canvas.getZoom().zoom(zoomBox.getSelectedIndex());
 			}
 		});
 		add(zoomBox);

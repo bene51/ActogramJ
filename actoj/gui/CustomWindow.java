@@ -5,10 +5,6 @@ import actoj.io.ActogramReader;
 import actoj.gui.ActogramProcessor;
 import actoj.gui.ATreeSelectionListener;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-
 import ij.process.ImageProcessor;
 
 import javax.swing.JFrame;
@@ -26,23 +22,15 @@ public class CustomWindow extends JFrame
 
 	final ImageCanvas canvas;
 	final TreeView tree;
-	final Zoom zoom;
 	final StatusBar status;
-
-	private int zoomf;
-	private float uLimit = 1f;
-	private int ppl = 2;
 
 	public CustomWindow() {
 		super("ActoJ");
 		setPreferredSize(new Dimension(800, 600));
 
-		canvas = new ImageCanvas();
+		canvas = new ImageCanvas(this);
 		tree = new TreeView();
-		zoom = new Zoom(this);
 		status = new StatusBar(this);
-
-		zoomf = zoom.LEVELS[zoom.getZoomIndex()];
 
 		tree.addTreeSelectionListener(this);
 
@@ -59,90 +47,8 @@ public class CustomWindow extends JFrame
 		setVisible(true);
 	}
 
-	public Zoom getZoom() {
-		return zoom;
-	}
-
-	public void setZoom(int zoom) {
-		this.zoomf = zoom;
-		updateCanvas();
-	}
-
-	public int getPeriodsPerLine() {
-		return ppl;
-	}
-
-	public void setPeriodsPerLine(int ppl) {
-		this.ppl = ppl;
-		updateCanvas();
-	}
-
-	public float getUpperLimit() {
-		return uLimit;
-	}
-
-	public void setUpperLimit(float uLimit) {
-		this.uLimit = uLimit;
-		updateCanvas();
-	}
-
-	public int getNumColumns() {
-		return canvas.getMaxColumns();
-	}
-
-	public void setNumColumns(int n) {
-		canvas.setMaxColumns(n);
-		updateCanvas();
-	}
-
-	public void setCalibrationSubdivisions(int n) {
-		canvas.setCalibrationSubdivisions(n);
-	}
-
-	public int getCalibrationSubdivisions() {
-		return canvas.getCalibrationSubdivisions();
-	}
-
-	public void updateCanvas() {
-		canvas.clear();
-
-		List<Actogram> selected = tree.getSelected();
-		if(selected.size() == 0)
-			return;
-
-		List<ActogramCanvas> ac = new ArrayList<ActogramCanvas>();
-		for(Actogram a : selected)
-			ac.add(new ActogramCanvas(
-				a, zoomf, uLimit, ppl,
-				canvas.getCalibrationSubdivisions(), this));
-
-		canvas.addAll(ac);
-		invalidate();
-		validateTree();
-		doLayout();
-	}
-
 	public void selectionChanged() {
-		List<Actogram> selected = tree.getSelected();
-		HashMap<Actogram, ActogramCanvas> displayed
-			= new HashMap<Actogram, ActogramCanvas>();
-		for(ActogramCanvas a : canvas.getActograms())
-			displayed.put(a.processor.original, a);
-
-		canvas.clear();
-		List<ActogramCanvas> ac = new ArrayList<ActogramCanvas>();
-		for(Actogram a : selected) {
-			if(displayed.containsKey(a))
-				ac.add(displayed.get(a));
-			else
-				ac.add(new ActogramCanvas(
-					a, zoomf, uLimit, ppl,
-					canvas.getCalibrationSubdivisions(), this));
-		}
-		canvas.addAll(ac);
-		invalidate();
-		validateTree();
-		doLayout();
+		canvas.display(tree.getSelected());
 	}
 
 	public void positionChanged(String pos) {
