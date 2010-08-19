@@ -67,29 +67,27 @@ public class FitSine {
 		return fun.getRealParameters(x);
 	}
 
-	private void calculateInitials(Actogram gram) {
-		float[] data = gram.getData();
-		float[] sorted = new float[data.length];
-		System.arraycopy(data, 0, sorted, 0, data.length);
+	private void calculateInitials(A gram) {
+		int f = this.from / gram.factor;
+		int t = Math.min(this.to / gram.factor, gram.data.length);
+
+		float[] sorted = new float[t - f];
+
+		System.arraycopy(gram.data, f, sorted, 0, t -f);
 		Arrays.sort(sorted);
 
-		float ax = data[data.length - 1];
-		float ed = data[data.length / 2];
+		float maximum = sorted[sorted.length - 1];
+		float median  = sorted[sorted.length / 2];
 
-		initial[0] = ax;
-		initial[1] = 2 * Math.PI / gram.SAMPLES_PER_PERIOD;
+		initial[0] = maximum;
+		initial[1] = 2 * Math.PI / actogram.SAMPLES_PER_PERIOD;
 		initial[2] = 0;
 		initial[3] = 0;
 
-		min[0] = ed;                max[0] = 5 * ax;
+		min[0] = median;            max[0] = 2 * maximum;
 		min[1] = 0.5 * initial[1];  max[1] = 1.5 * initial[1];
-		min[2] = 0;                 max[2] = gram.SAMPLES_PER_PERIOD;
-		min[3] = -ax;               max[3] = +ax;
-
-		print(initial);
-		print(min);
-		print(max);
-
+		min[2] = 0;                 max[2] = actogram.SAMPLES_PER_PERIOD;
+		min[3] = -maximum;          max[3] = +maximum;
 	}
 
 	private static final void print(double[] par) {
