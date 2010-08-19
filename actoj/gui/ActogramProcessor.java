@@ -3,8 +3,9 @@ package actoj.gui;
 import actoj.core.Actogram;
 
 import ij.process.ImageProcessor;
-import ij.process.ByteProcessor;
+import ij.process.ColorProcessor;
 
+import java.awt.Color;
 import java.awt.Point;
 
 public class ActogramProcessor {
@@ -36,7 +37,7 @@ public class ActogramProcessor {
 		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 		this.processor = createProcessor();
-		drawInto(processor, downsampled);
+		drawInto(downsampled, new Histogram(processor), Color.BLACK);
 	}
 
 	public int getIndex(int x, int y) {
@@ -69,17 +70,19 @@ public class ActogramProcessor {
 
 		int w = ppl * spp;
 		int h = (periods + 1) * baselineDist;
-		ByteProcessor p = new ByteProcessor(w, h);
+		ColorProcessor p = new ColorProcessor(w, h);
 
-		p.setValue(155);
+		p.setColor(Color.WHITE);
+		p.fill();
+
+		p.setColor(Color.DARK_GRAY);
 		p.drawRect(0, 0, w, h);
-		p.setValue(255);
 
 		return p;
 	}
 
-	private void drawInto(ImageProcessor ip, Actogram actogram) {
-		Style style = new Histogram(ip);
+	void drawInto(Actogram actogram, Style style, Color color) {
+		ImageProcessor ip = processor;
 		int spp = actogram.SAMPLES_PER_PERIOD;
 
 		int offs = 0;
@@ -92,8 +95,10 @@ public class ActogramProcessor {
 			int y = (d + 1) * baselineDist;
 			int x = (ppl - 1) * spp;
 			// draw baseline
+			ip.setColor(Color.BLACK);
 			ip.drawLine(x, y, x + length, y);
 			// draw signal
+			ip.setColor(color);
 			style.newline(x, y);
 			for(int i = offs; i < offs + length; i++, x++) {
 				float v = actogram.get(i);
@@ -108,8 +113,10 @@ public class ActogramProcessor {
 			for(int r = 1; r < ppl; r++) {
 				x = (r - 1) * spp;
 				// draw baseline
+				ip.setColor(Color.BLACK);
 				ip.drawLine(x, y, x + length, y);
 				// draw signal
+				ip.setColor(color);
 				style.newline(x, y);
 				for(int i = offs; i < offs + length; i++, x++) {
 					float v = actogram.get(i);
@@ -119,15 +126,14 @@ public class ActogramProcessor {
 				}
 			}
 		}
-		ip.invert();
 	}
 
-	private interface Style {
+	public static interface Style {
 		public void newline(int x, int y);
 		public void newData(int d);
 	}
 
-	private class Histogram implements Style {
+	public static class Histogram implements Style {
 
 		int x, y;
 		final ImageProcessor p;
@@ -147,7 +153,7 @@ public class ActogramProcessor {
 		}
 	}
 
-	private class Lines implements Style {
+	public static class Lines implements Style {
 
 		int last = -1;
 
