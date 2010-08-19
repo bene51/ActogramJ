@@ -1,6 +1,7 @@
 package actoj.gui;
 
 import actoj.core.*;
+import actoj.fitting.FitSine;
 
 import javax.swing.JPanel;
 import javax.swing.JComponent;
@@ -190,8 +191,36 @@ public class ActogramCanvas extends JPanel
 		sIdx *= processor.zoom;
 		cIdx *= processor.zoom;
 
-		System.out.println("Fit sinusoidal curve between " +
-			sIdx + " and " + cIdx);
+		Actogram org = processor.original;
+
+		double[] param = FitSine.fit(org, sIdx, cIdx);
+		Actogram pred = FitSine.getCurve(org, param);
+
+		pred = pred.downsample(processor.zoom);
+		processor.drawInto(pred,
+			new ActogramProcessor.Lines(processor.processor),
+			Color.RED);
+
+		fitStart = null;
+		fitCurr = null;
+		repaint();
+
+		StringBuffer msg = new StringBuffer();
+		msg.append("Start:    ").append(org.getTimeStringForIndex(sIdx));
+		msg.append("\n");
+		msg.append("End:      ").append(org.getTimeStringForIndex(cIdx));
+		msg.append("\n \n");
+		msg.append("Function: min(0, a * sin(b * t + c) + d)\n \n");
+		msg.append("a = ").append((float)param[0]).append("\n");
+		double w = param[1] / org.interval.millis;
+		msg.append("b = ").append((float)w).append("/ms").append("\n");
+		msg.append("c = ").append((float)param[2]).append("\n");
+		msg.append("d = ").append((float)param[3]).append("\n \n");
+		double T = 2 * Math.PI / w; // in ms
+		msg.append("T = " + new TimeInterval(Math.round(T)).
+						intervalIn(org.unit));
+
+		IJ.showMessage(msg.toString());
 	}
 
 	public void paintComponent(Graphics g) {
