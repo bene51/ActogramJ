@@ -42,7 +42,7 @@ public class ActogramProcessor {
 	public int getIndex(int x, int y) {
 		int spp = downsampled.SAMPLES_PER_PERIOD;
 		int xIdx = x % spp;
-		int yIdx = y / baselineDist - (ppl - x / spp - 1);
+		int yIdx = (y-1) / baselineDist - (ppl - x / spp - 1);
 		if(xIdx < 0 || yIdx < 0 || yIdx >= periods + 1)
 			return -1;
 		return yIdx * spp + xIdx;
