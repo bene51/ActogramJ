@@ -46,25 +46,34 @@ public class FitSine {
 	}
 
 	private double[] optimizeMultiRes() {
-		float[] sigmas = new float[] {100f, 50f, 20f, 10f, 5f, 2f};
-		Actogram a = actogram.convolve(
-				Filters.makeGaussianKernel(sigmas[0]));
-		calculateInitials(a);
-		double[] opt = optimize(a, initial);
-		for(int i = 1; i < sigmas.length; i++) {
-			a = actogram.convolve(Filters.makeGaussianKernel(sigmas[i]));
-			opt = optimize(a, opt);
-			System.out.println(i);
+		A org = new A(actogram.getData(), 1);
+
+		int l = org.data.length;
+		int n = 1;
+		while((l /= 2) > 1000)
+			n++;
+
+		A[] pyramid = new A[n];
+		pyramid[0] = org;
+		float sigma = actogram.SAMPLES_PER_PERIOD / 30f / (n - 1);
+		for(int i = 1; i < n; i++) {
+			pyramid[i] = pyramid[i - 1].smooth(sigma);
+			pyramid[i] = pyramid[i].downsample();
 		}
+
+		calculateInitials(pyramid[n - 1]);
+		double[] opt = initial;
+		for(int i = n - 1; i >= 1; i--)
+			opt = optimize(pyramid[i], opt);
 		return opt;
 	}
 
-	private double[] optimize(Actogram gram, double[] init) {
+	private double[] optimize(A gram, double[] init) {
 		ConjugateDirectionSearch CG = new ConjugateDirectionSearch();
 		SineFunction fun = new SineFunction(gram, from, to, min, max, init);
 		double[] x = new double[4];
 		CG.optimize(fun, x, 0.01, 0.01);
-		return fun.getRealParameters(x);
+		return fun.bestParameters;
 	}
 
 	private void calculateInitials(A gram) {
@@ -107,7 +116,10 @@ public class FitSine {
 		private final double[] factor;  // the noralization factors (multiplication results in
 		                                // normalized values
 		private final double[] initial;
-		private final int N;
+		protected final int N;
+
+		protected double minDiff = Double.POSITIVE_INFINITY;
+		protected double[] bestParameters;
 
 		NormalizedMultivariateFunction(double[] min, double[] max, double[] initial) {
 			this.min = min;
@@ -117,6 +129,7 @@ public class FitSine {
 			N = min.length;
 
 			factor = new double[N];
+			bestParameters = new double[N];
 			double ax = 0;
 
 			for(int i = 0; i < N; i++) {
@@ -154,10 +167,10 @@ public class FitSine {
 	
 	private static class SineFunction extends NormalizedMultivariateFunction {
 
-		private final Actogram actogram;
+		private final A actogram;
 		private final int from, to;
 
-		public SineFunction(Actogram actogram, int from, int to, double[] min, double[] max, double[] init) {
+		public SineFunction(A actogram, int from, int to, double[] min, double[] max, double[] init) {
 			super(min, max, init);
 			this.actogram = actogram;
 			this.from = from;
@@ -168,54 +181,61 @@ public class FitSine {
 			double[] param = getRealParameters(args);
 			double diff = 0.0;
 			float[] data = actogram.getData();
-			for(int i = from; i < to; i++)
-				diff += Math.abs(data[i] - calculate(i, param));
+			int from = this.from / actogram.factor;
+			int to = this.to / actogram.factor;
+			for(int i = from; i < to && i < data.length; i++)
+				diff += Math.abs(data[i] - calculate(actogram.factor * i, param));
+
+			if(diff < minDiff) {
+				minDiff = diff;
+				System.arraycopy(param, 0, bestParameters, 0, N);
+			}
 			return diff;
 		}
 	}
 
-// 	private static class A {
-// 		float[] data;
-// 		int from;
-// 		int to;
-// 		int factor;
-// 
-// 		A(float[] data, int from, int to, int factor) {
-// 			this.data = data;
-// 			this.from = from;
-// 			this.to = to;
-// 			this.factor = factor;
-// 		}
-// 
-// 		A downsample() {
-// 			A smoothed = convolve(Filters.makeGaussianKernel(2f));
-// 			int newlength = smoothed.data.length / 2;
-// 			float[] newdata = new float[newlength];
-// 			for(int i = 0; i < newlength; i++) {
-// 				newdata[i] = 0;
-// 				newdata[i] += smoothed.data[2 * i + 0];
-// 				newdata[i] += smoothed.data[2 * i + 1];
-// 				newdata[i] /= 2f;
-// 			}
-// 			return new A(newdata, from * 2, Math.min(to * 2, newdata.length), factor * 2);
-// 		}
-// 
-// 		A convolve(float[] kernel) {
-// 			int dl = data.length;
-// 			int kl = kernel.length;
-// 
-// 			float[] n = new float[data.length];
-// 
-// 			for(int i = 0; i < dl; i++) {
-// 				n[i] = 0;
-// 				for(int j = 0; j < kl; j++) {
-// 					int idx = i + j - kl/2;
-// 					float v = (idx < 0 || idx >= dl) ? 0 : data[idx];
-// 					n[i] += kernel[j] * v;
-// 				}
-// 			}
-// 			return new A(n, from, to, factor);
-// 		}
-// 	}
+	private static class A {
+		float[] data;
+		int factor;
+
+		A(float[] data, int factor) {
+			this.data = data;
+			this.factor = factor;
+		}
+
+		public float[] getData() {
+			return data;
+		}
+
+		A downsample() {
+			int newlength = data.length / 2;
+			float[] newdata = new float[newlength];
+			for(int i = 0; i < newlength; i++) {
+				newdata[i] = 0;
+				newdata[i] += data[2 * i + 0];
+				newdata[i] += data[2 * i + 1];
+				newdata[i] /= 2f;
+			}
+			return new A(newdata, factor * 2);
+		}
+
+		A smooth(float sigma) {
+			float[] kernel = Filters.makeGaussianKernel(sigma);
+			int dl = data.length;
+			int kl = kernel.length;
+
+			float[] n = new float[data.length];
+
+			for(int i = 0; i < dl; i++) {
+				n[i] = 0;
+				for(int j = 0; j < kl; j++) {
+					int idx = i + j - kl/2;
+					float v = (idx < 0 || idx >= dl) ? 0 : data[idx];
+					n[i] += kernel[j] * v;
+				}
+			}
+			return new A(n, factor);
+		}
+	}
 }
 
