@@ -16,11 +16,12 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 
+import java.awt.image.BufferedImage;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import ij.process.ImageProcessor;
 import ij.IJ;
 
 /**
@@ -117,7 +118,7 @@ public class ActogramCanvas extends JPanel
 		this.feedback = f;
 		this.nSubdivisions = subd;
 
-		ImageProcessor ip = processor.processor;
+		BufferedImage ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
 		height = ip.getHeight() + INT_TOP + INT_BOTTOM;
 		this.setPreferredSize(new Dimension(width, height));
@@ -198,7 +199,8 @@ public class ActogramCanvas extends JPanel
 
 		pred = pred.downsample(processor.zoom);
 		processor.drawInto(pred,
-			new ActogramProcessor.Lines(processor.processor),
+			new ActogramProcessor.Lines(
+				processor.processor.createGraphics()),
 			Color.RED);
 
 		fitStart = null;
@@ -224,10 +226,9 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public void paintComponent(Graphics g) {
-		ImageProcessor ip = processor.processor;
 		g.setColor(background);
 		g.fillRect(0, 0, width, height);
-		g.drawImage(ip.createImage(), INT_LEFT, INT_TOP, null);
+		g.drawImage(processor.processor, INT_LEFT, INT_TOP, null);
 
 
 		drawFPTriangle(g);

@@ -2,17 +2,16 @@ package actoj.gui;
 
 import actoj.core.Actogram;
 
-import ij.process.ImageProcessor;
-import ij.process.ColorProcessor;
-
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class ActogramProcessor {
 
 	public final Actogram original;
 	public final Actogram downsampled;
-	public final ImageProcessor processor;
+	public final BufferedImage processor;
 
 	public final int zoom;
 	public final float uLimit;
@@ -37,7 +36,7 @@ public class ActogramProcessor {
 		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 		this.processor = createProcessor();
-		drawInto(downsampled, new Histogram(processor), Color.BLACK);
+		drawInto(downsampled, new Histogram(processor.createGraphics()), Color.BLACK);
 	}
 
 	public int getIndex(int x, int y) {
@@ -64,25 +63,28 @@ public class ActogramProcessor {
 		}
 	}
 
-	private ImageProcessor createProcessor() {
+	private BufferedImage createProcessor() {
 		Actogram actogram = downsampled;
 		int spp = downsampled.SAMPLES_PER_PERIOD;
 
 		int w = ppl * spp;
 		int h = (periods + 1) * baselineDist;
-		ColorProcessor p = new ColorProcessor(w, h);
+		BufferedImage bImage = new BufferedImage(w, h,
+			BufferedImage.TYPE_INT_ARGB);
 
-		p.setColor(Color.WHITE);
-		p.fill();
+		Graphics g = bImage.createGraphics();
 
-		p.setColor(Color.DARK_GRAY);
-		p.drawRect(0, 0, w, h);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, w, h);
 
-		return p;
+		g.setColor(Color.DARK_GRAY);
+		g.drawRect(0, 0, w, h);
+
+		return bImage;
 	}
 
 	void drawInto(Actogram actogram, Style style, Color color) {
-		ImageProcessor ip = processor;
+		Graphics g = style.getGraphics();
 		int spp = actogram.SAMPLES_PER_PERIOD;
 
 		int offs = 0;
@@ -95,10 +97,10 @@ public class ActogramProcessor {
 			int y = (d + 1) * baselineDist;
 			int x = (ppl - 1) * spp;
 			// draw baseline
-			ip.setColor(Color.BLACK);
-			ip.drawLine(x, y, x + length, y);
+			g.setColor(Color.BLACK);
+			g.drawLine(x, y, x + length, y);
 			// draw signal
-			ip.setColor(color);
+			g.setColor(color);
 			style.newline(x, y);
 			for(int i = offs; i < offs + length; i++, x++) {
 				float v = actogram.get(i);
@@ -113,10 +115,10 @@ public class ActogramProcessor {
 			for(int r = 1; r < ppl; r++) {
 				x = (r - 1) * spp;
 				// draw baseline
-				ip.setColor(Color.BLACK);
-				ip.drawLine(x, y, x + length, y);
+				g.setColor(Color.BLACK);
+				g.drawLine(x, y, x + length, y);
 				// draw signal
-				ip.setColor(color);
+				g.setColor(color);
 				style.newline(x, y);
 				for(int i = offs; i < offs + length; i++, x++) {
 					float v = actogram.get(i);
@@ -131,15 +133,16 @@ public class ActogramProcessor {
 	public static interface Style {
 		public void newline(int x, int y);
 		public void newData(int d);
+		public Graphics getGraphics();
 	}
 
 	public static class Histogram implements Style {
 
 		int x, y;
-		final ImageProcessor p;
+		final Graphics g;
 
-		public Histogram(ImageProcessor p) {
-			this.p = p;
+		public Histogram(Graphics g) {
+			this.g = g;
 		}
 
 		public void newline(int x, int y) {
@@ -148,8 +151,12 @@ public class ActogramProcessor {
 		}
 
 		public void newData(int d) {
-			p.drawLine(x, y, x, y - d);
+			g.drawLine(x, y, x, y - d);
 			this.x++;
+		}
+
+		public Graphics getGraphics() {
+			return g;
 		}
 	}
 
@@ -158,10 +165,10 @@ public class ActogramProcessor {
 		int last = -1;
 
 		int x, y;
-		final ImageProcessor p;
+		final Graphics g;
 
-		public Lines(ImageProcessor p) {
-			this.p = p;
+		public Lines(Graphics g) {
+			this.g = g;
 		}
 
 		public void newline(int x, int y) {
@@ -173,9 +180,13 @@ public class ActogramProcessor {
 		public void newData(int d) {
 			if(last == -1)
 				last = d;
-			p.drawLine(x-1, y - last, x, y - d);
+			g.drawLine(x-1, y - last, x, y - d);
 			last = d;
 			this.x++;
+		}
+
+		public Graphics getGraphics() {
+			return g;
 		}
 	}
 }
