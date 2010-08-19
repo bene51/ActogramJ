@@ -128,8 +128,8 @@ public class ActogramCanvas extends JPanel
 	public TimeInterval getFreerunningPeriod() {
 		if(fpStart == null || fpCurr == null)
 			return null;
-		Point st = upper();
-		Point cu = lower();
+		Point st = upper(fpStart, fpCurr);
+		Point cu = lower(fpStart, fpCurr);
 		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
 		if(dy == 0)
 			return null;
@@ -160,8 +160,8 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private void drawFPTriangle(Graphics g) {
-		Point st = upper();
-		Point cu = lower();
+		Point st = upper(fpStart, fpCurr);
+		Point cu = lower(fpStart, fpCurr);
 		int sIdx = processor.getIndex(st.x, st.y);
 		if(sIdx < 0) return;
 		int cIdx = processor.getIndex(cu.x, cu.y);
@@ -228,16 +228,16 @@ public class ActogramCanvas extends JPanel
 		return new Point(in.x - INT_LEFT, (idx + 1) * bd);
 	}
 
-	private Point upper() {
-		if(fpStart == null || fpCurr == null)
+	private static Point upper(Point p1, Point p2) {
+		if(p1 == null || p2 == null)
 			return null;
-		return fpStart.y <= fpCurr.y ? fpStart : fpCurr;
+		return p1.y <= p2.y ? p1 : p2;
 	}
 
-	private Point lower() {
-		if(fpStart == null || fpCurr == null)
+	private Point lower(Point p1, Point p2) {
+		if(p1 == null || p2 == null)
 			return null;
-		return fpStart.y <= fpCurr.y ? fpCurr : fpStart;
+		return p1.y <= p2.y ? p2 : p1;
 	}
 
 	public void mouseEntered(MouseEvent e) {}
