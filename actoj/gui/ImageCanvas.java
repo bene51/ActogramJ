@@ -32,7 +32,6 @@ public class ImageCanvas extends JPanel {
 
 	private ActogramCanvas.Feedback feedback;
 
-
 	private GridBagLayout gridbag = new GridBagLayout();
 	private GridBagConstraints c = new GridBagConstraints();
 
@@ -60,6 +59,11 @@ public class ImageCanvas extends JPanel {
 
 	public int getMaxColumns() {
 		return maxColumns;
+	}
+
+	public void setCanvasMode(ActogramCanvas.Mode mode) {
+		for(ActogramCanvas ac : actograms)
+			ac.setMode(mode);
 	}
 
 	public void setMaxColumns(int n) {

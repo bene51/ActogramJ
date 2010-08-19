@@ -3,7 +3,8 @@ package actoj.gui.actions;
 import actoj.ActogramJ_;
 import actoj.core.ActogramGroup;
 import actoj.io.ActogramReader;
-import actoj.gui.TreeView;
+import actoj.gui.ImageCanvas;
+import actoj.gui.ActogramCanvas;
 
 import ij.IJ;
 import ij.io.OpenDialog;
@@ -14,7 +15,7 @@ import java.awt.event.ActionEvent;
 
 import java.io.File;
 
-public class Calib extends AbstractAction {
+public class CalibAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
 	// 	DEFAULT
@@ -24,19 +25,19 @@ public class Calib extends AbstractAction {
 	// 	SHORT_DESCRIPTION
 	// 	SMALL_ICON 
 
-	private final TreeView treeview;
+	private final ImageCanvas canvas;
 
-	public Calib(TreeView treeview) {
-		this.treeview = treeview;
+	public CalibAction(ImageCanvas canvas) {
+		this.canvas = canvas;
 		putValue(SHORT_DESCRIPTION, "Calibration");
 		putValue(LONG_DESCRIPTION, "Calibration");
-		putValue(NAME, "Calibration");
+		putValue(NAME, "");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/calib.png")));
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("calib");
+		canvas.setCanvasMode(ActogramCanvas.Mode.FREERUNNING_PERIOD);
 	}
 }
 
