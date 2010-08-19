@@ -20,6 +20,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import ij.process.ImageProcessor;
+import ij.IJ;
 
 /**
  * A JComponent representing one actogram plus accompanying data, like
@@ -27,7 +28,7 @@ import ij.process.ImageProcessor;
  */
 public class ActogramCanvas extends JPanel
 			implements MouseMotionListener, MouseListener {
-	
+
 	public static enum Mode {
 		POINTING, FREERUNNING_PERIOD, FITTING;
 	}
@@ -58,6 +59,18 @@ public class ActogramCanvas extends JPanel
 	 * ActogramProcessor coordinate system.
 	 */
 	private Point fpCurr = null;
+
+	/**
+	 * Start point of the fitting interval within the
+	 * ActogramProcessor coordinate system.
+	 */
+	private Point fitStart = null;
+
+	/**
+	 * Current(end) point of the fitting interval within the
+	 * ActogramProcessor coordinate system.
+	 */
+	private Point fitCurr = null;
 
 	/** Distance between left border and the actogram. */
 	private int INT_LEFT = 5;
@@ -160,6 +173,27 @@ public class ActogramCanvas extends JPanel
 			tv.intervalIn(processor.downsampled.unit));
 	}
 
+	public void fitSine() {
+		if(fitStart == null || fitCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(fitStart, fitCurr);
+		Point cu = lower(fitStart, fitCurr);
+		if(st.y == cu.y && st.x > cu.x) {
+			Point tmp = st; st = cu; cu = tmp;
+		}
+		int sIdx = processor.getIndex(st.x, st.y);
+		if(sIdx < 0) return;
+		int cIdx = processor.getIndex(cu.x, cu.y);
+		if(cIdx < 0) return;
+
+		sIdx *= processor.zoom;
+		cIdx *= processor.zoom;
+
+		System.out.println("Fit sinusoidal curve between " +
+			sIdx + " and " + cIdx);
+	}
+
 	public void paintComponent(Graphics g) {
 		ImageProcessor ip = processor.processor;
 		g.setColor(background);
@@ -167,13 +201,65 @@ public class ActogramCanvas extends JPanel
 		g.drawImage(ip.createImage(), INT_LEFT, INT_TOP, null);
 
 
-		if(fpStart != null && fpCurr != null)
-			drawFPTriangle(g);
+		drawFPTriangle(g);
+
+		drawFittingInterval(g);
 
 		drawCalibration(g, nSubdivisions);
 	}
 
+	private void drawFittingInterval(Graphics g) {
+		if(fitStart == null || fitCurr == null)
+			return;
+
+		Graphics2D g2d = (Graphics2D) g;
+		Point st = upper(fitStart, fitCurr);
+		Point cu = lower(fitStart, fitCurr);
+		if(st.y == cu.y && st.x > cu.x) {
+			Point tmp = st; st = cu; cu = tmp;
+		}
+		int sIdx = processor.getIndex(st.x, st.y);
+		if(sIdx < 0) return;
+		int cIdx = processor.getIndex(cu.x, cu.y);
+		if(cIdx < 0) return;
+
+
+		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
+		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
+
+		int x0 = INT_LEFT;
+		int x1 = INT_LEFT + processor.processor.getWidth() - 1;
+		int sh = processor.signalHeight;
+
+		// draw start marker
+		g2d.setColor(Color.RED);
+		g2d.fillRect(s.x-1, s.y - sh, 2, sh);
+
+		// draw end marker
+		g2d.fillRect(c.x-1, c.y - sh, 2, sh);
+
+		g2d.setColor(new Color(1f, 0f, 0f, 0.5f));
+
+		// on the same line
+		if(s.y == c.y) {
+			g2d.fillRect(s.x, s.y - sh, c.x - s.x, sh);
+			return;
+		}
+
+		// on different lines
+		g2d.fillRect(s.x, s.y - sh, x1 - s.x, sh);
+		g2d.fillRect(x0,  c.y - sh, c.x - x0, sh);
+		int cury = s.y + processor.baselineDist;
+		while(cury < c.y) {
+			g2d.fillRect(x0, cury - sh, x1 - x0, sh);
+			cury += processor.baselineDist;
+		}
+	}
+
 	private void drawFPTriangle(Graphics g) {
+		if(fpStart == null || fpCurr == null)
+			return;
+
 		Point st = upper(fpStart, fpCurr);
 		Point cu = lower(fpStart, fpCurr);
 		int sIdx = processor.getIndex(st.x, st.y);
@@ -256,13 +342,27 @@ public class ActogramCanvas extends JPanel
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
+
+	public void mouseReleased(MouseEvent e) {
+		if(mode == Mode.FITTING) {
+			boolean doit = IJ.showMessageWithCancel(
+				"Fit", "Automatically fit sine curve?");
+			if(!doit)
+				return;
+			fitSine();
+		}
+	}
+
 	public void mouseClicked(MouseEvent e) {
 		if(mode == Mode.FREERUNNING_PERIOD) {
 			fpStart = null;
 			fpCurr = null;
 			if(feedback != null)
 				feedback.periodChanged(getPeriodString());
+			repaint();
+		} else if(mode == Mode.FITTING) {
+			fitStart = null;
+			fitCurr = null;
 			repaint();
 		}
 	}
@@ -271,6 +371,9 @@ public class ActogramCanvas extends JPanel
 		if(mode == Mode.FREERUNNING_PERIOD) {
 			fpStart = snap(e.getPoint());
 			fpCurr = snap(e.getPoint());
+		} else if(mode == Mode.FITTING) {
+			fitStart = snap(e.getPoint());
+			fitCurr = snap(e.getPoint());
 		}
 	}
 
@@ -291,6 +394,9 @@ public class ActogramCanvas extends JPanel
 			fpCurr = tmp;
 			if(feedback != null)
 				feedback.periodChanged(getPeriodString());
+			repaint();
+		} else if(mode == Mode.FITTING) {
+			fitCurr = snap(e.getPoint());
 			repaint();
 		}
 	}
