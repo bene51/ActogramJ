@@ -28,6 +28,10 @@ import ij.process.ImageProcessor;
 public class ActogramCanvas extends JPanel
 			implements MouseMotionListener, MouseListener {
 	
+	public static enum Mode {
+		POINTING, FREERUNNING_PERIOD, FITTING;
+	}
+
 	/** The ActogramProcessor for drawing the actogram itself. */
 	public final ActogramProcessor processor;
 
@@ -84,6 +88,8 @@ public class ActogramCanvas extends JPanel
 
 	private int nSubdivisions = 8;
 
+	private Mode mode = Mode.POINTING;
+
 
 	public ActogramCanvas(
 				Actogram actogram,
@@ -106,6 +112,14 @@ public class ActogramCanvas extends JPanel
 		addMouseMotionListener(this);
 
 		setBackground(background);
+	}
+
+	public Mode getMode() {
+		return mode;
+	}
+
+	public void setMode(Mode mode) {
+		this.mode = mode;
 	}
 
 	public void setNSubdivisions(int n) {
@@ -244,16 +258,20 @@ public class ActogramCanvas extends JPanel
 	public void mouseExited(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {
-		fpStart = null;
-		fpCurr = null;
-		if(feedback != null)
-			feedback.periodChanged(getPeriodString());
-		repaint();
+		if(mode == Mode.FREERUNNING_PERIOD) {
+			fpStart = null;
+			fpCurr = null;
+			if(feedback != null)
+				feedback.periodChanged(getPeriodString());
+			repaint();
+		}
 	}
 
 	public void mousePressed(MouseEvent e) {
-		fpStart = snap(e.getPoint());
-		fpCurr = snap(e.getPoint());
+		if(mode == Mode.FREERUNNING_PERIOD) {
+			fpStart = snap(e.getPoint());
+			fpCurr = snap(e.getPoint());
+		}
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -266,12 +284,15 @@ public class ActogramCanvas extends JPanel
 		if(feedback != null)
 			feedback.positionChanged(
 				getPositionString(e.getX(), e.getY()));
-		Point tmp = snap(e.getPoint());
 
-		fpCurr = tmp;
-		if(feedback != null)
-			feedback.periodChanged(getPeriodString());
-		repaint();
+		if(mode == Mode.FREERUNNING_PERIOD) {
+			Point tmp = snap(e.getPoint());
+
+			fpCurr = tmp;
+			if(feedback != null)
+				feedback.periodChanged(getPeriodString());
+			repaint();
+		}
 	}
 
 	public static interface Feedback {
