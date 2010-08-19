@@ -374,6 +374,9 @@ public class ActogramCanvas extends JPanel
 
 	public void mouseReleased(MouseEvent e) {
 		if(mode == Mode.FITTING) {
+			if(fitStart == null || fitCurr == null ||
+				fitStart.equals(fitCurr))
+				return;
 			boolean doit = IJ.showMessageWithCancel(
 				"Fit", "Automatically fit sine curve?");
 			if(!doit)
@@ -400,9 +403,11 @@ public class ActogramCanvas extends JPanel
 		if(mode == Mode.FREERUNNING_PERIOD) {
 			fpStart = snap(e.getPoint());
 			fpCurr = snap(e.getPoint());
+			repaint();
 		} else if(mode == Mode.FITTING) {
 			fitStart = snap(e.getPoint());
 			fitCurr = snap(e.getPoint());
+			repaint();
 		}
 	}
 
