@@ -153,54 +153,57 @@ public class ActogramCanvas extends JPanel
 		g.drawImage(ip.createImage(), INT_LEFT, INT_TOP, null);
 
 
-		if(start != null && curr != null) {
-			Point st = upper();
-			Point cu = lower();
-			int sIdx = processor.getIndex(st.x, st.y);
-			if(sIdx < 0) return;
-			int cIdx = processor.getIndex(cu.x, cu.y);
-			if(cIdx < 0) return;
-
-			Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
-			Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
-
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.setColor(color);
-			g2d.setStroke(stroke);
-			g2d.drawLine(s.x, s.y, c.x, c.y);
-			g2d.drawLine(s.x, s.y, s.x, c.y);
-			g2d.drawLine(s.x, c.y, c.x, c.y);
-			int dy = (cu.y - st.y) / processor.baselineDist; // in periods
-			int dx = Math.abs(cu.x - st.x);
-			dx *= processor.downsampled.interval.millis;
-			String v = dy + "periods";
-			String h = new TimeInterval(dx).toString();
-			g2d.setFont(font);
-			FontMetrics fm = getFontMetrics(font);
-			int fh = fm.getHeight();
-
-			// v string
-			Rectangle vr = new Rectangle(
-				s.x - fm.stringWidth(v) - 2,
-				(s.y + c.y + fh) / 2,
-				fm.stringWidth(v), fh);
-			g2d.setColor(color);
-			g2d.fillRect(vr.x, vr.y - fh + 2, vr.width, vr.height);
-			g2d.setColor(text);
-			g2d.drawString(v, vr.x, vr.y);
-
-			// h string
-			Rectangle hr = new Rectangle(
-				(s.x + c.x - fm.stringWidth(h)) / 2,
-				c.y + fh + 2,
-				fm.stringWidth(h), fh);
-			g2d.setColor(color);
-			g2d.fillRect(hr.x, hr.y - fh + 2, hr.width, hr.height);
-			g2d.setColor(text);
-			g2d.drawString(h, hr.x, hr.y);
-		}
+		if(start != null && curr != null)
+			drawFPTriangle(g);
 
 		drawCalibration(g, nSubdivisions);
+	}
+
+	private void drawFPTriangle(Graphics g) {
+		Point st = upper();
+		Point cu = lower();
+		int sIdx = processor.getIndex(st.x, st.y);
+		if(sIdx < 0) return;
+		int cIdx = processor.getIndex(cu.x, cu.y);
+		if(cIdx < 0) return;
+
+		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
+		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
+
+		Graphics2D g2d = (Graphics2D)g;
+		g2d.setColor(color);
+		g2d.setStroke(stroke);
+		g2d.drawLine(s.x, s.y, c.x, c.y);
+		g2d.drawLine(s.x, s.y, s.x, c.y);
+		g2d.drawLine(s.x, c.y, c.x, c.y);
+		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
+		int dx = Math.abs(cu.x - st.x);
+		dx *= processor.downsampled.interval.millis;
+		String v = dy + "periods";
+		String h = new TimeInterval(dx).toString();
+		g2d.setFont(font);
+		FontMetrics fm = getFontMetrics(font);
+		int fh = fm.getHeight();
+
+		// v string
+		Rectangle vr = new Rectangle(
+			s.x - fm.stringWidth(v) - 2,
+			(s.y + c.y + fh) / 2,
+			fm.stringWidth(v), fh);
+		g2d.setColor(color);
+		g2d.fillRect(vr.x, vr.y - fh + 2, vr.width, vr.height);
+		g2d.setColor(text);
+		g2d.drawString(v, vr.x, vr.y);
+
+		// h string
+		Rectangle hr = new Rectangle(
+			(s.x + c.x - fm.stringWidth(h)) / 2,
+			c.y + fh + 2,
+			fm.stringWidth(h), fh);
+		g2d.setColor(color);
+		g2d.fillRect(hr.x, hr.y - fh + 2, hr.width, hr.height);
+		g2d.setColor(text);
+		g2d.drawString(h, hr.x, hr.y);
 	}
 
 	private void drawCalibration(Graphics gr, int subd) {
