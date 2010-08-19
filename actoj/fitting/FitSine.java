@@ -90,8 +90,8 @@ public class FitSine {
 		min[3] = -maximum;          max[3] = +maximum;
 	}
 
-	private static final void print(double[] par) {
-		System.out.print("parameters: ");
+	private static final void print(String label, double[] par) {
+		System.out.print(label + ": ");
 		for(double d : par)
 			System.out.print(d + " ");
 		System.out.println();
