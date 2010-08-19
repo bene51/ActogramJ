@@ -47,13 +47,13 @@ public class ActogramCanvas extends JPanel
 	 * Start point of the freerunning period triangle within the
 	 * ActogramProcessor coordinate system.
 	 */
-	private Point start = null;
+	private Point fpStart = null;
 
 	/**
 	 * Current(end) point of the freerunning period triangle within the
 	 * ActogramProcessor coordinate system.
 	 */
-	private Point curr = null;
+	private Point fpCurr = null;
 
 	/** Distance between left border and the actogram. */
 	private int INT_LEFT = 5;
@@ -126,7 +126,7 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public TimeInterval getFreerunningPeriod() {
-		if(start == null || curr == null)
+		if(fpStart == null || fpCurr == null)
 			return null;
 		Point st = upper();
 		Point cu = lower();
@@ -153,7 +153,7 @@ public class ActogramCanvas extends JPanel
 		g.drawImage(ip.createImage(), INT_LEFT, INT_TOP, null);
 
 
-		if(start != null && curr != null)
+		if(fpStart != null && fpCurr != null)
 			drawFPTriangle(g);
 
 		drawCalibration(g, nSubdivisions);
@@ -229,31 +229,31 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private Point upper() {
-		if(start == null || curr == null)
+		if(fpStart == null || fpCurr == null)
 			return null;
-		return start.y <= curr.y ? start : curr;
+		return fpStart.y <= fpCurr.y ? fpStart : fpCurr;
 	}
 
 	private Point lower() {
-		if(start == null || curr == null)
+		if(fpStart == null || fpCurr == null)
 			return null;
-		return start.y <= curr.y ? curr : start;
+		return fpStart.y <= fpCurr.y ? fpCurr : fpStart;
 	}
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {
-		start = null;
-		curr = null;
+		fpStart = null;
+		fpCurr = null;
 		if(feedback != null)
 			feedback.periodChanged(getPeriodString());
 		repaint();
 	}
 
 	public void mousePressed(MouseEvent e) {
-		start = snap(e.getPoint());
-		curr = snap(e.getPoint());
+		fpStart = snap(e.getPoint());
+		fpCurr = snap(e.getPoint());
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -268,7 +268,7 @@ public class ActogramCanvas extends JPanel
 				getPositionString(e.getX(), e.getY()));
 		Point tmp = snap(e.getPoint());
 
-		curr = tmp;
+		fpCurr = tmp;
 		if(feedback != null)
 			feedback.periodChanged(getPeriodString());
 		repaint();
