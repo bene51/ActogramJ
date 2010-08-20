@@ -1,5 +1,7 @@
 package actoj.gui;
 
+import java.awt.Font;
+
 public abstract class DrawingBackend {
 
 	protected float linewidth = 1f;
@@ -7,6 +9,7 @@ public abstract class DrawingBackend {
 	protected int fillcolor = 0;
 	protected float offsX = 0;
 	protected float offsY = 0;
+	protected Font font = new Font("Helvetica", Font.PLAIN, 12);
 
 	public void setLineWidth(float linewidth) {
 		this.linewidth = linewidth;
@@ -40,6 +43,14 @@ public abstract class DrawingBackend {
 		return fillcolor;
 	}
 
+	public void setFont(Font f) {
+		this.font = f;
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
 	public void setOffsX(float offsX) {
 		this.offsX = offsX;
 	}
@@ -63,4 +74,6 @@ public abstract class DrawingBackend {
 	public abstract void drawRectangle(float w, float h);
 
 	public abstract void fillRectangle(float w, float h);
+
+	public abstract void drawText(String text);
 }

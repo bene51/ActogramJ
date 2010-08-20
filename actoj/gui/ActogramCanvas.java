@@ -87,7 +87,7 @@ public class ActogramCanvas extends JPanel
 	private int INT_BOTTOM = 5;
 
 	/** Stroke for the freerunning period triangle */
-	private final BasicStroke stroke = new BasicStroke(3f);
+	private final float stroke = 3f;
 
 	/** Font for the freerunning period triangle */
 	private final Font font = new Font("Helvetica", Font.BOLD, 14);
@@ -226,23 +226,27 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public void paintComponent(Graphics g) {
-		g.setColor(background);
-		g.fillRect(0, 0, width, height);
+		GraphicsBackend gb = new GraphicsBackend(g);
+
+		clearBackground(gb);
+
 		g.drawImage(processor.processor, INT_LEFT, INT_TOP, null);
 
-
-		drawFPTriangle(g);
-
-		drawFittingInterval(g);
-
-		drawCalibration(g, nSubdivisions);
+		drawFPTriangle(gb);
+		drawFittingInterval(gb);
+		drawCalibration(gb);
 	}
 
-	private void drawFittingInterval(Graphics g) {
+	private void clearBackground(DrawingBackend g) {
+		g.setFillColor(background.getRGB());
+		g.moveTo(0, 0);
+		g.fillRectangle(width, height);
+	}
+
+	private void drawFittingInterval(DrawingBackend g) {
 		if(fitStart == null || fitCurr == null)
 			return;
 
-		Graphics2D g2d = (Graphics2D) g;
 		Point st = upper(fitStart, fitCurr);
 		Point cu = lower(fitStart, fitCurr);
 		if(st.y == cu.y && st.x > cu.x) {
@@ -262,31 +266,37 @@ public class ActogramCanvas extends JPanel
 		int sh = processor.signalHeight;
 
 		// draw start marker
-		g2d.setColor(Color.RED);
-		g2d.fillRect(s.x-1, s.y - sh, 2, sh);
+		g.setFillColor(255, 0, 0, 255);
+		g.moveTo(s.x - 1, s.y - sh);
+		g.fillRectangle(2, sh);
 
 		// draw end marker
-		g2d.fillRect(c.x-1, c.y - sh, 2, sh);
+		g.moveTo(c.x - 1, c.y - sh);
+		g.fillRectangle(2, sh);
 
-		g2d.setColor(new Color(1f, 0f, 0f, 0.5f));
+		g.setFillColor(255, 0, 0, 150);
 
 		// on the same line
 		if(s.y == c.y) {
-			g2d.fillRect(s.x, s.y - sh, c.x - s.x, sh);
+			g.moveTo(s.x, s.y - sh);
+			g.fillRectangle(c.x - s.x, sh);
 			return;
 		}
 
 		// on different lines
-		g2d.fillRect(s.x, s.y - sh, x1 - s.x, sh);
-		g2d.fillRect(x0,  c.y - sh, c.x - x0, sh);
+		g.moveTo(s.x, s.y - sh);
+		g.fillRectangle(x1 - s.x, sh);
+		g.moveTo(x0, c.y - sh);
+		g.fillRectangle(c.x - x0, sh);
 		int cury = s.y + processor.baselineDist;
 		while(cury < c.y) {
-			g2d.fillRect(x0, cury - sh, x1 - x0, sh);
+			g.moveTo(x0, cury - sh);
+			g.fillRectangle(x1 - x0, sh);
 			cury += processor.baselineDist;
 		}
 	}
 
-	private void drawFPTriangle(Graphics g) {
+	private void drawFPTriangle(DrawingBackend g) {
 		if(fpStart == null || fpCurr == null)
 			return;
 
@@ -300,18 +310,18 @@ public class ActogramCanvas extends JPanel
 		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
 		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
 
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(color);
-		g2d.setStroke(stroke);
-		g2d.drawLine(s.x, s.y, c.x, c.y);
-		g2d.drawLine(s.x, s.y, s.x, c.y);
-		g2d.drawLine(s.x, c.y, c.x, c.y);
+		g.setLineColor(color.getRGB());
+		g.setLineWidth(stroke);
+		g.moveTo(c.x, c.y);
+		g.lineTo(s.x, s.y);
+		g.lineTo(s.x, c.y);
+		g.lineTo(c.x, c.y);
 		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
 		int dx = Math.abs(cu.x - st.x);
 		dx *= processor.downsampled.interval.millis;
 		String v = dy + "periods";
 		String h = new TimeInterval(dx).toString();
-		g2d.setFont(font);
+		g.setFont(font);
 		FontMetrics fm = getFontMetrics(font);
 		int fh = fm.getHeight();
 
@@ -320,32 +330,37 @@ public class ActogramCanvas extends JPanel
 			s.x - fm.stringWidth(v) - 2,
 			(s.y + c.y + fh) / 2,
 			fm.stringWidth(v), fh);
-		g2d.setColor(color);
-		g2d.fillRect(vr.x, vr.y - fh + 2, vr.width, vr.height);
-		g2d.setColor(text);
-		g2d.drawString(v, vr.x, vr.y);
+		g.setFillColor(color.getRGB());
+		g.moveTo(vr.x, vr.y - fh + 2);
+		g.fillRectangle(vr.width, vr.height);
+		g.setLineColor(text.getRGB());
+		g.moveTo(vr.x, vr.y);
+		g.drawText(v);
 
 		// h string
 		Rectangle hr = new Rectangle(
 			(s.x + c.x - fm.stringWidth(h)) / 2,
 			c.y + fh + 2,
 			fm.stringWidth(h), fh);
-		g2d.setColor(color);
-		g2d.fillRect(hr.x, hr.y - fh + 2, hr.width, hr.height);
-		g2d.setColor(text);
-		g2d.drawString(h, hr.x, hr.y);
+		g.setFillColor(color.getRGB());
+		g.moveTo(hr.x, hr.y - fh + 2);
+		g.fillRectangle(hr.width, hr.height);
+		g.setLineColor(text.getRGB());
+		g.moveTo(hr.x, hr.y);
+		g.drawText(h);
 	}
 
-	private void drawCalibration(Graphics gr, int subd) {
+	private void drawCalibration(DrawingBackend g) {
 		int w = width - INT_LEFT - INT_RIGHT;
 
-		Graphics2D g = (Graphics2D)gr;
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(1f));
-		g.drawLine(INT_LEFT, 10, width - INT_RIGHT, 10);
-		for(int i = 0; i <= subd; i++) {
-			int x = INT_LEFT + (int)Math.round((float)i * w / subd);
-			g.drawLine(x, 10 - 5, x, 10 + 5);
+		g.setLineColor(0, 0, 0, 255);
+		g.setLineWidth(1f);
+		g.moveTo(INT_LEFT, 10);
+		g.lineTo(width - INT_RIGHT, 10);
+		for(int i = 0; i <= nSubdivisions; i++) {
+			int x = INT_LEFT + (int)Math.round((float)i * w / nSubdivisions);
+			g.moveTo(x, 10 - 5);
+			g.lineTo(x, 10 + 5);
 		}
 	}
 
