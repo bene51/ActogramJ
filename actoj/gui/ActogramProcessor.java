@@ -21,6 +21,9 @@ public class ActogramProcessor {
 	public final int signalHeight;
 	public final int periods;
 
+	public final int width;
+	public final int height;
+
 	public ActogramProcessor(Actogram actogram, int zoom, float uLimit, int ppl) {
 		this.original = actogram;
 		this.downsampled = actogram.downsample(zoom);
@@ -35,6 +38,10 @@ public class ActogramProcessor {
 		// w:h ~ 2:3
 		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
+
+		this.width = ppl * spp;
+		this.height = (periods + 1) * baselineDist;
+
 		this.processor = createProcessor();
 		drawInto(downsampled, new Histogram(
 			new GraphicsBackend(processor.getGraphics())), Color.BLACK);
@@ -65,16 +72,14 @@ public class ActogramProcessor {
 	}
 
 	private BufferedImage createProcessor() {
-		Actogram actogram = downsampled;
-		int spp = downsampled.SAMPLES_PER_PERIOD;
-
-		int w = ppl * spp;
-		int h = (periods + 1) * baselineDist;
-		BufferedImage bImage = new BufferedImage(w, h,
+		BufferedImage bImage = new BufferedImage(width, height,
 			BufferedImage.TYPE_INT_ARGB);
 
-		GraphicsBackend ba = new GraphicsBackend(bImage.getGraphics());
+		clearBackground(new GraphicsBackend(bImage.getGraphics()));
+		return bImage;
+	}
 
+	public void clearBackground(DrawingBackend ba) {
 		ba.moveTo(0, 0);
 
 		ba.setFillColor(255, 255, 255, 255);
@@ -82,8 +87,6 @@ public class ActogramProcessor {
 
 		ba.setLineColor(50, 50, 50, 255);
 		ba.drawRectangle(w, h);
-
-		return bImage;
 	}
 
 	void drawInto(Actogram actogram, Style style, Color color) {
