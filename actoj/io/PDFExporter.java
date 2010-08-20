@@ -119,7 +119,7 @@ public class PDFExporter {
 			float aw = aWidthInMM;
 			float ah = aHeightInMM;
 
-			drawActogram(content, canvas.processor, ax, ay, aw, ah);
+			drawActogram(content, canvas, ax, ay, aw, ah);
 			gridx++;
 			if(gridx >= ic.getMaxColumns()) {
 				gridx = 0;
@@ -137,18 +137,15 @@ public class PDFExporter {
 	/**
 	 * Method to draw a single actogram.
 	 */
-	public void drawActogram(PdfContentByte content, ActogramProcessor ap, float ax, float ay, float aw, float ah) {
+	public void drawActogram(PdfContentByte content, ActogramCanvas ac, float ax, float ay, float aw, float ah) {
 
 		PdfBackend ba = new PdfBackend(content, h);
-		ba.setFactorX(aw / ap.width);
-		ba.setFactorY(ah / ap.height);
+		ba.setFactorX(aw / ac.width);
+		ba.setFactorY(ah / ac.height);
 		ba.setOffsX(ax);
 		ba.setOffsY(ay);
 
-		ap.clearBackground(ba);
-		ap.drawInto(ap.downsampled,
-			new ActogramProcessor.Histogram(ba),
-			java.awt.Color.BLACK);
+		ac.paint(ba);
 	}
 }
 

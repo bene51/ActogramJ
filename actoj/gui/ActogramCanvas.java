@@ -237,6 +237,23 @@ public class ActogramCanvas extends JPanel
 		drawCalibration(gb);
 	}
 
+	public void paint(DrawingBackend gb) {
+		clearBackground(gb);
+
+		float offX = gb.getOffsX(), offY = gb.getOffsY();
+		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
+		gb.setOffsY(offY + gb.getFactorY() * INT_TOP);
+		processor.clearBackground(gb);
+		processor.drawInto(processor.downsampled,
+				new ActogramProcessor.Histogram(gb), Color.BLACK);
+		gb.setOffsX(offX);
+		gb.setOffsY(offY);
+
+		drawFPTriangle(gb);
+		drawFittingInterval(gb);
+		drawCalibration(gb);
+	}
+
 	private void clearBackground(DrawingBackend g) {
 		g.setFillColor(background.getRGB());
 		g.moveTo(0, 0);
@@ -334,6 +351,7 @@ public class ActogramCanvas extends JPanel
 		g.moveTo(vr.x, vr.y - fh + 2);
 		g.fillRectangle(vr.width, vr.height);
 		g.setLineColor(text.getRGB());
+		g.setFillColor(text.getRGB());
 		g.moveTo(vr.x, vr.y);
 		g.drawText(v);
 
@@ -346,6 +364,7 @@ public class ActogramCanvas extends JPanel
 		g.moveTo(hr.x, hr.y - fh + 2);
 		g.fillRectangle(hr.width, hr.height);
 		g.setLineColor(text.getRGB());
+		g.setFillColor(text.getRGB());
 		g.moveTo(hr.x, hr.y);
 		g.drawText(h);
 	}

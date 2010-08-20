@@ -1,8 +1,8 @@
 package actoj.gui;
 
 import java.awt.Color;
-import java.awt.Font;
 
+import com.lowagie.text.Font;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -21,9 +21,6 @@ public class PdfBackend extends DrawingBackend {
 	private float x = 0;
 	private float y = 0;
 
-	private float factorX = 1f;
-	private float factorY = 1f;
-
 	private float paperHeight;
 
 	public PdfBackend(PdfContentByte g, float paperHeight) {
@@ -33,22 +30,6 @@ public class PdfBackend extends DrawingBackend {
 		setFillColor(fillcolor);
 
 		this.paperHeight = paperHeight;
-	}
-
-	public void setFactorX(float factorX) {
-		this.factorX = factorX;
-	}
-
-	public float getFactorX() {
-		return factorX;
-	}
-
-	public void setFactorY(float factorY) {
-		this.factorY = factorY;
-	}
-
-	public float getFactorY() {
-		return factorY;
 	}
 
 	@Override
@@ -121,13 +102,21 @@ public class PdfBackend extends DrawingBackend {
 	}
 
 	@Override
-	public void setFont(Font f) {
+	public void setFont(java.awt.Font f) {
 		super.setFont(f);
+		System.out.println("f.getFamily() = " + f.getFamily());
+		BaseFont bf = null;
 		try {
-			g.setFontAndSize(BaseFont.createFont(
-				f.getFontName(), "", false), f.getSize());
+			bf = BaseFont.createFont(f.getFamily(), "", false);
 		} catch(Exception e) {
+			// falling back to Helvetica
+			try {
+				bf = BaseFont.createFont(BaseFont.HELVETICA, "", false);
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
 		}
+		g.setFontAndSize(bf, f.getSize());
 	}
 }
 

@@ -9,6 +9,8 @@ public abstract class DrawingBackend {
 	protected int fillcolor = 0;
 	protected float offsX = 0;
 	protected float offsY = 0;
+	protected float factorX = 1f;
+	protected float factorY = 1f;
 	protected Font font = new Font("Helvetica", Font.PLAIN, 12);
 
 	public void setLineWidth(float linewidth) {
@@ -65,6 +67,22 @@ public abstract class DrawingBackend {
 
 	public float getOffsY() {
 		return offsY;
+	}
+
+	public void setFactorX(float factorX) {
+		this.factorX = factorX;
+	}
+
+	public float getFactorX() {
+		return factorX;
+	}
+
+	public void setFactorY(float factorY) {
+		this.factorY = factorY;
+	}
+
+	public float getFactorY() {
+		return factorY;
 	}
 
 	public abstract void moveTo(float x, float y);
