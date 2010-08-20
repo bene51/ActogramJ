@@ -200,7 +200,7 @@ public class ActogramCanvas extends JPanel
 		pred = pred.downsample(processor.zoom);
 		processor.drawInto(pred,
 			new ActogramProcessor.Histogram(
-				processor.processor.createGraphics()),
+				new GraphicsBackend(processor.processor.createGraphics())),
 			new Color(1f, 0f, 0f, 0.5f));
 
 		fitStart = null;
