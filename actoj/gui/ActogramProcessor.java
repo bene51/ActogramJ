@@ -83,10 +83,10 @@ public class ActogramProcessor {
 		ba.moveTo(0, 0);
 
 		ba.setFillColor(255, 255, 255, 255);
-		ba.fillRectangle(w, h);
+		ba.fillRectangle(width, height);
 
 		ba.setLineColor(50, 50, 50, 255);
-		ba.drawRectangle(w, h);
+		ba.drawRectangle(width, height);
 	}
 
 	void drawInto(Actogram actogram, Style style, Color color) {
