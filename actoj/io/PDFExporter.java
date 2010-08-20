@@ -111,8 +111,11 @@ public class PDFExporter {
 		int gridy = 0;
 
 		for(ActogramCanvas canvas : canvasses) {
+			// left coord in mm
 			float ax = gridx * aWidthInMM + (gridx + 1) * gapInMM;
-			float ay = h - ((gridy + 1) * (aHeightInMM + gapInMM));
+			// upper coord in mm, w.r.t. the top of the page
+			float ay = gridy * aHeightInMM + (gridy + 1) * gapInMM;
+
 			float aw = aWidthInMM;
 			float ah = aHeightInMM;
 
@@ -135,61 +138,17 @@ public class PDFExporter {
 	 * Method to draw a single actogram.
 	 */
 	public void drawActogram(PdfContentByte content, ActogramProcessor ap, float ax, float ay, float aw, float ah) {
-		Actogram acto = ap.downsampled;
-		int mpd = acto.SAMPLES_PER_PERIOD;
-		content.setRGBColorStroke(100, 100, 100);
-		content.rectangle(ax, ay, aw, ah);
-		content.setLineWidth(LINE_WIDTH);
-		content.stroke();
 
-		content.setRGBColorStroke(0, 0, 0);
-		content.setRGBColorFill(0, 0, 0);
+		PdfBackend ba = new PdfBackend(content, h);
+		ba.setFactorX(aw / ap.width);
+		ba.setFactorY(ah / ap.height);
+		ba.setOffsX(ax);
+		ba.setOffsY(ay);
 
-		float baselineDist = ah / (ap.periods + 1);
-		float signalWidth = aw / (ap.ppl * mpd);
-		float signalHeight = 0.75f * baselineDist;
-
-
-		int offs = 0;
-		for(int d = 0; d < ap.periods; d++) {
-			offs = mpd * d;
-			int length = offs + mpd < acto.size() ?
-					mpd : acto.size() - offs;
-
-			// first half
-			float y = ay + (ap.periods - d) * baselineDist;
-			float x = ax + (ap.ppl - 1) * mpd * signalWidth;
-			// draw baseline
-			content.moveTo(x, y);
-			content.lineTo(x + length * signalWidth, y);
-			content.setLineWidth(LINE_WIDTH);
-			content.stroke();
-			// draw signal
-			for(int i = offs; i < offs + length; i++, x += signalWidth) {
-				float v = acto.get(i);
-				float sh = signalHeight * Math.min(ap.uLimit, v) / ap.uLimit;
-				content.rectangle(x, y, signalWidth, sh);
-				content.fill();
-			}
-
-			// rest
-			y -= baselineDist;
-			for(int re = 1; re < ap.ppl; re++) {
-				x = ax + (re - 1) * mpd * signalWidth;
-				// draw baseline
-				content.moveTo(x, y);
-				content.lineTo(x + length * signalWidth, y);
-				content.setLineWidth(LINE_WIDTH);
-				content.stroke();
-				// draw signal
-				for(int i = offs; i < offs + length; i++, x += signalWidth) {
-					float v = acto.get(i);
-					float sh = signalHeight * Math.min(ap.uLimit, v) / ap.uLimit;
-					content.rectangle(x, y, signalWidth, sh);
-					content.fill();
-				}
-			}
-		}
+		ap.clearBackground(ba);
+		ap.drawInto(ap.downsampled,
+			new ActogramProcessor.Histogram(ba),
+			java.awt.Color.BLACK);
 	}
 }
 

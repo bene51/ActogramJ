@@ -89,7 +89,7 @@ public class ActogramProcessor {
 		ba.drawRectangle(width, height);
 	}
 
-	void drawInto(Actogram actogram, Style style, Color color) {
+	public void drawInto(Actogram actogram, Style style, Color color) {
 		DrawingBackend g = style.getBackend();
 		int spp = actogram.SAMPLES_PER_PERIOD;
 
