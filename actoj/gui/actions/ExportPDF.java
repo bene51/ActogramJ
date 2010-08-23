@@ -46,6 +46,7 @@ public class ExportPDF extends AbstractAction {
 			pe.export();
 		} catch(Exception ex) {
 			IJ.error(ex.getMessage());
+			ex.printStackTrace();
 			return;
 		}
 	}

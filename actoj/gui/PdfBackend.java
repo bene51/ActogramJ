@@ -11,6 +11,7 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 
+import com.lowagie.text.pdf.PdfGState;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 
@@ -22,6 +23,8 @@ public class PdfBackend extends DrawingBackend {
 	private float y = 0;
 
 	private float paperHeight;
+	private int alphaStroke = 255;
+	private int alphaFill = 255;
 
 	public PdfBackend(PdfContentByte g, float paperHeight) {
 		super();
@@ -30,6 +33,14 @@ public class PdfBackend extends DrawingBackend {
 		setFillColor(fillcolor);
 
 		this.paperHeight = paperHeight;
+	}
+
+	private void setOpacities() {
+		PdfGState gstate = new PdfGState();
+		gstate.setStrokeOpacity(alphaStroke / 255f);
+		gstate.setFillOpacity(alphaFill / 255f);
+		g.saveState();
+		g.setGState(gstate);
 	}
 
 	@Override
@@ -41,30 +52,38 @@ public class PdfBackend extends DrawingBackend {
 
 	@Override
 	public void lineTo(float toX, float toY) {
+		setOpacities();
 		g.lineTo(getX(toX), getY(toY));
 		g.stroke();
 		moveTo(toX, toY);
+		g.restoreState();
 	}
 
 	@Override
 	public void drawRectangle(float w, float h) {
 		w *= factorX;
 		h *= factorY;
+		setOpacities();
 		g.rectangle(x, y - h, w, h);
 		g.stroke();
+		g.restoreState();
 	}
 
 	@Override
 	public void fillRectangle(float w, float h) {
 		w *= factorX;
 		h *= factorY;
+		setOpacities();
 		g.rectangle(x, y - h, w, h);
 		g.fill();
+		g.restoreState();
 	}
 
 	@Override
 	public void drawText(String text) {
+		setOpacities();
 		g.showText(text);
+		g.restoreState();
 	}
 
 	private float getX(float x) {
@@ -88,6 +107,7 @@ public class PdfBackend extends DrawingBackend {
 		int r = (c & 0xff0000) >> 16;
 		int gg = (c & 0xff00) >> 8;
 		int b = (c & 0xff);
+		this.alphaStroke = a;
 		g.setColorStroke(new Color(r, gg, b, a));
 	}
 
@@ -98,6 +118,7 @@ public class PdfBackend extends DrawingBackend {
 		int r = (c & 0xff0000) >> 16;
 		int gg = (c & 0xff00) >> 8;
 		int b = (c & 0xff);
+		this.alphaFill = a;
 		g.setColorFill(new Color(r, gg, b, a));
 	}
 
