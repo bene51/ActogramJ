@@ -29,6 +29,7 @@ public class ImageCanvas extends JPanel {
 	private int zoomf;
 	private float uLimit = 1f;
 	private int ppl = 2;
+	private float whRatio = 2f / 3f;
 
 	private ActogramCanvas.Feedback feedback;
 
@@ -116,6 +117,26 @@ public class ImageCanvas extends JPanel {
 		}
 	}
 
+	public float getWHRatio() {
+		return whRatio;
+	}
+
+	public void setWHRatio(float whRatio) {
+		if(this.whRatio != whRatio) {
+			this.whRatio = whRatio;
+			update();
+		}
+	}
+
+	public void set(int ppl, float uLimit, int maxColumns, int nSubdivisions, float whRatio) {
+		this.ppl = ppl;
+		this.uLimit = uLimit;
+		this.maxColumns = maxColumns;
+		this.nSubdivisions = nSubdivisions;
+		this.whRatio = whRatio;
+		update();
+	}
+
 	public void addActogram(ActogramCanvas a) {
 		actograms.add(a);
 		c.gridx++;
@@ -157,7 +178,7 @@ public class ImageCanvas extends JPanel {
 			else
 				ac.add(new ActogramCanvas(
 					a, zoomf, uLimit, ppl,
-					nSubdivisions, feedback));
+					nSubdivisions, whRatio, feedback));
 		}
 		clear();
 		addAll(ac);
@@ -171,7 +192,7 @@ public class ImageCanvas extends JPanel {
 		for(ActogramCanvas old : actograms)
 			ac.add(new ActogramCanvas(
 				old.processor.original, zoomf, uLimit, ppl,
-				nSubdivisions, feedback));
+				nSubdivisions, whRatio, feedback));
 
 		clear();
 		addAll(ac);

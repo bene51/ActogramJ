@@ -112,9 +112,10 @@ public class ActogramCanvas extends JPanel
 				float uLimit,
 				int ppl,
 				int subd,
+				float whRatio,
 				Feedback f) {
 		super();
-		this.processor = new ActogramProcessor(actogram, zoom, uLimit, ppl);
+		this.processor = new ActogramProcessor(actogram, zoom, uLimit, ppl, whRatio);
 		this.feedback = f;
 		this.nSubdivisions = subd;
 

@@ -24,19 +24,22 @@ public class ActogramProcessor {
 	public final int width;
 	public final int height;
 
-	public ActogramProcessor(Actogram actogram, int zoom, float uLimit, int ppl) {
+	public final float whRatio;
+
+	public ActogramProcessor(Actogram actogram, int zoom, float uLimit, int ppl, float whRatio) {
 		this.original = actogram;
 		this.downsampled = actogram.downsample(zoom);
 
 		this.zoom = zoom;
 		this.uLimit = uLimit;
 		this.ppl = ppl;
+		this.whRatio = whRatio;
 
 		this.periods = (int)Math.ceil(downsampled.size() /
 			(float)downsampled.SAMPLES_PER_PERIOD);
 		int spp = downsampled.SAMPLES_PER_PERIOD;
-		// w:h ~ 2:3
-		this.baselineDist = (int)Math.ceil(3f * ppl * spp / (2f * (periods + 1)));
+
+		this.baselineDist = (int)Math.ceil(ppl * spp / (whRatio * (periods + 1)));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 
 		this.width = ppl * spp;
