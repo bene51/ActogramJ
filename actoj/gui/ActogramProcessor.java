@@ -39,11 +39,13 @@ public class ActogramProcessor {
 			(float)downsampled.SAMPLES_PER_PERIOD);
 		int spp = downsampled.SAMPLES_PER_PERIOD;
 
-		this.baselineDist = (int)Math.ceil(ppl * spp / (whRatio * (periods + 1)));
+		int nlines = periods + 1;
+
+		this.baselineDist = (int)Math.ceil(ppl * spp / (whRatio * nlines));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 
 		this.width = ppl * spp;
-		this.height = (periods + 1) * baselineDist;
+		this.height = nlines * baselineDist;
 
 		this.processor = createProcessor();
 		drawInto(downsampled, new Histogram(
@@ -95,49 +97,38 @@ public class ActogramProcessor {
 	public void drawInto(Actogram actogram, Style style, Color color) {
 		DrawingBackend g = style.getBackend();
 		int spp = actogram.SAMPLES_PER_PERIOD;
+		int nlines = periods + 1;
 
-		int offs = 0;
-		for(int d = 0; d < periods; d++) {
-			offs = spp * d;
-			int length = offs + spp < actogram.size() ?
-					spp : actogram.size() - offs;
-
-			// first half
-			int y = (d + 1) * baselineDist;
-			int x = (ppl - 1) * spp;
-			// draw baseline
-			g.setLineColor(0, 0, 0, 255);
-			g.moveTo(x, y);
-			g.lineTo(x + length, y);
-			// draw signal
-			g.setFillColor(color.getRGB());
-			style.newline(x, y);
-			for(int i = offs; i < offs + length; i++, x++) {
-				float v = actogram.get(i);
-				int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
-				style.newData(sh);
-// 				p.drawLine(x, y, x, y - sh);
+		for(int l = 0; l < nlines; l++) {
+			for(int c = 0; c < ppl; c++) {
+				int d = l - 1 + c;
+				if(d < 0 || d >= periods)
+					continue;
+				int y = (l + 1) * baselineDist;
+				int x = c * spp;
+				drawPeriod(actogram, d, style, color, x, y);
 			}
+		}
+	}
 
-			// rest
-			y += baselineDist;
+	private void drawPeriod(Actogram actogram, int d, Style style, Color color, int x, int y) {
+		DrawingBackend g = style.getBackend();
+		int spp = actogram.SAMPLES_PER_PERIOD;
 
-			for(int r = 1; r < ppl; r++) {
-				x = (r - 1) * spp;
-				// draw baseline
-				g.setLineColor(0, 0, 0, 255);
-				g.moveTo(x, y);
-				g.lineTo(x + length, y);
-				// draw signal
-				g.setFillColor(color.getRGB());
-				style.newline(x, y);
-				for(int i = offs; i < offs + length; i++, x++) {
-					float v = actogram.get(i);
-					int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
-					style.newData(sh);
-// 					p.drawLine(x, y, x, y - sh);
-				}
-			}
+		int offs = spp * d;
+		int length = offs + spp < actogram.size() ?
+				spp : actogram.size() - offs;
+		// draw baseline
+		g.setLineColor(0, 0, 0, 255);
+		g.moveTo(x, y);
+		g.lineTo(x + length, y);
+		// draw signal
+		g.setFillColor(color.getRGB());
+		style.newline(x, y);
+		for(int i = offs; i < offs + length; i++, x++) {
+			float v = actogram.get(i);
+			int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
+			style.newData(sh);
 		}
 	}
 
