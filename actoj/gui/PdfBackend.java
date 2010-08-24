@@ -29,6 +29,9 @@ public class PdfBackend extends DrawingBackend {
 	public PdfBackend(PdfContentByte g, float paperHeight) {
 		super();
 		this.g = g;
+
+		setOpacities();
+
 		setLineColor(linecolor);
 		setFillColor(fillcolor);
 
@@ -43,6 +46,10 @@ public class PdfBackend extends DrawingBackend {
 		g.setGState(gstate);
 	}
 
+	private void resetOpacities() {
+		g.restoreState();
+	}
+
 	@Override
 	public void moveTo(float toX, float toY) {
 		this.x = getX(toX);
@@ -52,38 +59,30 @@ public class PdfBackend extends DrawingBackend {
 
 	@Override
 	public void lineTo(float toX, float toY) {
-		setOpacities();
 		g.lineTo(getX(toX), getY(toY));
 		g.stroke();
 		moveTo(toX, toY);
-		g.restoreState();
 	}
 
 	@Override
 	public void drawRectangle(float w, float h) {
 		w *= factorX;
 		h *= factorY;
-		setOpacities();
 		g.rectangle(x, y - h, w, h);
 		g.stroke();
-		g.restoreState();
 	}
 
 	@Override
 	public void fillRectangle(float w, float h) {
 		w *= factorX;
 		h *= factorY;
-		setOpacities();
 		g.rectangle(x, y - h, w, h);
 		g.fill();
-		g.restoreState();
 	}
 
 	@Override
 	public void drawText(String text) {
-		setOpacities();
 		g.showText(text);
-		g.restoreState();
 	}
 
 	private float getX(float x) {
@@ -108,7 +107,9 @@ public class PdfBackend extends DrawingBackend {
 		int gg = (c & 0xff00) >> 8;
 		int b = (c & 0xff);
 		this.alphaStroke = a;
-		g.setColorStroke(new Color(r, gg, b, a));
+		resetOpacities();
+		setOpacities();
+		g.setColorStroke(new Color(r, gg, b));
 	}
 
 	@Override
@@ -119,7 +120,9 @@ public class PdfBackend extends DrawingBackend {
 		int gg = (c & 0xff00) >> 8;
 		int b = (c & 0xff);
 		this.alphaFill = a;
-		g.setColorFill(new Color(r, gg, b, a));
+		resetOpacities();
+		setOpacities();
+		g.setColorFill(new Color(r, gg, b));
 	}
 
 	@Override
