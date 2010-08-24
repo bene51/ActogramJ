@@ -27,12 +27,13 @@ public class PdfBackend extends DrawingBackend {
 	private int alphaFill = 255;
 
 	private BaseFont baseFont;
-	private int fontSize;
+	private float fontSize;
 
 	public PdfBackend(PdfContentByte g, float paperHeight) {
 		super();
 		this.g = g;
 		setFont(this.font);
+		setLineWidth(linewidth);
 		g.saveState();
 		setOpacities();
 		this.paperHeight = paperHeight;
@@ -99,6 +100,7 @@ public class PdfBackend extends DrawingBackend {
 
 	@Override
 	public void setLineWidth(float linewidth) {
+		linewidth *= factorX;
 		super.setLineWidth(linewidth);
 		g.setLineWidth(linewidth);
 	}
@@ -121,7 +123,7 @@ public class PdfBackend extends DrawingBackend {
 	public void setFont(java.awt.Font f) {
 		super.setFont(f);
 		this.baseFont = null;
-		this.fontSize = f.getSize();
+		this.fontSize = f.getSize() * factorX;
 		try {
 			baseFont = BaseFont.createFont(f.getFamily(), "", false);
 		} catch(Exception e) {
