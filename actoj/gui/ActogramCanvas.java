@@ -249,8 +249,8 @@ public class ActogramCanvas extends JPanel
 
 		gb.setOffsX(0);
 		gb.setOffsY(0);
-		drawFPTriangle(gb);
 		drawFittingInterval(gb);
+		drawFPTriangle(gb);
 	}
 
 	public void paint(DrawingBackend gb) {
@@ -274,8 +274,8 @@ public class ActogramCanvas extends JPanel
 		gb.setOffsX(offX);
 		gb.setOffsY(offY);
 
-		drawFPTriangle(gb);
 		drawFittingInterval(gb);
+		drawFPTriangle(gb);
 	}
 
 	private void clearBackground(DrawingBackend g) {
