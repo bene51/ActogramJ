@@ -54,11 +54,18 @@ public class ActogramProcessor {
 
 	public int getIndex(int x, int y) {
 		int spp = downsampled.SAMPLES_PER_PERIOD;
-		int xIdx = x % spp;
-		int yIdx = (y-1) / baselineDist - (ppl - x / spp - 1);
-		if(xIdx < 0 || yIdx < 0 || yIdx >= periods + 1)
+		int lineIdx = (y - 1) / baselineDist;
+		int colIdx = x / spp;
+
+		int period = lineIdx - 1 + colIdx;
+		if(period < 0 || period >= periods)
 			return -1;
-		return yIdx * spp + xIdx;
+
+		int index = period * spp + x % spp;
+		if(index < 0 || index >= downsampled.size())
+			return -1;
+
+		return index;
 	}
 
 	// points[xfold]
