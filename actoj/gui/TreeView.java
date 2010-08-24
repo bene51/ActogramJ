@@ -27,8 +27,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private ArrayList<ActogramGroup> actogroups;
 
-	private ArrayList<ATreeSelectionListener> selectionListeners =
-		new ArrayList<ATreeSelectionListener>();
+	private ArrayList<TreeViewListener> selectionListeners =
+		new ArrayList<TreeViewListener>();
 	
 	private final ArrayList<Actogram> selected = new ArrayList<Actogram>();
 
@@ -126,11 +126,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	public void editExternalVariables(ActogramGroup ag, int i) {
 		ExternalVariablesDialog.run(ag, i);
+		fireExternalVariablesChanged();
 	}
 
 	public void addExternalVariable(ActogramGroup ag) {
 		if(ag.size() == 0)
-			throw new IllegalArgumentException("Empty actogram group");
+			throw new IllegalArgumentException("Non-empty actogram group required");
 
 		String name = IJ.getString("Variable name", "Unnamed");
 		if(name.length() == 0)
@@ -140,11 +141,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			ag.get(i).addExternalVariable(ev);
 
 		editExternalVariables(ag, ag.get(0).getExternalVariables().length - 1);
+		fireExternalVariablesChanged();
 	}
 
 	public void removeExternalVariable(ActogramGroup ag) {
 		if(ag.size() == 0)
-			throw new IllegalArgumentException("Empty actogram group");
+			throw new IllegalArgumentException("Non-empty actogram group required");
 
 		ExternalVariable[] evs = ag.get(0).getExternalVariables();
 		String[] names = new String[evs.length];
@@ -159,6 +161,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		int idx = gd.getNextChoiceIndex();
 		for(int i = 0; i < ag.size(); i++)
 			ag.get(i).removeExternalVariable(idx);
+
+		fireExternalVariablesChanged();
 	}
 
 	public void addCalculated(Actogram a) {
@@ -207,17 +211,22 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		return selected;
 	}
 
-	public void addTreeSelectionListener(ATreeSelectionListener l) {
+	public void addTreeSelectionListener(TreeViewListener l) {
 		selectionListeners.add(l);
 	}
 
-	public void removeTreeSelectionListener(ATreeSelectionListener l) {
+	public void removeTreeSelectionListener(TreeViewListener l) {
 		selectionListeners.remove(l);
 	}
 
 	private void fireSelectionChanged() {
-		for(ATreeSelectionListener l : selectionListeners)
+		for(TreeViewListener l : selectionListeners)
 			l.selectionChanged();
+	}
+
+	private void fireExternalVariablesChanged() {
+		for(TreeViewListener l : selectionListeners)
+			l.externalVariablesChanged();
 	}
 
 	public void valueChanged(TreeSelectionEvent e) {

@@ -3,7 +3,7 @@ package actoj.gui;
 import actoj.core.Actogram;
 import actoj.io.ActogramReader;
 import actoj.gui.ActogramProcessor;
-import actoj.gui.ATreeSelectionListener;
+import actoj.gui.TreeViewListener;
 
 import ij.process.ImageProcessor;
 
@@ -18,7 +18,7 @@ import java.awt.event.MouseMotionListener;
 
 
 public class CustomWindow extends JFrame
-		implements ATreeSelectionListener, ActogramCanvas.Feedback {
+		implements TreeViewListener, ActogramCanvas.Feedback {
 
 	final ImageCanvas canvas;
 	final TreeView tree;
@@ -45,6 +45,10 @@ public class CustomWindow extends JFrame
 		getContentPane().add(status, BorderLayout.SOUTH);
 		pack();
 		setVisible(true);
+	}
+
+	public void externalVariablesChanged() {
+		canvas.update();
 	}
 
 	public void selectionChanged() {
