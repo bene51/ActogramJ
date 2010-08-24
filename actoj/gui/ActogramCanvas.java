@@ -303,7 +303,7 @@ public class ActogramCanvas extends JPanel
 		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP_ALL);
 
 		int x0 = INT_LEFT;
-		int x1 = INT_LEFT + processor.processor.getWidth() - 1;
+		int x1 = INT_LEFT + processor.processor.getWidth();
 		int sh = processor.signalHeight;
 
 		// draw start marker
