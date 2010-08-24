@@ -26,19 +26,23 @@ public class PdfBackend extends DrawingBackend {
 	private int alphaStroke = 255;
 	private int alphaFill = 255;
 
+	private BaseFont baseFont;
+	private int fontSize;
+
 	public PdfBackend(PdfContentByte g, float paperHeight) {
 		super();
 		this.g = g;
-
+		setFont(this.font);
+		g.saveState();
 		setOpacities();
-
-		setLineColor(linecolor);
-		setFillColor(fillcolor);
-
 		this.paperHeight = paperHeight;
 	}
 
 	private void setOpacities() {
+		g.restoreState();
+		g.setColorStroke(new Color(linecolor));
+		g.setColorFill(new Color(fillcolor));
+		g.setFontAndSize(baseFont, fontSize);
 		PdfGState gstate = new PdfGState();
 		gstate.setStrokeOpacity(alphaStroke / 255f);
 		gstate.setFillOpacity(alphaFill / 255f);
@@ -102,44 +106,33 @@ public class PdfBackend extends DrawingBackend {
 	@Override
 	public void setLineColor(int c) {
 		super.setLineColor(c);
-		int a = (int)((c & (255L << 24)) >> 24);
-		int r = (c & 0xff0000) >> 16;
-		int gg = (c & 0xff00) >> 8;
-		int b = (c & 0xff);
-		this.alphaStroke = a;
-		resetOpacities();
+		this.alphaStroke = (int)((c & (255L << 24)) >> 24);
 		setOpacities();
-		g.setColorStroke(new Color(r, gg, b));
 	}
 
 	@Override
 	public void setFillColor(int c) {
 		super.setFillColor(c);
-		int a = (int)((c & (255L << 24)) >> 24);
-		int r = (c & 0xff0000) >> 16;
-		int gg = (c & 0xff00) >> 8;
-		int b = (c & 0xff);
-		this.alphaFill = a;
-		resetOpacities();
+		this.alphaFill = (int)((c & (255L << 24)) >> 24);
 		setOpacities();
-		g.setColorFill(new Color(r, gg, b));
 	}
 
 	@Override
 	public void setFont(java.awt.Font f) {
 		super.setFont(f);
-		BaseFont bf = null;
+		this.baseFont = null;
+		this.fontSize = f.getSize();
 		try {
-			bf = BaseFont.createFont(f.getName(), "", false);
+			baseFont = BaseFont.createFont(f.getFamily(), "", false);
 		} catch(Exception e) {
 			// falling back to Helvetica
 			try {
-				bf = BaseFont.createFont(BaseFont.HELVETICA, "", false);
+				baseFont = BaseFont.createFont(BaseFont.HELVETICA, "", false);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		g.setFontAndSize(bf, f.getSize());
+		g.setFontAndSize(baseFont, fontSize);
 	}
 }
 
