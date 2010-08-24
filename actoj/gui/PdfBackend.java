@@ -128,10 +128,9 @@ public class PdfBackend extends DrawingBackend {
 	@Override
 	public void setFont(java.awt.Font f) {
 		super.setFont(f);
-		System.out.println("f.getFamily() = " + f.getFamily());
 		BaseFont bf = null;
 		try {
-			bf = BaseFont.createFont(f.getFamily(), "", false);
+			bf = BaseFont.createFont(f.getName(), "", false);
 		} catch(Exception e) {
 			// falling back to Helvetica
 			try {
