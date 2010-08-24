@@ -19,8 +19,8 @@ import java.awt.event.*;
 
 public class ExternalVariablesDialog extends JDialog {
 
-	public static final void run(ActogramGroup ag) {
-		new ExternalVariablesDialog(ag);
+	public static final void run(ActogramGroup ag, int i) {
+		new ExternalVariablesDialog(ag, i);
 	}
 
 	private ActogramGroup ag;
@@ -34,7 +34,7 @@ public class ExternalVariablesDialog extends JDialog {
 
 	private ExternalVariable[] exts;
 
-	public ExternalVariablesDialog(ActogramGroup ag) {
+	public ExternalVariablesDialog(ActogramGroup ag, int idx) {
 		super();
 		setTitle("External variables");
 		this.ag = ag;
@@ -43,12 +43,14 @@ public class ExternalVariablesDialog extends JDialog {
 			throw new IllegalArgumentException("Empty ActogramGroup");
 
 		ExternalVariable[] old = ag.get(0).getExternalVariables();
+		if(idx < 0) idx = 0;
+		if(idx >= old.length) idx = old.length - 1;
+
 		// Make a deep copy
-		exts = new ExternalVariable[old.length + 1];
+		exts = new ExternalVariable[old.length];
 		for(int i = 0; i < old.length; i++)
 			exts[i] = new ExternalVariable(old[i]);
-		exts[old.length] = new ExternalVariable("New variable", ag.get(0).SAMPLES_PER_PERIOD);
-		curr = exts[0];
+		curr = exts[idx];
 
 		GridBagLayout gridbag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -60,6 +62,7 @@ public class ExternalVariablesDialog extends JDialog {
 
 		c.gridx = c.gridy = 0;
 		variableBox = new JComboBox(exts);
+		variableBox.setSelectedIndex(idx);
 		c.fill = GridBagConstraints.NONE;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		getContentPane().add(variableBox, c);
@@ -131,40 +134,22 @@ public class ExternalVariablesDialog extends JDialog {
 
 		variableBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				variableChanged();
+				variableChanged((ExternalVariable)variableBox.getSelectedItem());
 			}
 		});
 
 		pack();
-		variableChanged();
+		variableChanged(curr);
 		setVisible(true);
 	}
 
 	private void accept() {
-		int l = exts.length;
-		ExternalVariable[] upd = new ExternalVariable[l - 1];
-		System.arraycopy(exts, 0, upd, 0, l - 1);
 		for(int i = 0; i < ag.size(); i++)
-			ag.get(i).setExternalVariables(upd);
+			ag.get(i).setExternalVariables(exts);
 	}
 
-	private void variableChanged() {
-		System.out.println("var changed");
-		int idx = variableBox.getSelectedIndex();
-		this.curr = (ExternalVariable)variableBox.getSelectedItem();
-		if(idx == variableBox.getItemCount() - 1) {
-			ExternalVariable[] tmp = new ExternalVariable[exts.length + 1];
-			System.arraycopy(exts, 0, tmp, 0, exts.length);
-			tmp[exts.length] = new ExternalVariable("New variable", ag.get(0).SAMPLES_PER_PERIOD);
-			this.exts = tmp;
-			variableBox.addItem(exts[exts.length - 1]);
-
-			String name = IJ.getString("Name", "New variable");
-			if(name.length() == 0)
-				name = "Unnamed";
-			curr.name = name;
-		}
-
+	private void variableChanged(ExternalVariable ev) {
+		this.curr = ev;
 		varPanel.setVariable(curr);
 		onColor.setTheColor(new Color(curr.onColor));
 		offColor.setTheColor(new Color(curr.offColor));

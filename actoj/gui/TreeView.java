@@ -1,5 +1,9 @@
 package actoj.gui;
 
+import ij.IJ;
+import ij.gui.GenericDialog;
+
+import actoj.core.ExternalVariable;
 import actoj.core.Actogram;
 import actoj.core.ActogramGroup;
 
@@ -50,7 +54,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private void createPopup() {
 		final JPopupMenu popup = new JPopupMenu();
-		JMenuItem item = new JMenuItem("Remove");
+		JMenuItem item = new JMenuItem("Remove actograms");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
@@ -61,11 +65,35 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 		popup.add(item);
 
-		item = new JMenuItem("External variables");
+		popup.addSeparator();
+
+		item = new JMenuItem("Add external variable");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
-					editExternalVariables(popupClicked);
+					addExternalVariable(popupClicked);
+					popupClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+
+		item = new JMenuItem("Remove external variable");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(popupClicked != null) {
+					removeExternalVariable(popupClicked);
+					popupClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+
+		item = new JMenuItem("Edit external variables");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(popupClicked != null) {
+					editExternalVariables(popupClicked, 0);
 					popupClicked = null;
 				}
 			}
@@ -96,8 +124,41 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 	}
 
-	public void editExternalVariables(ActogramGroup ag) {
-		ExternalVariablesDialog.run(ag);
+	public void editExternalVariables(ActogramGroup ag, int i) {
+		ExternalVariablesDialog.run(ag, i);
+	}
+
+	public void addExternalVariable(ActogramGroup ag) {
+		if(ag.size() == 0)
+			throw new IllegalArgumentException("Empty actogram group");
+
+		String name = IJ.getString("Variable name", "Unnamed");
+		if(name.length() == 0)
+			name = "Unnamed";
+		ExternalVariable ev = new ExternalVariable(name, ag.get(0).SAMPLES_PER_PERIOD);
+		for(int i = 0; i < ag.size(); i++)
+			ag.get(i).addExternalVariable(ev);
+
+		editExternalVariables(ag, ag.get(0).getExternalVariables().length - 1);
+	}
+
+	public void removeExternalVariable(ActogramGroup ag) {
+		if(ag.size() == 0)
+			throw new IllegalArgumentException("Empty actogram group");
+
+		ExternalVariable[] evs = ag.get(0).getExternalVariables();
+		String[] names = new String[evs.length];
+		for(int i = 0; i < evs.length; i++)
+			names[i] = evs[i].toString();
+		GenericDialog gd = new GenericDialog("Remove external variable");
+		gd.addChoice("Variable", names, names[0]);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		int idx = gd.getNextChoiceIndex();
+		for(int i = 0; i < ag.size(); i++)
+			ag.get(i).removeExternalVariable(idx);
 	}
 
 	public void addCalculated(Actogram a) {
