@@ -72,6 +72,16 @@ public class Actogram {
 		this.externals = tmp;
 	}
 
+	public void removeExternalVariable(int idx) {
+		int l = externals.length;
+		if(idx < 0 || idx >= l)
+			throw new IllegalArgumentException(idx + " out of range");
+		ExternalVariable[] tmp = new ExternalVariable[l - 1];
+		System.arraycopy(externals, 0, tmp, 0, idx);
+		System.arraycopy(externals, idx + 1, tmp, idx, l - idx - 1);
+		this.externals = tmp;
+	}
+
 	public ExternalVariable[] getExternalVariables() {
 		return externals;
 	}
