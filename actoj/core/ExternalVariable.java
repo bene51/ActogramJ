@@ -15,6 +15,8 @@ public class ExternalVariable {
 	public ExternalVariable(ExternalVariable ext) {
 		this(ext.name, ext.values.length);
 		System.arraycopy(ext.values, 0, this.values, 0, ext.values.length);
+		this.onColor = ext.onColor;
+		this.offColor = ext.offColor;
 	}
 
 	public ExternalVariable(String name, int perLength) {
