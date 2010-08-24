@@ -35,6 +35,11 @@ public class Actogram {
 	public final TimeInterval.Units unit;
 
 	/**
+	 * Array of external variables.
+	 */
+	private ExternalVariable[] externals;
+
+	/**
 	 * Constructur.
 	 */
 	public Actogram(String name, Actogram a) {
@@ -44,6 +49,7 @@ public class Actogram {
 		this.interval = a.interval;
 		this.SAMPLES_PER_PERIOD = a.SAMPLES_PER_PERIOD;
 		this.unit = a.unit;
+		this.externals = new ExternalVariable[0];
 	}
 
 	/**
@@ -55,6 +61,23 @@ public class Actogram {
 		this.interval = interval;
 		this.SAMPLES_PER_PERIOD = SPP;
 		this.unit = unit;
+		this.externals = new ExternalVariable[0];
+	}
+
+	public void addExternalVariable(ExternalVariable v) {
+		int l = externals.length;
+		ExternalVariable[] tmp = new ExternalVariable[l + 1];
+		System.arraycopy(externals, 0, tmp, 0, l);
+		tmp[l] = v;
+		this.externals = tmp;
+	}
+
+	public ExternalVariable[] getExternalVariables() {
+		return externals;
+	}
+
+	public void setExternalVariables(ExternalVariable[] ext) {
+		this.externals = ext;
 	}
 
 	/**
