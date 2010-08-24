@@ -83,6 +83,8 @@ public class ActogramCanvas extends JPanel
 	/** Distance between top border and the actogram. */
 	private int INT_TOP = 20;
 
+	private int INT_TOP_ALL;
+
 	/** Distance between bottom border and the actogram. */
 	private int INT_BOTTOM = 5;
 
@@ -119,9 +121,13 @@ public class ActogramCanvas extends JPanel
 		this.feedback = f;
 		this.nSubdivisions = subd;
 
+		int nExternals = actogram.getExternalVariables().length;
+		INT_TOP_ALL = INT_TOP + nExternals * 25;
+
 		BufferedImage ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
-		height = ip.getHeight() + INT_TOP + INT_BOTTOM;
+		height = ip.getHeight() + INT_TOP_ALL + INT_BOTTOM;
+
 		this.setPreferredSize(new Dimension(width, height));
 
 		addMouseListener(this);
@@ -145,9 +151,9 @@ public class ActogramCanvas extends JPanel
 
 	// x and y are coordinates within this component
 	public String getPositionString(int x, int y) {
-		if(x < INT_LEFT || y < INT_TOP || x >= width - INT_RIGHT || y >= height - INT_BOTTOM)
+		if(x < INT_LEFT || y < INT_TOP_ALL || x >= width - INT_RIGHT || y >= height - INT_BOTTOM)
 			return "outside";
-		int idx = processor.getIndex(x - INT_LEFT, y - INT_TOP);
+		int idx = processor.getIndex(x - INT_LEFT, y - INT_TOP_ALL);
 		if(idx < 0)
 			return "outside";
 		Actogram a = processor.downsampled;
@@ -230,20 +236,38 @@ public class ActogramCanvas extends JPanel
 		GraphicsBackend gb = new GraphicsBackend(g);
 
 		clearBackground(gb);
+		drawCalibration(gb);
 
-		g.drawImage(processor.processor, INT_LEFT, INT_TOP, null);
+		ExternalVariable[] ev = processor.original.getExternalVariables();
+		for(int i = 0; i < ev.length; i++) {
+			gb.setOffsX(INT_LEFT);
+			gb.setOffsY(INT_TOP + i * 25);
+			ev[i].paint(gb, processor.width);
+		}
 
+		g.drawImage(processor.processor, INT_LEFT, INT_TOP_ALL, null);
+
+		gb.setOffsX(0);
+		gb.setOffsY(0);
 		drawFPTriangle(gb);
 		drawFittingInterval(gb);
-		drawCalibration(gb);
 	}
 
 	public void paint(DrawingBackend gb) {
 		clearBackground(gb);
+		drawCalibration(gb);
 
 		float offX = gb.getOffsX(), offY = gb.getOffsY();
+
+		ExternalVariable[] ev = processor.original.getExternalVariables();
+		for(int i = 0; i < ev.length; i++) {
+			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
+			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + i * 25));
+			ev[i].paint(gb, processor.width);
+		}
+
 		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
-		gb.setOffsY(offY + gb.getFactorY() * INT_TOP);
+		gb.setOffsY(offY + gb.getFactorY() * INT_TOP_ALL);
 		processor.clearBackground(gb);
 		processor.drawInto(processor.downsampled,
 				new ActogramProcessor.Histogram(gb), Color.BLACK);
@@ -252,7 +276,6 @@ public class ActogramCanvas extends JPanel
 
 		drawFPTriangle(gb);
 		drawFittingInterval(gb);
-		drawCalibration(gb);
 	}
 
 	private void clearBackground(DrawingBackend g) {
@@ -276,8 +299,8 @@ public class ActogramCanvas extends JPanel
 		if(cIdx < 0) return;
 
 
-		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
-		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
+		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP_ALL);
+		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP_ALL);
 
 		int x0 = INT_LEFT;
 		int x1 = INT_LEFT + processor.processor.getWidth() - 1;
@@ -325,8 +348,8 @@ public class ActogramCanvas extends JPanel
 		int cIdx = processor.getIndex(cu.x, cu.y);
 		if(cIdx < 0) return;
 
-		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP);
-		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP);
+		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP_ALL);
+		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP_ALL);
 
 		g.setLineColor(color.getRGB());
 		g.setLineWidth(stroke);
@@ -385,11 +408,11 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public Point snap(Point in) {
-		if(in.x < INT_LEFT || in.y < INT_TOP ||
+		if(in.x < INT_LEFT || in.y < INT_TOP_ALL ||
 			in.x >= width - INT_RIGHT || in.y >= height - INT_BOTTOM)
 			return null;
 		int bd = processor.baselineDist;
-		int idx = (in.y - INT_TOP)/ bd;
+		int idx = (in.y - INT_TOP_ALL)/ bd;
 		return new Point(in.x - INT_LEFT, (idx + 1) * bd);
 	}
 

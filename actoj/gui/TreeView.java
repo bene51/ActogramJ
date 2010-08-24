@@ -61,6 +61,17 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 		popup.add(item);
 
+		item = new JMenuItem("External variables");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(popupClicked != null) {
+					editExternalVariables(popupClicked);
+					popupClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+
 
 		tree.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -83,6 +94,10 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			}
 
 		});
+	}
+
+	public void editExternalVariables(ActogramGroup ag) {
+		ExternalVariablesDialog.run(ag);
 	}
 
 	public void addCalculated(Actogram a) {
