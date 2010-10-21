@@ -1,7 +1,9 @@
 package actoj.gui;
 
 import actoj.core.*;
+import actoj.util.PeakFinder;
 import actoj.fitting.FitSine;
+import actoj.periodogram.*;
 
 import javax.swing.JPanel;
 import javax.swing.JComponent;
@@ -23,6 +25,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import ij.IJ;
+import ij.gui.Plot;
 
 /**
  * A JComponent representing one actogram plus accompanying data, like
@@ -180,6 +183,69 @@ public class ActogramCanvas extends JPanel
 		TimeInterval tv = getFreerunningPeriod();
 		return tv == null ? "" : Float.toString(
 			tv.intervalIn(processor.downsampled.unit));
+	}
+
+	public void calculatePeriodogram() {
+		if(fitStart == null || fitCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(fitStart, fitCurr);
+		Point cu = lower(fitStart, fitCurr);
+		if(st.y == cu.y && st.x > cu.x) {
+			Point tmp = st; st = cu; cu = tmp;
+		}
+		int sIdx = processor.getIndex(st.x, st.y);
+		if(sIdx < 0) return;
+		int cIdx = processor.getIndex(cu.x, cu.y);
+		if(cIdx < 0) return;
+
+		sIdx *= processor.zoom;
+		cIdx *= processor.zoom;
+
+		Actogram org = processor.original;
+		int fromPeriod = org.SAMPLES_PER_PERIOD / 2;
+		int toPeriod = org.SAMPLES_PER_PERIOD * 2;
+
+		FourierPeriodogram fp = new FourierPeriodogram(
+				org, sIdx, cIdx, fromPeriod, toPeriod);
+
+		float[] values = fp.getPeriodogramValues();
+		float factor = org.interval.intervalIn(org.unit);
+		for(int i = 0; i < values.length; i++)
+			values[i] *= factor;
+
+		int[] peaks = PeakFinder.findPeaks(values);
+
+		String unit = org.unit.abbr;
+		Plot plot = new Plot(
+				"Periodogram (Fourier)",
+				"Period (" + unit + ")",
+				"R^2",
+				fp.getPeriod(),
+				values,
+				Plot.LINE);
+		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
+		int H = 200 + Plot.TOP_MARGIN + Plot.BOTTOM_MARGIN;
+		plot.setSize(W, H);
+
+		plot.setColor(Color.BLUE);
+		plot.draw();
+		plot.setColor(Color.RED);
+		plot.addPoints(fp.getPeriod(), fp.getPValues(), Plot.LINE);
+		plot.draw();
+		plot.setColor(Color.BLACK);
+		float maxV = 0;
+		for(float v : values)
+			if(v > maxV)
+				maxV = v;
+		for(int i = 0; i < 5 && i < peaks.length; i++) {
+			int p = peaks[i];
+			plot.drawLine(p + fromPeriod, 0, p + fromPeriod, values[p]);
+			float x = p / (float)(toPeriod - fromPeriod);
+			float y = (maxV - values[p]) / (float)(maxV);
+			plot.addLabel(x, y, Integer.toString((fromPeriod + p)));
+		}
+		plot.show();
 	}
 
 	public void fitSine() {
