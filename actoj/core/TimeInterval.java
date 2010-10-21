@@ -7,19 +7,23 @@ public class TimeInterval {
 	 * the appropriate number of milliseconds in the inMillis field.
 	 */
 	public static enum Units {
-		MILLISECONDS (1),
-		SECONDS      (1000),
-		MINUTES      (1000 * 60),
-		HOURS        (1000 * 60 * 60),
-		DAYS         (1000 * 60 * 60 * 24),
-		YEARS        (1000 * 60 * 60 * 24 * 365L);
+		MILLISECONDS (1, "ms"),
+		SECONDS      (1000, "s"),
+		MINUTES      (1000 * 60, "m"),
+		HOURS        (1000 * 60 * 60, "h"),
+		DAYS         (1000 * 60 * 60 * 24, "d"),
+		YEARS        (1000 * 60 * 60 * 24 * 365L, "y");
 
 		/** Number of milliseconds of this time unit. */
-		final long inMillis;
+		public final long inMillis;
+
+		/** Abbreviation char */
+		public final String abbr;
 
 		/** Constructor. */
-		Units(long inMillis) {
+		Units(long inMillis, String abbr) {
 			this.inMillis = inMillis;
+			this.abbr = abbr;
 		}
 	}
 
