@@ -360,7 +360,7 @@ public class ActogramCanvas extends JPanel
 		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
 		int dx = Math.abs(cu.x - st.x);
 		dx *= processor.downsampled.interval.millis;
-		String v = dy + "periods";
+		String v = dy + " cycles";
 		String h = new TimeInterval(dx).toString();
 		g.setFont(font);
 		FontMetrics fm = getFontMetrics(font);
