@@ -422,7 +422,7 @@ public class ActogramCanvas extends JPanel
 		return p1.y <= p2.y ? p1 : p2;
 	}
 
-	private Point lower(Point p1, Point p2) {
+	private static Point lower(Point p1, Point p2) {
 		if(p1 == null || p2 == null)
 			return null;
 		return p1.y <= p2.y ? p2 : p1;
