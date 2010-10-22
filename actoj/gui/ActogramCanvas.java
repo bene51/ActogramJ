@@ -36,7 +36,7 @@ public class ActogramCanvas extends JPanel
 			implements MouseMotionListener, MouseListener {
 
 	public static enum Mode {
-		POINTING, FREERUNNING_PERIOD, FITTING;
+		POINTING, FREERUNNING_PERIOD, SELECTING;
 	}
 
 	/** The ActogramProcessor for drawing the actogram itself. */
@@ -529,25 +529,7 @@ public class ActogramCanvas extends JPanel
 
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-
-	public void mouseReleased(MouseEvent e) {
-		if(mode == Mode.FITTING) {
-			if(fitStart == null || fitCurr == null ||
-				fitStart.equals(fitCurr))
-				return;
-			boolean doit = IJ.showMessageWithCancel(
-				"Fit", "Automatically fit sine curve?");
-			if(!doit)
-				return;
-// 			fitSine();
-			Thread t = new Thread() {
-				public void run() {
-					calculatePeriodogram();
-				}
-			};
-			t.start();
-		}
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	public void mouseClicked(MouseEvent e) {
 		if(mode == Mode.FREERUNNING_PERIOD) {
@@ -556,7 +538,7 @@ public class ActogramCanvas extends JPanel
 			if(feedback != null)
 				feedback.periodChanged(getPeriodString());
 			repaint();
-		} else if(mode == Mode.FITTING) {
+		} else if(mode == Mode.SELECTING) {
 			fitStart = null;
 			fitCurr = null;
 			repaint();
@@ -568,7 +550,7 @@ public class ActogramCanvas extends JPanel
 			fpStart = snap(e.getPoint());
 			fpCurr = snap(e.getPoint());
 			repaint();
-		} else if(mode == Mode.FITTING) {
+		} else if(mode == Mode.SELECTING) {
 			fitStart = snap(e.getPoint());
 			fitCurr = snap(e.getPoint());
 			repaint();
@@ -593,7 +575,7 @@ public class ActogramCanvas extends JPanel
 			if(feedback != null)
 				feedback.periodChanged(getPeriodString());
 			repaint();
-		} else if(mode == Mode.FITTING) {
+		} else if(mode == Mode.SELECTING) {
 			fitCurr = snap(e.getPoint());
 			repaint();
 		}

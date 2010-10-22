@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
 
 import java.io.File;
 
-public class FittingAction extends AbstractAction {
+public class SelectingAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
 	// 	DEFAULT
@@ -27,17 +27,17 @@ public class FittingAction extends AbstractAction {
 
 	private final ImageCanvas canvas;
 
-	public FittingAction(ImageCanvas canvas) {
+	public SelectingAction(ImageCanvas canvas) {
 		this.canvas = canvas;
-		putValue(SHORT_DESCRIPTION, "Fitting");
-		putValue(LONG_DESCRIPTION, "Fitting");
+		putValue(SHORT_DESCRIPTION, "Selecting");
+		putValue(LONG_DESCRIPTION, "Selecting");
 		putValue(NAME, "");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/fitting.png")));
+			ActogramJ_.class.getResource("icons/selecting.png")));
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		canvas.calculatePeriodogram();
+		canvas.setCanvasMode(ActogramCanvas.Mode.SELECTING);
 	}
 }
 

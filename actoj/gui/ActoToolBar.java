@@ -25,9 +25,15 @@ public class ActoToolBar extends JToolBar {
 		add(button);
 		bg.add(button);
 		button.setSelected(true);
+		button = new JToggleButton(new SelectingAction(win.canvas));
+		add(button);
+		bg.add(button);
 		button = new JToggleButton(new CalibAction(win.canvas));
 		add(button);
 		bg.add(button);
+
+		addSeparator();
+
 		button = new JToggleButton(new FittingAction(win.canvas));
 		add(button);
 		bg.add(button);

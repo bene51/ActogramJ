@@ -62,6 +62,22 @@ public class ImageCanvas extends JPanel {
 		return maxColumns;
 	}
 
+	public void calculatePeriodogram() {
+		// TODO really to all?
+		// TODO catch RuntimeException, which is thrown
+		// in ActogramCanvas if no start and end is selected
+		// maybe get the parameters here, and then calculate
+		// it for every canvas with a selection, and show a
+		// error message only if no canvas has a selection.
+		// maybe: ActogramCanvas.hasSelection()
+		new Thread() {
+			public void run() {
+				for(ActogramCanvas ac : actograms)
+					ac.calculatePeriodogram();
+			}
+		}.start();
+	}
+
 	public void setCanvasMode(ActogramCanvas.Mode mode) {
 		for(ActogramCanvas ac : actograms)
 			ac.setMode(mode);
