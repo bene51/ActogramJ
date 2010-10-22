@@ -3,49 +3,22 @@ package actoj.periodogram;
 import ij.IJ;
 import actoj.core.Actogram;
 
-public class FourierPeriodogram {
+public class FourierPeriodogram extends Periodogram {
 
-	private final int N;
-
-	// in sample units
-	private final int fromPeriod;
-	private final int toPeriod;
-	private final float[] measurements;
-
-	private final float[] period;
-	private final float[] periodogramValues;
-	private final float[] pValues;
-
-	// to exclusive
 	public FourierPeriodogram(Actogram acto,
 			int fromData, int toData, int fromPeriod, int toPeriod) {
-		this.N = toData - fromData;
-		this.measurements = new float[N];
-		System.arraycopy(acto.getData(), fromData, measurements, 0, N);
-
-		this.fromPeriod = fromPeriod;
-		this.toPeriod = toPeriod;
-		int nResult = toPeriod - fromPeriod;
-		this.periodogramValues = new float[nResult];
-		this.period = new float[nResult];
-		this.pValues = new float[nResult];
-
-		calculatePeriodogram();
+		super(acto, fromData, toData, fromPeriod, toPeriod);
 	}
 
-	public float[] getPeriodogramValues() {
-		return periodogramValues;
+	public String getMethod() {
+		return "Fourier";
 	}
 
-	public float[] getPeriod() {
-		return period;
+	public String getResponseName() {
+		return "R^2";
 	}
 
-	public float[] getPValues() {
-		return pValues;
-	}
-
-	public void calculatePeriodogram() {
+	protected void calculatePeriodogram() {
 		int n = toPeriod - fromPeriod;
 		float maxR2 = 0f;
 		float sumR2 = 0f;
