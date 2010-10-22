@@ -26,6 +26,7 @@ import java.awt.event.MouseMotionListener;
 
 import ij.IJ;
 import ij.gui.Plot;
+import ij.gui.GenericDialog;
 
 /**
  * A JComponent representing one actogram plus accompanying data, like
@@ -205,22 +206,54 @@ public class ActogramCanvas extends JPanel
 		Actogram org = processor.original;
 		int fromPeriod = org.SAMPLES_PER_PERIOD / 2;
 		int toPeriod = org.SAMPLES_PER_PERIOD * 2;
+		String unit = org.unit.abbr;
+		int nPeaks = 3;
+		int methodIdx = 0;
 
-		FourierPeriodogram fp = new FourierPeriodogram(
-				org, sIdx, cIdx, fromPeriod, toPeriod);
+		GenericDialog gd = new GenericDialog("Create Periodogram");
+		String[] methods = new String[] { "Fourier", "Enright" };
+		gd.addChoice("Method", methods, methods[methodIdx]);
+		gd.addNumericField("from_period", fromPeriod, 0, 6, unit);
+		gd.addNumericField("to_period", toPeriod, 0, 6, unit);
+		gd.addNumericField("Number of peaks", nPeaks, 0);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		methodIdx  = gd.getNextChoiceIndex();
+		fromPeriod = (int)gd.getNextNumber();
+		toPeriod   = (int)gd.getNextNumber();
+		nPeaks     = (int)gd.getNextNumber();
+
+		Periodogram fp = null;
+		switch(methodIdx) {
+			case 0:
+				fp = new FourierPeriodogram(
+					org, sIdx, cIdx, fromPeriod, toPeriod);
+				break;
+			case 1:
+				fp = new EnrightPeriodogram(
+					org, sIdx, cIdx, fromPeriod, toPeriod);
+				break;
+			default: throw new RuntimeException(
+					   "Invalid periodogram method");
+		}
 
 		float[] values = fp.getPeriodogramValues();
+		float[] pValues = fp.getPValues();
 		float factor = org.interval.intervalIn(org.unit);
 		for(int i = 0; i < values.length; i++)
 			values[i] *= factor;
 
-		int[] peaks = PeakFinder.findPeaks(values);
+		float[] relatives = new float[values.length];
+		for(int i = 0; i < values.length; i++)
+			relatives[i] = values[i] - pValues[i];
+		int[] peaks = PeakFinder.findPeaks(relatives);
 
-		String unit = org.unit.abbr;
 		Plot plot = new Plot(
-				"Periodogram (Fourier)",
+				"Periodogram (" + fp.getMethod() + ")",
 				"Period (" + unit + ")",
-				"R^2",
+				fp.getResponseName(),
 				fp.getPeriod(),
 				values,
 				Plot.LINE);
@@ -231,14 +264,14 @@ public class ActogramCanvas extends JPanel
 		plot.setColor(Color.BLUE);
 		plot.draw();
 		plot.setColor(Color.RED);
-		plot.addPoints(fp.getPeriod(), fp.getPValues(), Plot.LINE);
+		plot.addPoints(fp.getPeriod(), pValues, Plot.LINE);
 		plot.draw();
 		plot.setColor(Color.BLACK);
 		float maxV = 0;
 		for(float v : values)
 			if(v > maxV)
 				maxV = v;
-		for(int i = 0; i < 5 && i < peaks.length; i++) {
+		for(int i = 0; i < nPeaks && i < peaks.length; i++) {
 			int p = peaks[i];
 			plot.drawLine(p + fromPeriod, 0, p + fromPeriod, values[p]);
 			float x = p / (float)(toPeriod - fromPeriod);
@@ -506,7 +539,13 @@ public class ActogramCanvas extends JPanel
 				"Fit", "Automatically fit sine curve?");
 			if(!doit)
 				return;
-			fitSine();
+// 			fitSine();
+			Thread t = new Thread() {
+				public void run() {
+					calculatePeriodogram();
+				}
+			};
+			t.start();
 		}
 	}
 
