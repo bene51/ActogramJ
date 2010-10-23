@@ -67,16 +67,16 @@ public class ActogramCanvas extends JPanel
 	private Point fpCurr = null;
 
 	/**
-	 * Start point of the fitting interval within the
+	 * Start point of the selection interval within the
 	 * ActogramProcessor coordinate system.
 	 */
-	private Point fitStart = null;
+	private Point selStart = null;
 
 	/**
-	 * Current(end) point of the fitting interval within the
+	 * Current(end) point of the selection interval within the
 	 * ActogramProcessor coordinate system.
 	 */
-	private Point fitCurr = null;
+	private Point selCurr = null;
 
 	/** Distance between left border and the actogram. */
 	private int INT_LEFT = 5;
@@ -153,6 +153,10 @@ public class ActogramCanvas extends JPanel
 		repaint();
 	}
 
+	public boolean hasSelection() {
+		return selStart != null && selCurr != null;
+	}
+
 	// x and y are coordinates within this component
 	public String getPositionString(int x, int y) {
 		if(x < INT_LEFT || y < INT_TOP_ALL || x >= width - INT_RIGHT || y >= height - INT_BOTTOM)
@@ -187,11 +191,11 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public void calculatePeriodogram() {
-		if(fitStart == null || fitCurr == null)
+		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
 
-		Point st = upper(fitStart, fitCurr);
-		Point cu = lower(fitStart, fitCurr);
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
 		if(st.y == cu.y && st.x > cu.x) {
 			Point tmp = st; st = cu; cu = tmp;
 		}
@@ -287,11 +291,11 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public void fitSine() {
-		if(fitStart == null || fitCurr == null)
+		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
 
-		Point st = upper(fitStart, fitCurr);
-		Point cu = lower(fitStart, fitCurr);
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
 		if(st.y == cu.y && st.x > cu.x) {
 			Point tmp = st; st = cu; cu = tmp;
 		}
@@ -314,8 +318,8 @@ public class ActogramCanvas extends JPanel
 				new GraphicsBackend(processor.processor.createGraphics())),
 			new Color(1f, 0f, 0f, 0.5f));
 
-		fitStart = null;
-		fitCurr = null;
+		selStart = null;
+		selCurr = null;
 		repaint();
 
 		StringBuffer msg = new StringBuffer();
@@ -353,7 +357,7 @@ public class ActogramCanvas extends JPanel
 
 		gb.setOffsX(0);
 		gb.setOffsY(0);
-		drawFittingInterval(gb);
+		drawSelection(gb);
 		drawFPTriangle(gb);
 	}
 
@@ -378,7 +382,7 @@ public class ActogramCanvas extends JPanel
 		gb.setOffsX(offX);
 		gb.setOffsY(offY);
 
-		drawFittingInterval(gb);
+		drawSelection(gb);
 		drawFPTriangle(gb);
 	}
 
@@ -388,12 +392,12 @@ public class ActogramCanvas extends JPanel
 		g.fillRectangle(width, height);
 	}
 
-	private void drawFittingInterval(DrawingBackend g) {
-		if(fitStart == null || fitCurr == null)
+	private void drawSelection(DrawingBackend g) {
+		if(selStart == null || selCurr == null)
 			return;
 
-		Point st = upper(fitStart, fitCurr);
-		Point cu = lower(fitStart, fitCurr);
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
 		if(st.y == cu.y && st.x > cu.x) {
 			Point tmp = st; st = cu; cu = tmp;
 		}
@@ -544,8 +548,8 @@ public class ActogramCanvas extends JPanel
 				feedback.periodChanged(getPeriodString());
 			repaint();
 		} else if(mode == Mode.SELECTING) {
-			fitStart = null;
-			fitCurr = null;
+			selStart = null;
+			selCurr = null;
 			repaint();
 		}
 	}
@@ -556,8 +560,8 @@ public class ActogramCanvas extends JPanel
 			fpCurr = snap(e.getPoint());
 			repaint();
 		} else if(mode == Mode.SELECTING) {
-			fitStart = snap(e.getPoint());
-			fitCurr = snap(e.getPoint());
+			selStart = snap(e.getPoint());
+			selCurr = snap(e.getPoint());
 			repaint();
 		}
 	}
@@ -581,7 +585,7 @@ public class ActogramCanvas extends JPanel
 				feedback.periodChanged(getPeriodString());
 			repaint();
 		} else if(mode == Mode.SELECTING) {
-			fitCurr = snap(e.getPoint());
+			selCurr = snap(e.getPoint());
 			repaint();
 		}
 	}
