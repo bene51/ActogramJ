@@ -190,7 +190,10 @@ public class ActogramCanvas extends JPanel
 			tv.intervalIn(processor.downsampled.unit));
 	}
 
-	public void calculatePeriodogram() {
+	/**
+	 * @param method: 0 - Fourier, 1 - Enright, 2 - Lomb-Scargle
+	 */
+	public void calculatePeriodogram(int fromPeriod, int toPeriod, int method, int nPeaks) {
 		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
 
@@ -208,30 +211,9 @@ public class ActogramCanvas extends JPanel
 		cIdx *= processor.zoom;
 
 		Actogram org = processor.original;
-		int fromPeriod = org.SAMPLES_PER_PERIOD / 2;
-		int toPeriod = org.SAMPLES_PER_PERIOD * 2;
-		String unit = org.unit.abbr;
-		int nPeaks = 3;
-		int methodIdx = 0;
-
-		GenericDialog gd = new GenericDialog("Create Periodogram");
-		String[] methods = new String[] {
-			"Fourier", "Enright", "Lomb-Scargle" };
-		gd.addChoice("Method", methods, methods[methodIdx]);
-		gd.addNumericField("from_period", fromPeriod, 0, 6, unit);
-		gd.addNumericField("to_period", toPeriod, 0, 6, unit);
-		gd.addNumericField("Number of peaks", nPeaks, 0);
-		gd.showDialog();
-		if(gd.wasCanceled())
-			return;
-
-		methodIdx  = gd.getNextChoiceIndex();
-		fromPeriod = (int)gd.getNextNumber();
-		toPeriod   = (int)gd.getNextNumber();
-		nPeaks     = (int)gd.getNextNumber();
 
 		Periodogram fp = null;
-		switch(methodIdx) {
+		switch(method) {
 			case 0:
 				fp = new FourierPeriodogram(
 					org, sIdx, cIdx, fromPeriod, toPeriod);
@@ -248,6 +230,7 @@ public class ActogramCanvas extends JPanel
 					   "Invalid periodogram method");
 		}
 
+		String unit = org.unit.abbr;
 		float[] values = fp.getPeriodogramValues();
 		float[] pValues = fp.getPValues();
 		float factor = org.interval.intervalIn(org.unit);

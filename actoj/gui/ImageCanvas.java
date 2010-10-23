@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 
 import java.awt.*;
 
-import ij.process.ImageProcessor;
+import ij.IJ;
+import ij.gui.GenericDialog;
 
 public class ImageCanvas extends JPanel {
 
@@ -63,16 +64,45 @@ public class ImageCanvas extends JPanel {
 	}
 
 	public void calculatePeriodogram() {
-		// TODO really to all?
-		// maybe get the parameters here, and then calculate
-		// it for every canvas with a selection, and show a
-		// error message only if no canvas has a selection.
-		// maybe: ActogramCanvas.hasSelection()
+		ActogramCanvas first = null;
+		for(ActogramCanvas ac : actograms) {
+			if(ac.hasSelection()) {
+				first = ac;
+				break;
+			}
+		}
+		if(first == null) {
+			IJ.error("Selection required");
+			return;
+		}
+		Actogram a = first.processor.original;
+
+		int fromPeriod = a.SAMPLES_PER_PERIOD / 2;
+		int toPeriod = a.SAMPLES_PER_PERIOD * 2;
+		int nPeaks = 3;
+		int methodIdx = 0;
+
+		GenericDialog gd = new GenericDialog("Create Periodogram");
+		String[] methods = new String[] {
+			"Fourier", "Enright", "Lomb-Scargle" };
+		gd.addChoice("Method", methods, methods[methodIdx]);
+		gd.addNumericField("from_period", fromPeriod, 0, 6, "samples");
+		gd.addNumericField("to_period", toPeriod, 0, 6, "samples");
+		gd.addNumericField("Number of peaks", nPeaks, 0);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		final int m  = gd.getNextChoiceIndex();
+		final int fp = (int)gd.getNextNumber();
+		final int tp = (int)gd.getNextNumber();
+		final int np = (int)gd.getNextNumber();
 		new Thread() {
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection())
-						ac.calculatePeriodogram();
+						ac.calculatePeriodogram(
+							fp, tp, m, np);
 				}
 			}
 		}.start();
