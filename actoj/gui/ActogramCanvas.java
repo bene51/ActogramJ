@@ -211,7 +211,8 @@ public class ActogramCanvas extends JPanel
 		int methodIdx = 0;
 
 		GenericDialog gd = new GenericDialog("Create Periodogram");
-		String[] methods = new String[] { "Fourier", "Enright" };
+		String[] methods = new String[] {
+			"Fourier", "Enright", "Lomb-Scargle" };
 		gd.addChoice("Method", methods, methods[methodIdx]);
 		gd.addNumericField("from_period", fromPeriod, 0, 6, unit);
 		gd.addNumericField("to_period", toPeriod, 0, 6, unit);
@@ -233,6 +234,10 @@ public class ActogramCanvas extends JPanel
 				break;
 			case 1:
 				fp = new EnrightPeriodogram(
+					org, sIdx, cIdx, fromPeriod, toPeriod);
+				break;
+			case 2:
+				fp = new LombScarglePeriodogram(
 					org, sIdx, cIdx, fromPeriod, toPeriod);
 				break;
 			default: throw new RuntimeException(
