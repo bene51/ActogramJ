@@ -256,12 +256,12 @@ public class ActogramCanvas extends JPanel
 		int[] peaks = PeakFinder.findPeaks(relatives);
 
 		Plot plot = new Plot(
-				"Periodogram (" + fp.getMethod() + ")",
-				"Period (" + unit + ")",
-				fp.getResponseName(),
-				fp.getPeriod(),
-				values,
-				Plot.LINE);
+			"Periodogram (" + fp.getMethod() + ") - " + org.name,
+			"Period (" + unit + ")",
+			fp.getResponseName(),
+			fp.getPeriod(),
+			values,
+			Plot.LINE);
 		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
 		int H = 200 + Plot.TOP_MARGIN + Plot.BOTTOM_MARGIN;
 		plot.setSize(W, H);
