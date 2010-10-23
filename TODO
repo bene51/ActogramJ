@@ -1,0 +1,18 @@
+* not everything seems to get repainted when the selection changes
+* right side should show the same order of files
+* daily average
+* open multiple files
+* print landscape
+* normalize actogram: sum of activity is some specified value
+* manual and automatic peak/location selection
+* blue bg -> white
+* uniform in CUSTOM kernel
+* zoom out
+* Rename 'External veriable' to 'Environmental bar'
+* Environmental bar adjusted for 1 period
+* scale the bars, too.
+* 'number of ticks' in calibration bar
+* Freerunning period in 1.xx h
+* Versions and about dialog.
+
+
