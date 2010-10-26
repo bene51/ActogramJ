@@ -28,21 +28,23 @@ public class CalculateDialog {
 
 	private static float[] makeKernel() {
 		GenericDialog gd = new GenericDialog("Make kernel");
-		gd.addChoice("Type", new String[] {"Gaussian"}, "Gaussian");
-		gd.addNumericField("sigma", 2.0, 3);
+		gd.addChoice("Type", new String[] {"Gaussian", "Uniform"}, "Gaussian");
+		gd.addNumericField("sigma/length", 2.0, 3);
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return null;
 		int idx = gd.getNextChoiceIndex();
-		if(idx != 0)
-			return null;
 		float sigma = (float)gd.getNextNumber();
-		return Filters.makeGaussianKernel(sigma);
+		switch(idx) {
+			case 0: return Filters.makeGaussianKernel(sigma);
+			case 1: return Filters.makeUniformKernel((int)sigma);
+		}
+		return null;
 	}
 
 	private static class CalcDialog extends JDialog {
 
-		private JComboBox methodBox, operationBox;
+		private JComboBox operationBox;
 		private JTextField kernelField;
 		private JButton kernelButton;
 
@@ -71,19 +73,6 @@ public class CalculateDialog {
 			operationBox = new JComboBox(new String[] {
 				"Average", "Sum", "Smooth" });
 			getContentPane().add(operationBox, c);
-
-
-			c.gridy++;
-			c.gridx = 0;
-			l = new JLabel("Method:");
-			smoothComponents.add(l);
-			getContentPane().add(l, c);
-
-			c.gridx++;
-			methodBox = new JComboBox(new String[] {
-				"Gaussian", "Uniform", "Custom" });
-			smoothComponents.add(methodBox);
-			getContentPane().add(methodBox, c);
 
 
 			c.gridy++;
@@ -144,12 +133,6 @@ public class CalculateDialog {
 				}
 			});
 
-			methodBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					adjustEnabled();
-				}
-			});
-
 			pack();
 			adjustEnabled();
 			setVisible(true);
@@ -159,19 +142,6 @@ public class CalculateDialog {
 			int idx = operationBox.getSelectedIndex();
 			for(JComponent c : smoothComponents)
 				c.setEnabled(idx == 2);
-			if(idx == 2) {
-				int midx = methodBox.getSelectedIndex();
-				float[] kernel = null;
-				switch(midx) {
-					case 0: kernel = GAUSSIAN_KERNEL; break;
-					case 1: kernel = UNIFORM_KERNEL; break;
-					case 2: kernel = new float[0]; break;
-				}
-				kernelField.setEnabled(true);
-				kernelField.setText(arrayToString(kernel));
-				kernelField.setEnabled(midx == 2);
-				kernelButton.setEnabled(midx == 2);
-			}
 		}
 
 		private String arrayToString(float[] arr) {
@@ -183,7 +153,6 @@ public class CalculateDialog {
 
 		private void calculate() {
 			int opIndex = operationBox.getSelectedIndex();
-			int meIndex = methodBox.getSelectedIndex();
 
 			ArrayList<ActogramCanvas> acs;
 			List<Actogram> actograms;
@@ -210,19 +179,7 @@ public class CalculateDialog {
 				case 2: // smooth
 					acs = win.canvas.getActograms();
 					actograms = new ArrayList<Actogram>();
-					float[] kernel = null;
-					switch(meIndex) {
-						case 0:
-						kernel = GAUSSIAN_KERNEL;
-						break;
-						case 1:
-						kernel = UNIFORM_KERNEL;
-						break;
-						case 2:
-						kernel = getKernel(
-							kernelField.getText());
-						break;
-					}
+					float[] kernel = getKernel(kernelField.getText());
 					for(ActogramCanvas ac : acs) {
 						Actogram ag =
 							ac.processor.original;
