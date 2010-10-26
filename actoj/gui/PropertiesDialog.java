@@ -16,7 +16,7 @@ public class PropertiesDialog {
 		gd.addNumericField("Number of plots", ppl, 0);
 		gd.addNumericField("Upper limit", ul, 1);
 		gd.addNumericField("Max. number of columns on sheet", cols, 0);
-		gd.addNumericField("Number of calibration subdivisions", subd, 0);
+		gd.addNumericField("Number of ticks in the calibration bar", subd, 0);
 		gd.addNumericField("Ratio w:h", whRatio, 2);
 		gd.showDialog();
 		if(gd.wasCanceled())
