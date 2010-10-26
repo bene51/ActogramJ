@@ -67,7 +67,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		popup.addSeparator();
 
-		item = new JMenuItem("Add external variable");
+		item = new JMenuItem("Add environmental bar");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
@@ -78,7 +78,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 		popup.add(item);
 
-		item = new JMenuItem("Remove external variable");
+		item = new JMenuItem("Remove environmental bar");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
@@ -89,7 +89,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		});
 		popup.add(item);
 
-		item = new JMenuItem("Edit external variables");
+		item = new JMenuItem("Edit environmental bars");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
@@ -133,7 +133,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		if(ag.size() == 0)
 			throw new IllegalArgumentException("Non-empty actogram group required");
 
-		String name = IJ.getString("Variable name", "Unnamed");
+		String name = IJ.getString("Name", "Unnamed");
 		if(name.length() == 0)
 			name = "Unnamed";
 		ExternalVariable ev = new ExternalVariable(name, ag.get(0).SAMPLES_PER_PERIOD);
@@ -152,8 +152,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		String[] names = new String[evs.length];
 		for(int i = 0; i < evs.length; i++)
 			names[i] = evs[i].toString();
-		GenericDialog gd = new GenericDialog("Remove external variable");
-		gd.addChoice("Variable", names, names[0]);
+		GenericDialog gd = new GenericDialog("Remove environmental bar");
+		gd.addChoice("Environmental bar", names, names[0]);
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;

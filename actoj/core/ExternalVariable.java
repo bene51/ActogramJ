@@ -6,7 +6,7 @@ public class ExternalVariable {
 
 	public final boolean[] values;
 
-	public String name = "New variable";
+	public String name = "New bar";
 	public int onColor  = java.awt.Color.WHITE.getRGB();
 	public int offColor = java.awt.Color.BLACK.getRGB();
 

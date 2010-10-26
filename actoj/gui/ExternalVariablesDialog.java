@@ -36,7 +36,7 @@ public class ExternalVariablesDialog extends JDialog {
 
 	public ExternalVariablesDialog(ActogramGroup ag, int idx) {
 		super(IJ.getInstance(), true);
-		setTitle("External variables");
+		setTitle("Environmental bar");
 		this.ag = ag;
 
 		if(ag.size() == 0)
