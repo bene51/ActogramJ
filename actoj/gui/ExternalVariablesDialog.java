@@ -253,7 +253,7 @@ public class ExternalVariablesDialog extends JDialog {
 		}
 
 		public void paintComponent(Graphics g) {
-			ext.paint(new GraphicsBackend(g), width);
+			ext.paint(new GraphicsBackend(g), width, 1);
 		}
 	}
 }

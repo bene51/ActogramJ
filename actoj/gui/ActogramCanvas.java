@@ -333,7 +333,7 @@ public class ActogramCanvas extends JPanel
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(INT_LEFT);
 			gb.setOffsY(INT_TOP + i * 25);
-			ev[i].paint(gb, processor.width);
+			ev[i].paint(gb, processor.width, processor.ppl);
 		}
 
 		g.drawImage(processor.processor, INT_LEFT, INT_TOP_ALL, null);
@@ -354,7 +354,7 @@ public class ActogramCanvas extends JPanel
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
 			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + i * 25));
-			ev[i].paint(gb, processor.width);
+			ev[i].paint(gb, processor.width, processor.ppl);
 		}
 
 		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);

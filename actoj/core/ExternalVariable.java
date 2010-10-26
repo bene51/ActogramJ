@@ -24,16 +24,17 @@ public class ExternalVariable {
 		this.values = new boolean[perLength];
 	}
 
-	public void paint(DrawingBackend g, int w) {
-		float factor = values.length / (float)w;
+	public void paint(DrawingBackend g, int w, int xfold) {
 		int fh = 12;
 		g.moveTo(0, fh);
 		g.setFont(font);
 		g.setLineColor(0, 0, 0, 255);
 		g.setFillColor(0, 0, 0, 255);
 		g.drawText(name);
+
+		float factor = xfold * values.length / (float)w;
 		for(int x = 0; x < w; x++) {
-			int idx = (int)(factor * x);
+			int idx = ((int)(factor * x)) % values.length;
 			g.setFillColor(values[idx] ? onColor : offColor);
 			g.moveTo(x, fh + 2);
 			g.fillRectangle(1, 10);
