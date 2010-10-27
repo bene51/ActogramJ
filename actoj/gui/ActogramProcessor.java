@@ -44,7 +44,7 @@ public class ActogramProcessor {
 		this.baselineDist = (int)Math.ceil(ppl * spp / (whRatio * nlines));
 		this.signalHeight = (int)Math.ceil(baselineDist * 0.75);
 
-		this.width = ppl * spp;
+		this.width = ppl * spp + 2;
 		this.height = nlines * baselineDist;
 
 		this.processor = createProcessor();
@@ -53,6 +53,9 @@ public class ActogramProcessor {
 	}
 
 	public int getIndex(int x, int y) {
+		if(x < 1 || x >= width - 1)
+			return -1;
+		x -= 1; // there's a 1px border
 		int spp = downsampled.SAMPLES_PER_PERIOD;
 		int lineIdx = (y - 1) / baselineDist;
 		int colIdx = x / spp;
@@ -74,11 +77,12 @@ public class ActogramProcessor {
 		int period = index / spp;
 		int mod = index % spp;
 
-		points[0].x = (ppl - 1) * spp + mod;
+		// + 1 for the 1px border
+		points[0].x = (ppl - 1) * spp + mod + 1;
 		points[0].y = (period + 1) * baselineDist;
 
 		for(int i = 1; i < ppl; i++) {
-			points[i].x = (i - 1) * spp + mod;
+			points[i].x = (i - 1) * spp + mod + 1;
 			points[i].y = points[0].y + baselineDist;
 		}
 	}
@@ -112,7 +116,7 @@ public class ActogramProcessor {
 				if(d < 0 || d >= periods)
 					continue;
 				int y = (l + 1) * baselineDist;
-				int x = c * spp;
+				int x = c * spp + 1;
 				drawPeriod(actogram, d, style, color, x, y);
 			}
 		}
@@ -128,7 +132,7 @@ public class ActogramProcessor {
 		// draw baseline
 		g.setLineColor(0, 0, 0, 255);
 		g.moveTo(x, y);
-		g.lineTo(x + length, y);
+		g.lineTo(x + length - 1, y);
 		// draw signal
 		g.setFillColor(color.getRGB());
 		style.newline(x, y);

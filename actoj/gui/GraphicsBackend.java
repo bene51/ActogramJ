@@ -38,7 +38,7 @@ public class GraphicsBackend extends DrawingBackend {
 	@Override
 	public void drawRectangle(float w, float h) {
 		g.setColor(lColor);
-		g.drawRect(x, y, (int)w, (int) h);
+		g.drawRect(x, y, (int)w - 1, (int) h - 1);
 	}
 
 	@Override
