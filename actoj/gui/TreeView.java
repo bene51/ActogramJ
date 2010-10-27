@@ -9,6 +9,7 @@ import actoj.core.ActogramGroup;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -232,13 +233,27 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		TreePath[] paths = tree.getSelectionPaths();
 		selected.clear();
-		if(paths != null) {
-			for(int i = 0; i < paths.length; i++) {
-				Object l = paths[i].getLastPathComponent();
-				if(l instanceof Actogram)
-					selected.add((Actogram)l);
+		if(paths == null) {
+			fireSelectionChanged();
+			return;
+		}
+
+		TreeMap<Integer, Actogram> rowToActogram =
+			new TreeMap<Integer, Actogram>();
+
+		for(int i = 0; i < paths.length; i++) {
+			TreePath p = paths[i];
+			Object l = p.getLastPathComponent();
+			if(l instanceof Actogram) {
+				Actogram a = (Actogram) l;
+				int row = tree.getRowForPath(p);
+				rowToActogram.put(row, a);
 			}
 		}
+
+		for(int row : rowToActogram.keySet())
+			selected.add(rowToActogram.get(row));
+
 		fireSelectionChanged();
 	}
 
