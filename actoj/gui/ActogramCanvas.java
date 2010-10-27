@@ -108,7 +108,7 @@ public class ActogramCanvas extends JPanel
 	private final Color color = new Color(26, 93, 0);
 
 	/** Background color for the canvas */
-	private final Color background = new Color(139, 142, 255);
+	private final Color background = Color.WHITE;// new Color(139, 142, 255);
 
 	private int nSubdivisions = 8;
 
@@ -384,6 +384,8 @@ public class ActogramCanvas extends JPanel
 		g.setFillColor(background.getRGB());
 		g.moveTo(0, 0);
 		g.fillRectangle(width, height);
+		g.setLineColor(Color.BLACK.getRGB());
+		g.drawRectangle(width, height);
 	}
 
 	private void drawSelection(DrawingBackend g) {

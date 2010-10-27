@@ -5,7 +5,7 @@ z right side should show the same order of files
 * print landscape
 * normalize actogram: sum of activity is some specified value
 * manual and automatic peak/location selection
-* blue bg -> white
+z blue bg -> white
 z uniform in CUSTOM kernel
 * zoom out
 z Rename 'External veriable' to 'Environmental bar'
