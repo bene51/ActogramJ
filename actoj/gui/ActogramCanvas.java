@@ -116,6 +116,8 @@ public class ActogramCanvas extends JPanel
 
 	private Mode mode = Mode.POINTING;
 
+	private final int extVarHeight;
+
 
 	public ActogramCanvas(
 				Actogram actogram,
@@ -131,9 +133,10 @@ public class ActogramCanvas extends JPanel
 		this.feedback = f;
 		this.nSubdivisions = subd;
 		this.fpUnit = fpUnit;
+		this.extVarHeight = 2 * processor.signalHeight;
 
 		int nExternals = actogram.getExternalVariables().length;
-		INT_TOP_ALL = INT_TOP + nExternals * 25;
+		INT_TOP_ALL = INT_TOP + nExternals * extVarHeight;
 
 		BufferedImage ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
@@ -340,8 +343,8 @@ public class ActogramCanvas extends JPanel
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(INT_LEFT);
-			gb.setOffsY(INT_TOP + i * 25);
-			ev[i].paint(gb, processor.width, processor.ppl);
+			gb.setOffsY(INT_TOP + i * extVarHeight);
+			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
 		g.drawImage(processor.processor, INT_LEFT, INT_TOP_ALL, null);
@@ -361,8 +364,8 @@ public class ActogramCanvas extends JPanel
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
-			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + i * 25));
-			ev[i].paint(gb, processor.width, processor.ppl);
+			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + i * extVarHeight));
+			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
 		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
