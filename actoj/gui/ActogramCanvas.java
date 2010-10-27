@@ -88,7 +88,7 @@ public class ActogramCanvas extends JPanel
 	private int INT_RIGHT = 5;
 
 	/** Distance between top border and the actogram. */
-	private int INT_TOP = 20;
+	private int INT_TOP = 5;
 
 	private int INT_TOP_ALL;
 
@@ -136,7 +136,7 @@ public class ActogramCanvas extends JPanel
 		this.extVarHeight = 2 * processor.signalHeight;
 
 		int nExternals = actogram.getExternalVariables().length;
-		INT_TOP_ALL = INT_TOP + nExternals * extVarHeight;
+		INT_TOP_ALL = INT_TOP + (1 + nExternals) * extVarHeight;
 
 		BufferedImage ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
@@ -343,7 +343,7 @@ public class ActogramCanvas extends JPanel
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(INT_LEFT);
-			gb.setOffsY(INT_TOP + i * extVarHeight);
+			gb.setOffsY(INT_TOP + (i + 1) * extVarHeight);
 			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
@@ -364,7 +364,7 @@ public class ActogramCanvas extends JPanel
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
 			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
-			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + i * extVarHeight));
+			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + (i + 1) * extVarHeight));
 			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
@@ -497,15 +497,16 @@ public class ActogramCanvas extends JPanel
 
 	private void drawCalibration(DrawingBackend g) {
 		int w = width - INT_LEFT - INT_RIGHT;
+		int h = extVarHeight;
 
 		g.setLineColor(0, 0, 0, 255);
 		g.setLineWidth(1f);
-		g.moveTo(INT_LEFT, 10);
-		g.lineTo(width - INT_RIGHT, 10);
+		g.moveTo(INT_LEFT, INT_TOP + h/2);
+		g.lineTo(width - INT_RIGHT, INT_TOP + h/2);
 		for(int i = 0; i <= nSubdivisions; i++) {
 			int x = INT_LEFT + (int)Math.round((float)i * w / nSubdivisions);
-			g.moveTo(x, 10 - 5);
-			g.lineTo(x, 10 + 5);
+			g.moveTo(x, INT_TOP + h/2 - h/4);
+			g.lineTo(x, INT_TOP + h/2 + h/4);
 		}
 	}
 
