@@ -1,5 +1,7 @@
 package actoj.gui;
 
+import actoj.core.TimeInterval.Units;
+
 import ij.gui.GenericDialog;
 
 public class PropertiesDialog {
@@ -18,6 +20,11 @@ public class PropertiesDialog {
 		gd.addNumericField("Max. number of columns on sheet", cols, 0);
 		gd.addNumericField("Number of ticks in the calibration bar", subd, 0);
 		gd.addNumericField("Ratio w:h", whRatio, 2);
+		String[] units = new String[Units.values().length];
+		for(int i = 0; i < units.length; i++)
+			units[i] = Units.values()[i].toString();
+		String u = Units.HOURS.toString();
+		gd.addChoice("Unit of freerunning period", units, u);
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;
@@ -27,8 +34,10 @@ public class PropertiesDialog {
 		cols = (int)gd.getNextNumber(); 
 		subd = (int)gd.getNextNumber();
 		whRatio = (float)gd.getNextNumber();
+		Units fpUnit = Units.values()[
+			gd.getNextChoiceIndex()];
 
-		ic.set(ppl, ul, cols, subd, whRatio);
+		ic.set(ppl, ul, cols, subd, whRatio, fpUnit);
 	}
 }
 

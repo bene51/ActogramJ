@@ -1,6 +1,7 @@
 package actoj.gui;
 
 import actoj.core.Actogram;
+import actoj.core.TimeInterval.Units;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ImageCanvas extends JPanel {
 	private float uLimit = 1f;
 	private int ppl = 2;
 	private float whRatio = 2f / 3f;
+	private Units fpUnits = Units.HOURS;
 
 	private ActogramCanvas.Feedback feedback;
 
@@ -174,12 +176,13 @@ public class ImageCanvas extends JPanel {
 		}
 	}
 
-	public void set(int ppl, float uLimit, int maxColumns, int nSubdivisions, float whRatio) {
+	public void set(int ppl, float uLimit, int maxColumns, int nSubdivisions, float whRatio, Units fpUnits) {
 		this.ppl = ppl;
 		this.uLimit = uLimit;
 		this.maxColumns = maxColumns;
 		this.nSubdivisions = nSubdivisions;
 		this.whRatio = whRatio;
+		this.fpUnits = fpUnits;
 		update();
 	}
 
@@ -224,7 +227,8 @@ public class ImageCanvas extends JPanel {
 			else
 				ac.add(new ActogramCanvas(
 					a, zoomf, uLimit, ppl,
-					nSubdivisions, whRatio, feedback));
+					nSubdivisions, whRatio,
+					fpUnits, feedback));
 		}
 		clear();
 		addAll(ac);
@@ -238,7 +242,7 @@ public class ImageCanvas extends JPanel {
 		for(ActogramCanvas old : actograms)
 			ac.add(new ActogramCanvas(
 				old.processor.original, zoomf, uLimit, ppl,
-				nSubdivisions, whRatio, feedback));
+				nSubdivisions, whRatio, fpUnits, feedback));
 
 		clear();
 		addAll(ac);

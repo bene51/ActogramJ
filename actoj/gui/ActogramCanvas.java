@@ -1,6 +1,7 @@
 package actoj.gui;
 
 import actoj.core.*;
+import actoj.core.TimeInterval.Units;
 import actoj.util.PeakFinder;
 import actoj.fitting.FitSine;
 import actoj.periodogram.*;
@@ -23,6 +24,8 @@ import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
+import java.text.DecimalFormat;
 
 import ij.IJ;
 import ij.gui.Plot;
@@ -109,6 +112,8 @@ public class ActogramCanvas extends JPanel
 
 	private int nSubdivisions = 8;
 
+	private final Units fpUnit;
+
 	private Mode mode = Mode.POINTING;
 
 
@@ -119,11 +124,13 @@ public class ActogramCanvas extends JPanel
 				int ppl,
 				int subd,
 				float whRatio,
+				Units fpUnit,
 				Feedback f) {
 		super();
 		this.processor = new ActogramProcessor(actogram, zoom, uLimit, ppl, whRatio);
 		this.feedback = f;
 		this.nSubdivisions = subd;
+		this.fpUnit = fpUnit;
 
 		int nExternals = actogram.getExternalVariables().length;
 		INT_TOP_ALL = INT_TOP + nExternals * 25;
@@ -184,10 +191,11 @@ public class ActogramCanvas extends JPanel
 		return new TimeInterval(i * (dy * spp + dx) / dy);
 	}
 
+	DecimalFormat df = new DecimalFormat("#.##");
 	public String getPeriodString() {
 		TimeInterval tv = getFreerunningPeriod();
-		return tv == null ? "" : Float.toString(
-			tv.intervalIn(processor.downsampled.unit));
+		return tv == null ? "" : df.format(
+			tv.intervalIn(fpUnit)) + fpUnit.abbr;
 	}
 
 	/**
