@@ -235,6 +235,7 @@ public class ImageCanvas extends JPanel {
 		invalidate();
 		validateTree();
 		getParent().doLayout();
+		repaint();
 	}
 
 	public void update() {
@@ -250,6 +251,7 @@ public class ImageCanvas extends JPanel {
 		invalidate();
 		validateTree();
 		getParent().doLayout();
+		repaint();
 	}
 }
 
