@@ -218,8 +218,8 @@ public class ActogramCanvas extends JPanel
 		int cIdx = processor.getIndex(cu.x, cu.y);
 		if(cIdx < 0) return;
 
-		sIdx *= processor.zoom;
-		cIdx *= processor.zoom;
+		sIdx = processor.getIndexInOriginal(sIdx);
+		cIdx = processor.getIndexInOriginal(cIdx);
 
 		Actogram org = processor.original;
 
@@ -298,8 +298,8 @@ public class ActogramCanvas extends JPanel
 		int cIdx = processor.getIndex(cu.x, cu.y);
 		if(cIdx < 0) return;
 
-		sIdx *= processor.zoom;
-		cIdx *= processor.zoom;
+		sIdx = processor.getIndexInOriginal(sIdx);
+		cIdx = processor.getIndexInOriginal(cIdx);
 
 		Actogram org = processor.original;
 

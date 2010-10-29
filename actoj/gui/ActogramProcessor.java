@@ -52,6 +52,10 @@ public class ActogramProcessor {
 			new GraphicsBackend(processor.getGraphics())), Color.BLACK);
 	}
 
+	public int getIndexInOriginal(int i) {
+		return (int)Math.floor(i / zoom);
+	}
+
 	public int getIndex(int x, int y) {
 		if(x < 1 || x >= width - 1)
 			return -1;
