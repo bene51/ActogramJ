@@ -53,7 +53,7 @@ public class ActogramProcessor {
 	}
 
 	public int getIndexInOriginal(int i) {
-		return (int)Math.floor(i / zoom);
+		return (int)Math.floor(i * zoom);
 	}
 
 	public int getIndex(int x, int y) {
