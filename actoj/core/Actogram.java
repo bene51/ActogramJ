@@ -134,6 +134,12 @@ public class Actogram {
 		return downsample(2);
 	}
 
+	public Actogram downsample(double factor) {
+		if(factor == (int)(factor))
+			return downsampleInt((int)factor);
+		return downsampleDouble(factor);
+	}
+
 	/**
 	 * Downsamples the data array by the given factor, and thus returns
 	 * a new actogram with length original_length / f;
@@ -145,9 +151,9 @@ public class Actogram {
 	 * if the number of measurements is not devidable by the given factor,
 	 * the last measurements is cut off.
 	 */
-	public Actogram downsample(int f) {
+	public Actogram downsampleInt(int f) {
 		if(SAMPLES_PER_PERIOD % f != 0)
-			return null;
+			throw new IllegalArgumentException("Invalid zoom factor: " + f);
 
 		int newlength = data.length / f;
 		float[] newdata = new float[newlength];
@@ -159,6 +165,36 @@ public class Actogram {
 			newdata[i] /= f;
 		}
 		return new Actogram(name, newdata, SAMPLES_PER_PERIOD / f, interval.mul(f), unit);
+	}
+
+	public Actogram downsampleDouble(double factor) {
+		if(SAMPLES_PER_PERIOD % factor != 0)
+			throw new IllegalArgumentException("Invalid zoom factor: " + factor);
+
+		int l = (int)Math.ceil(data.length / factor);
+		float[] newdata = new float[l];
+
+		double[] cumOld = new double[data.length + 1];
+		cumOld[0] = 0;
+		for(int i = 0; i < data.length; i++)
+			cumOld[i + 1] = cumOld[i] + data[i];
+
+		double[] cumNew = new double[l + 1];
+		cumNew[0] = 0;
+		for(int newIdx = 0; newIdx < l; newIdx++) {
+			int uInt = (int)Math.floor((newIdx + 1) * factor);
+			double partialOver = (newIdx + 1) * factor - uInt;
+			double c = cumOld[uInt] - cumNew[newIdx];
+			if(partialOver > 0)
+				c += partialOver * data[uInt];
+			newdata[newIdx] = (float)(c / factor);
+			cumNew[newIdx + 1] = cumNew[newIdx] + c;
+		}
+
+		return new Actogram(name, newdata,
+			(int)(SAMPLES_PER_PERIOD / factor),
+			new TimeInterval(interval.millis * factor),
+			unit);
 	}
 
 	/**
@@ -245,6 +281,24 @@ public class Actogram {
 	 */
 	public String toString() {
 		return name;
+	}
+
+	public static void main(String[] args) {
+		System.out.println("before");
+		float[] ex = new float[] {
+			0, 1, 2, 3, 4, 5 , 6, 7, 8, 9, 10, 11, 12, 13 };
+		for(int i = 0; i < ex.length; i++)
+			System.out.print(ex[i] + " ");
+		System.out.println();
+
+		Actogram a = new Actogram("lkj", ex, 14, // 6,
+			new TimeInterval(1, TimeInterval.Units.MINUTES),
+			TimeInterval.Units.MINUTES);
+		a = a.downsample(1.75);
+
+		for(int i = 0; i < a.data.length; i++)
+			System.out.print(a.data[i] + " ");
+		System.out.println();
 	}
 }
 

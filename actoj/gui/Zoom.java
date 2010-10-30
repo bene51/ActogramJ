@@ -2,8 +2,10 @@ package actoj.gui;
 
 public class Zoom {
 
-	public static final int[] LEVELS  = new int[] {
-		40, 30, 20, 18, 16, 15, 12, 10, 9, 8, 6, 5, 4, 3, 2, 1};
+	public static final double[] LEVELS  = new double[] {
+		40, 30, 20, 18, 16, 15, 12,
+		10, 9, 8, 6, 5, 4, 3, 2, 1,
+		0.5, 0.33, 0.25, 0.2, 0.1};
 
 	public static final int DEFAULT_ZOOM = 9; // i.e. LEVELS[9] = 8
 	
@@ -34,7 +36,7 @@ public class Zoom {
 	}
 
 	private void updateCanvas() {
-		int zoom = LEVELS[current];
+		double zoom = LEVELS[current];
 		canvas.setZoom(zoom);
 	}
 }

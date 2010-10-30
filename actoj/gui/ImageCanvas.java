@@ -28,7 +28,7 @@ public class ImageCanvas extends JPanel {
 
 	private int nSubdivisions = 8;
 	final Zoom zoom;
-	private int zoomf;
+	private double zoomf;
 	private float uLimit = 1f;
 	private int ppl = 2;
 	private float whRatio = 2f / 3f;
@@ -132,7 +132,7 @@ public class ImageCanvas extends JPanel {
 		return nSubdivisions;
 	}
 
-	public void setZoom(int zoom) {
+	public void setZoom(double zoom) {
 		if(this.zoomf != zoom) {
 			this.zoomf = zoom;
 			update();

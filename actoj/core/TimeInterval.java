@@ -74,30 +74,30 @@ public class TimeInterval {
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		double r = millis;
-		double h = r / Units.YEARS.inMillis;
-		if(h > 0) {
-			b.append((int)Math.floor(h) + "y ");
-			r = r - h;
+		int h = (int)Math.floor(r / Units.YEARS.inMillis);
+		if(h >= 1) {
+			b.append(h + "y ");
+			r -= h * Units.YEARS.inMillis;
 		}
-		h = r / Units.DAYS.inMillis;
-		if(h > 0) {
-			b.append((int)Math.floor(h) + "d ");
-			r = r - h;
+		h = (int)Math.floor(r / Units.DAYS.inMillis);
+		if(h >= 1) {
+			b.append(h + "d ");
+			r -= h * Units.DAYS.inMillis;
 		}
-		h = r / Units.HOURS.inMillis;
-		if(h > 0) {
-			b.append((int)Math.floor(h) + "h ");
-			r = r - h;
+		h = (int)Math.floor(r / Units.HOURS.inMillis);
+		if(h >= 1) {
+			b.append(h + "h ");
+			r -= h * Units.HOURS.inMillis;
 		}
-		h = r / Units.MINUTES.inMillis;
-		if(h > 0) {
-			b.append((int)Math.floor(h) + "m ");
-			r = r - h;
+		h = (int)Math.floor(r / Units.MINUTES.inMillis);
+		if(h >= 1) {
+			b.append(h + "m ");
+			r -= h * Units.MINUTES.inMillis;
 		}
-		h = r / Units.SECONDS.inMillis;
-		if(h > 0) {
-			b.append((int)Math.floor(h) + "s ");
-			r = r - h;
+		h = (int)Math.floor(r / Units.SECONDS.inMillis);
+		if(h >= 1) {
+			b.append(h + "s ");
+			r -= h * Units.SECONDS.inMillis;
 		}
 		if(r > 0)
 			b.append(df.format(r) + "ms ");

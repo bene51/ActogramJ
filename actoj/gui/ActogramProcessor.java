@@ -13,7 +13,7 @@ public class ActogramProcessor {
 	public final Actogram downsampled;
 	public final BufferedImage processor;
 
-	public final int zoom;
+	public final double zoom;
 	public final float uLimit;
 	public final int ppl;
 
@@ -26,7 +26,7 @@ public class ActogramProcessor {
 
 	public final float whRatio;
 
-	public ActogramProcessor(Actogram actogram, int zoom, float uLimit, int ppl, float whRatio) {
+	public ActogramProcessor(Actogram actogram, double zoom, float uLimit, int ppl, float whRatio) {
 		this.original = actogram;
 		this.downsampled = actogram.downsample(zoom);
 

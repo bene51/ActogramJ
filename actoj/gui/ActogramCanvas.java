@@ -121,7 +121,7 @@ public class ActogramCanvas extends JPanel
 
 	public ActogramCanvas(
 				Actogram actogram,
-				int zoom,
+				double zoom,
 				float uLimit,
 				int ppl,
 				int subd,
