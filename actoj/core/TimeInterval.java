@@ -1,5 +1,7 @@
 package actoj.core;
 
+import java.text.DecimalFormat;
+
 public class TimeInterval {
 
 	/**
@@ -28,26 +30,26 @@ public class TimeInterval {
 	}
 
 	/** Length of this time interval in milliseconds. */
-	public final long millis;
+	public final double millis;
 
 	/**
 	 * Constructor.
 	 */
-	public TimeInterval(long ms) {
+	public TimeInterval(double ms) {
 		this.millis = ms;
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public TimeInterval(long mul, Units unit) {
+	public TimeInterval(double mul, Units unit) {
 		this.millis = mul * unit.inMillis;
 	}
 
 	/**
 	 * Multiply this interval with the given factor.
 	 */
-	public TimeInterval mul(int factor) {
+	public TimeInterval mul(double factor) {
 		return new TimeInterval(factor * millis);
 	}
 
@@ -68,31 +70,37 @@ public class TimeInterval {
 	/**
 	 * Returns a string representation of this time interval.
 	 */
+	DecimalFormat df = new DecimalFormat("#.##");
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		long r = millis;
-		if(r / Units.YEARS.inMillis > 0) {
-			b.append((r / Units.YEARS.inMillis) + "y ");
-			r %= Units.YEARS.inMillis;
+		double r = millis;
+		double h = r / Units.YEARS.inMillis;
+		if(h > 0) {
+			b.append((int)Math.floor(h) + "y ");
+			r = r - h;
 		}
-		if(r / Units.DAYS.inMillis > 0) {
-			b.append((r / Units.DAYS.inMillis) + "d ");
-			r %= Units.DAYS.inMillis;
+		h = r / Units.DAYS.inMillis;
+		if(h > 0) {
+			b.append((int)Math.floor(h) + "d ");
+			r = r - h;
 		}
-		if(r / Units.HOURS.inMillis > 0) {
-			b.append((r / Units.HOURS.inMillis) + "h ");
-			r %= Units.HOURS.inMillis;
+		h = r / Units.HOURS.inMillis;
+		if(h > 0) {
+			b.append((int)Math.floor(h) + "h ");
+			r = r - h;
 		}
-		if(r / Units.MINUTES.inMillis > 0) {
-			b.append((r / Units.MINUTES.inMillis) + "m ");
-			r %= Units.MINUTES.inMillis;
+		h = r / Units.MINUTES.inMillis;
+		if(h > 0) {
+			b.append((int)Math.floor(h) + "m ");
+			r = r - h;
 		}
-		if(r / Units.SECONDS.inMillis > 0) {
-			b.append((r / Units.SECONDS.inMillis) + "s ");
-			r %= Units.SECONDS.inMillis;
+		h = r / Units.SECONDS.inMillis;
+		if(h > 0) {
+			b.append((int)Math.floor(h) + "s ");
+			r = r - h;
 		}
 		if(r > 0)
-			b.append(r + "ms ");
+			b.append(df.format(r) + "ms ");
 
 		if(b.length() == 0)
 			b.append('0');

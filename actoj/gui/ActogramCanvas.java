@@ -189,7 +189,7 @@ public class ActogramCanvas extends JPanel
 			return null;
 		int dx = cu.x - st.x;
 
-		long i = processor.downsampled.interval.millis;
+		double i = processor.downsampled.interval.millis;
 		int spp = processor.downsampled.SAMPLES_PER_PERIOD;
 		return new TimeInterval(i * (dy * spp + dx) / dy);
 	}
@@ -462,7 +462,7 @@ public class ActogramCanvas extends JPanel
 		g.lineTo(s.x, c.y);
 		g.lineTo(c.x, c.y);
 		int dy = (cu.y - st.y) / processor.baselineDist; // in periods
-		int dx = Math.abs(cu.x - st.x);
+		double dx = Math.abs(cu.x - st.x);
 		dx *= processor.downsampled.interval.millis;
 		String v = dy + " cycles";
 		String h = new TimeInterval(dx).toString();
