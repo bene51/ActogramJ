@@ -42,21 +42,45 @@ public class OpenAction extends AbstractAction {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		OpenDialog od = new OpenDialog("Open...", "");
-		String dir = od.getDirectory();
-		String file = od.getFileName();
-		if(dir == null || file == null)
+		String dir = OpenDialog.getLastDirectory();
+
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Open");
+		fc.setMultiSelectionEnabled(true);
+		if (dir != null)
+			fc.setCurrentDirectory(new File(dir));
+		int ret = fc.showOpenDialog(IJ.getInstance());
+		if(ret != JFileChooser.APPROVE_OPTION)
 			return;
-		String path = new File(dir, file).getAbsolutePath();
-		PreviewDialog pd = new PreviewDialog(path, treeview);
+		File[] files = fc.getSelectedFiles();
+		if(files == null || files.length == 0)
+			return;
+
+                dir = fc.getCurrentDirectory().getPath()
+			+ File.separator;
+		OpenDialog.setLastDirectory(dir);
+
+		PreviewDialog pd = new PreviewDialog(files, treeview);
 		pd.pack();
 		pd.setVisible(true);
 	}
 
+// 	public void actionPerformed(ActionEvent e) {
+// 		OpenDialog od = new OpenDialog("Open...", "");
+// 		String dir = od.getDirectory();
+// 		String file = od.getFileName();
+// 		if(dir == null || file == null)
+// 			return;
+// 		String path = new File(dir, file).getAbsolutePath();
+// 		PreviewDialog pd = new PreviewDialog(path, treeview);
+// 		pd.pack();
+// 		pd.setVisible(true);
+// 	}
+
 	private static final class PreviewDialog extends JDialog
 					implements ActionListener {
 
-		private final String file;
+		private final File[] files;
 		private final TreeView treeview;
 
 		private int numRows, numCols, startCol, startRow, spp, calValue;
@@ -68,14 +92,14 @@ public class OpenAction extends AbstractAction {
 			startColField, numColField, sppField, calValueField;
 		private JComboBox calUnitBox;
 
-		public PreviewDialog(String file, TreeView treeview) {
+		public PreviewDialog(File[] files, TreeView treeview) {
 			super();
-			this.file = file;
+			this.files = files;
 			this.treeview = treeview;
 			try {
 				createGUI();
 			} catch(IOException e) {
-				IJ.error("Can't read " + file);
+				IJ.error("Can't read " + files[0]);
 				e.printStackTrace();
 			}
 		}
@@ -103,7 +127,7 @@ public class OpenAction extends AbstractAction {
 			c.weightx = c.weighty = 1.0;
 			c.fill = GridBagConstraints.BOTH;
 
-			preview = new PreviewTable(file);
+			preview = new PreviewTable(files[0].getAbsolutePath());
 			JScrollPane scroll = new JScrollPane(preview);
 			scroll.setPreferredSize(new Dimension(400, 200));
 			scroll.setBorder(BorderFactory.
@@ -225,7 +249,7 @@ public class OpenAction extends AbstractAction {
 			}
 		}
 
-		public void readFile() throws IOException {
+		public void readFile(String file) throws IOException {
 			treeview.add(ActogramReader.readActograms(
 				file, startCol - 1, numCols,
 				startRow - 1, numRows, spp,
@@ -243,12 +267,14 @@ public class OpenAction extends AbstractAction {
 						ex.getMessage());
 				}
 				saveDefaults();
-				try {
-					readFile();
-				} catch(Exception ex) {
-					IJ.error("Error reading " + file + "\n"
-						+ ex.getClass() + ": " + ex.getMessage());
-					ex.printStackTrace();
+				for(File f : files) {
+					try {
+						readFile(f.getAbsolutePath());
+					} catch(Exception ex) {
+						IJ.error("Error reading " + f + "\n"
+								+ ex.getClass() + ": " + ex.getMessage());
+						ex.printStackTrace();
+					}
 				}
 				dispose();
 			} else if(e.getActionCommand().equals("Cancel")) {
