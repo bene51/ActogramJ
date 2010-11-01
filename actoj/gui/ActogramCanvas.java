@@ -6,6 +6,8 @@ import actoj.util.PeakFinder;
 import actoj.fitting.FitSine;
 import actoj.periodogram.*;
 
+import ij.util.Tools;
+
 import javax.swing.JPanel;
 import javax.swing.JComponent;
 
@@ -253,6 +255,9 @@ public class ActogramCanvas extends JPanel
 			relatives[i] = values[i] - pValues[i];
 		int[] peaks = PeakFinder.findPeaks(relatives);
 
+		double[] yminmax = Tools.getMinMax(values);
+		double[] xminmax = Tools.getMinMax(fp.getPeriod());
+
 		Plot plot = new Plot(
 			"Periodogram (" + fp.getMethod() + ") - " + org.name,
 			"Period (" + unit + ")",
@@ -263,6 +268,11 @@ public class ActogramCanvas extends JPanel
 		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
 		int H = 200 + Plot.TOP_MARGIN + Plot.BOTTOM_MARGIN;
 		plot.setSize(W, H);
+		plot.setLimits(
+			xminmax[0],
+			xminmax[1],
+			yminmax[0] - 0.1 * (yminmax[1] - yminmax[0]),
+			yminmax[1]);
 
 		plot.setColor(Color.BLUE);
 		plot.draw();
