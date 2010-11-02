@@ -246,6 +246,25 @@ public class Actogram {
 	}
 
 	/**
+	 * Multiplies each data value with the given value.
+	 */
+	public static void multiply(Actogram actogram, float s) {
+		for(int i = 0; i < actogram.data.length; i++)
+			actogram.data[i] *= s;
+	}
+
+	/**
+	 * Calculates the sum of all data values.
+	 */
+	public static float sum(Actogram actogram) {
+		double s = 0.0;
+		for(int i = 0; i < actogram.data.length; i++)
+			s += actogram.data[i];
+		return (float)s;
+	}
+
+
+	/**
 	 * Convenience method, equivalent to
 	 * devide(sum(actograms), actograms.size()).
 	 */

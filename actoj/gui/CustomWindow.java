@@ -53,6 +53,14 @@ public class CustomWindow extends JFrame
 		setVisible(true);
 	}
 
+	public ImageCanvas getCanvas() {
+		return canvas;
+	}
+
+	public TreeView getTreeView() {
+		return tree;
+	}
+
 	public void externalVariablesChanged() {
 		canvas.update();
 	}

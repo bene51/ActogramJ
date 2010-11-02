@@ -3,7 +3,7 @@ z right side should show the same order of files
 * daily average
 z open multiple files
 * print landscape
-* normalize actogram: sum of activity is some specified value
+z normalize actogram: sum of activity is some specified value
 * manual and automatic peak/location selection
 z blue bg -> white
 z uniform in CUSTOM kernel

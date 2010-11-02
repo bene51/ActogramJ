@@ -80,6 +80,38 @@ public class ImageCanvas extends JPanel {
 		return maxColumns;
 	}
 
+	public Actogram[] normalizeActograms() {
+		int n = actograms.size();
+		if(n < 2) {
+			IJ.error("At least two actograms are required");
+			return null;
+		}
+		String[] names = new String[n];
+		for(int i = 0; i < n; i++)
+			names[i] = actograms.get(i).processor.original.name;
+
+		GenericDialog gd = new GenericDialog("Normalize actograms");
+		gd.addChoice("Reference actogram: ", names, names[0]);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return null;
+
+		int refIdx = gd.getNextChoiceIndex();
+		Actogram ref = actograms.get(refIdx).processor.original;
+		Actogram[] res = new Actogram[n];
+		float totalActivity = Actogram.sum(ref);
+		for(int i = 0; i < n; i++) {
+			Actogram c = actograms.get(i).processor.original;
+			res[i] = new Actogram(c.name + "_normalized", c);
+			if(i == refIdx)
+				continue;
+			float act = Actogram.sum(res[i]);
+			float factor = totalActivity / act;
+			Actogram.multiply(res[i], factor);
+		}
+		return res;
+	}
+
 	public void calculatePeriodogram() {
 		ActogramCanvas first = null;
 		for(ActogramCanvas ac : actograms) {
