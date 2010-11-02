@@ -31,7 +31,7 @@ public class PointerAction extends AbstractAction {
 		this.canvas = canvas;
 		putValue(SHORT_DESCRIPTION, "Pointer");
 		putValue(LONG_DESCRIPTION, "Pointer");
-		putValue(NAME, "");
+		putValue(NAME, "Pointer tool");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/pointer.png")));
 	}

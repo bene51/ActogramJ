@@ -41,8 +41,14 @@ public class CustomWindow extends JFrame
 		split.setDividerLocation(200);
 
 		getContentPane().add(split);
-		getContentPane().add(new ActoToolBar(this), BorderLayout.NORTH);
+		ActoToolBar toolbar = new ActoToolBar(this);
+		ActoMenuBar menubar = new ActoMenuBar(this);
+		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(status, BorderLayout.SOUTH);
+		setJMenuBar(menubar);
+
+		canvas.addModeChangeListener(toolbar);
+		canvas.addModeChangeListener(menubar);
 		pack();
 		setVisible(true);
 	}

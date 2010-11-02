@@ -31,7 +31,7 @@ public class SelectingAction extends AbstractAction {
 		this.canvas = canvas;
 		putValue(SHORT_DESCRIPTION, "Selecting");
 		putValue(LONG_DESCRIPTION, "Selecting");
-		putValue(NAME, "");
+		putValue(NAME, "Selection tool");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/selecting.png")));
 	}

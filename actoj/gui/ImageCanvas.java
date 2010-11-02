@@ -39,6 +39,8 @@ public class ImageCanvas extends JPanel {
 	private GridBagLayout gridbag = new GridBagLayout();
 	private GridBagConstraints c = new GridBagConstraints();
 
+	private ArrayList<ModeChangeListener> listeners = new ArrayList<ModeChangeListener>();
+
 	public ImageCanvas(ActogramCanvas.Feedback feedback) {
 		this.feedback = feedback;
 		zoom = new Zoom(this);
@@ -47,6 +49,19 @@ public class ImageCanvas extends JPanel {
 		setLayout(gridbag);
 		c.gridx = maxColumns - 1; c.gridy = -1;
 		c.insets = new Insets(PADDING, PADDING, PADDING, PADDING);
+	}
+
+	public void removeModeChangeListener(ModeChangeListener l) {
+		listeners.remove(l);
+	}
+
+	public void addModeChangeListener(ModeChangeListener l) {
+		listeners.add(l);
+	}
+
+	private void fireModeChanged(ActogramCanvas.Mode mode) {
+		for(ModeChangeListener l : listeners)
+			l.modeChanged(mode);
 	}
 
 	public ArrayList<ActogramCanvas> getActograms() {
@@ -113,6 +128,7 @@ public class ImageCanvas extends JPanel {
 	public void setCanvasMode(ActogramCanvas.Mode mode) {
 		for(ActogramCanvas ac : actograms)
 			ac.setMode(mode);
+		fireModeChanged(mode);
 	}
 
 	public void setMaxColumns(int n) {

@@ -31,7 +31,7 @@ public class CalibAction extends AbstractAction {
 		this.canvas = canvas;
 		putValue(SHORT_DESCRIPTION, "Calibration");
 		putValue(LONG_DESCRIPTION, "Calibration");
-		putValue(NAME, "");
+		putValue(NAME, "Period tool");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/calib.png")));
 	}
