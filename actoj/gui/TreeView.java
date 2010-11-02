@@ -166,6 +166,23 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		fireExternalVariablesChanged();
 	}
 
+	public void clearSelection() {
+		tree.clearSelection();
+	}
+
+	public void addToSelection(Actogram[] actograms) {
+		for(Actogram a : actograms) {
+			TreePath tp = model.findLeaf(new TreePath(model.getRoot()), a);
+			if(tp != null)
+				tree.addSelectionPath(tp);
+		}
+	}
+
+	public void setSelection(Actogram[] actograms) {
+		clearSelection();
+		addToSelection(actograms);
+	}
+
 	public void addCalculated(Actogram a) {
 		if(!hasCalculated) {
 			ActogramGroup ag = new ActogramGroup("Calculated");
@@ -285,6 +302,25 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			if(parent instanceof ActogramGroup)
 				return ((ActogramGroup)parent).indexOf((Actogram)child);
 			return -1;
+		}
+
+		public TreePath findLeaf(TreePath path, Object a) {
+			Object parent = path.getLastPathComponent();
+			// check if one of the children is the object
+			for(int i = 0; i < getChildCount(parent); i++)
+				if(getChild(parent, i) == a)
+					return path.pathByAddingChild(a);
+
+			// check if one of the children's subtree has the
+			// object
+			for(int i = 0; i < getChildCount(parent); i++) {
+				TreePath np = path.pathByAddingChild(getChild(parent, i));
+				TreePath res = findLeaf(np, a);
+				if(res != null)
+					return res;
+			}
+
+			return null;
 		}
 
 		public Object getRoot() {
