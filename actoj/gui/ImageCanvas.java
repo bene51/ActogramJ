@@ -133,7 +133,7 @@ public class ImageCanvas extends JPanel {
 
 		GenericDialog gd = new GenericDialog("Create Periodogram");
 		String[] methods = new String[] {
-			"Fourier", "Enright", "Lomb-Scargle" };
+			"Fourier", "Chi-Square", "Lomb-Scargle" };
 		gd.addChoice("Method", methods, methods[methodIdx]);
 		gd.addNumericField("from_period", fromPeriod, 0, 6, "samples");
 		gd.addNumericField("to_period", toPeriod, 0, 6, "samples");

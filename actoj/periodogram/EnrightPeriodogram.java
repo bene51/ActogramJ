@@ -12,7 +12,7 @@ public class EnrightPeriodogram extends Periodogram {
 	}
 
 	public String getMethod() {
-		return "Enright";
+		return "Chi-Square";
 	}
 
 	public String getResponseName() {
