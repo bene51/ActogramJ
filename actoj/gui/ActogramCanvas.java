@@ -206,7 +206,9 @@ public class ActogramCanvas extends JPanel
 	/**
 	 * @param method: 0 - Fourier, 1 - Enright, 2 - Lomb-Scargle
 	 */
-	public void calculatePeriodogram(int fromPeriod, int toPeriod, int method, int nPeaks) {
+	public void calculatePeriodogram(int fromPeriod, int toPeriod,
+			int method, int nPeaks, float downsamplingFactor) {
+
 		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
 
@@ -223,30 +225,40 @@ public class ActogramCanvas extends JPanel
 		sIdx = processor.getIndexInOriginal(sIdx);
 		cIdx = processor.getIndexInOriginal(cIdx);
 
-		Actogram org = processor.original;
+		sIdx /= downsamplingFactor;
+		cIdx /= downsamplingFactor;
+
+		Actogram acto = processor.original.downsample(
+				downsamplingFactor);
+		fromPeriod /= downsamplingFactor;
+		toPeriod /= downsamplingFactor;
 
 		Periodogram fp = null;
 		switch(method) {
 			case 0:
 				fp = new FourierPeriodogram(
-					org, sIdx, cIdx, fromPeriod, toPeriod);
+					acto, sIdx, cIdx, fromPeriod, toPeriod);
 				break;
 			case 1:
 				fp = new EnrightPeriodogram(
-					org, sIdx, cIdx, fromPeriod, toPeriod);
+					acto, sIdx, cIdx, fromPeriod, toPeriod);
 				break;
 			case 2:
 				fp = new LombScarglePeriodogram(
-					org, sIdx, cIdx, fromPeriod, toPeriod);
+					acto, sIdx, cIdx, fromPeriod, toPeriod);
 				break;
 			default: throw new RuntimeException(
 					   "Invalid periodogram method");
 		}
 
-		String unit = org.unit.abbr;
+		String unit = acto.unit.abbr;
 		float[] values = fp.getPeriodogramValues();
 		float[] pValues = fp.getPValues();
-		float factor = org.interval.intervalIn(org.unit);
+		float[] periods = fp.getPeriod();
+		for(int i = 0; i < periods.length; i++)
+			periods[i] *= downsamplingFactor;
+
+		float factor = acto.interval.intervalIn(acto.unit);
 		for(int i = 0; i < values.length; i++)
 			values[i] *= factor;
 
@@ -256,13 +268,13 @@ public class ActogramCanvas extends JPanel
 		int[] peaks = PeakFinder.findPeaks(relatives);
 
 		double[] yminmax = Tools.getMinMax(values);
-		double[] xminmax = Tools.getMinMax(fp.getPeriod());
+		double[] xminmax = Tools.getMinMax(periods);
 
 		Plot plot = new Plot(
-			"Periodogram (" + fp.getMethod() + ") - " + org.name,
+			"Periodogram (" + fp.getMethod() + ") - " + acto.name,
 			"Period (" + unit + ")",
 			fp.getResponseName(),
-			fp.getPeriod(),
+			periods,
 			values,
 			Plot.LINE);
 		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
@@ -277,7 +289,7 @@ public class ActogramCanvas extends JPanel
 		plot.setColor(Color.BLUE);
 		plot.draw();
 		plot.setColor(Color.RED);
-		plot.addPoints(fp.getPeriod(), pValues, Plot.LINE);
+		plot.addPoints(periods, pValues, Plot.LINE);
 		plot.draw();
 		plot.setColor(Color.BLACK);
 		float maxV = 0;
@@ -289,7 +301,8 @@ public class ActogramCanvas extends JPanel
 			plot.drawLine(p + fromPeriod, 0, p + fromPeriod, values[p]);
 			float x = p / (float)(toPeriod - fromPeriod);
 			float y = (maxV - values[p]) / (float)(maxV);
-			plot.addLabel(x, y, Integer.toString((fromPeriod + p)));
+			float period = (fromPeriod + p) * downsamplingFactor;
+			plot.addLabel(x, y, df.format(period));
 		}
 		plot.show();
 	}

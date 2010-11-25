@@ -17,6 +17,6 @@ z Freerunning period in 1.xx h
 z make p-values visible in the periodogram
 
 * Rename Enright -> Chi-Square
-* Optional downsample before calc. periodogram
+z Optional downsample before calc. periodogram
 * Check correctness of p-values
 
