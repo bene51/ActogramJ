@@ -1,0 +1,183 @@
+<html>
+<body>
+<h2><a name=top>ActogramJ</a></h2>
+
+<ul>
+<li><a href="#installation">1. Installation</a>
+<li><a href="#opening">2. Opening an actogram file</a>
+<li><a href="#displaying">3. Displaying actograms</a></h3>
+<li><a href="#displayparams">4. Change the way actograms are displayed</a></h3>
+<li><a href="#envbar">5. Add environmental bars, e.g. for light</a></h3>
+<li><a href="#export">6. Exporting actograms to pdf</a></h3>
+<li><a href="#calculations">7. Calculations on actograms</a></h3>
+<li><a href="#fp">8. Determining the freerunning period manually</a></h3>
+<li><a href="#periodogram">9. Determining the freerunning period automatically</a>
+<li><a href="#normalization">10. Normalizing actograms</a>
+</ul>
+
+
+
+<h3><a name="installation">1. Installation</a></h3>
+<ul>
+<li><b>On Fiji:</b><br>
+If you are using Fiji, all you need to do is to download <a href="TODO">TODO</a>and copy into Fiji's plugins folder. <br><br>
+<li><b>On ImageJ:</b><br>
+If you are using ImageJ, you need to download <a href="TODO">TODO</a>and copy into ImageJ's plugins folder. Additionally you need <a href="TODO">iText.jar</a>, which also goes to the plugins folder.
+</ul>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name="opening">2. Opening an actogram file</a></h3>
+<p>To open an actogram file, choose "File"&rarr"Open" from the menu bar or click on the "Open" icon in the tool bar. A dialog comes up which lets you choose one or multiple files. Upon your selection, the first selected file will then show up in a preview window, and you can enter some parameters regarding the files to be opened:</p>
+<p align=center><img src=OpenDialog.png/></p>
+<ul>
+<li><b>Columns:</b> <br>
+Enter here the first column and the number of columns s which should be loaded. Each column is loaded as a separate actogram.<br><br>
+<li><b>Rows:</b> <br>
+Enter here the first row and the number of rows which should be loaded.<br><br>
+<li><b>Samples per period:</b> <br>
+Specify the number of sample measurements per period. If one period is a day, and a measurement is taken every minute, this number is 24 * 60 * 60 = 1440 minutes.<br><br>
+<li><b>Interval duration:</b> <br>
+Specify here the interval between measurements. In the example, this would be 1, and the unit is MINUTES.<br><br>
+</ul>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name="displaying">3. Displaying actograms</a></h3>
+<p>Here is a screenshot of the main window of ActogramJ:</p>
+<p align=center><img src=MainWindow.png/></p>
+
+<p>The left hand side consists of a simple browser, which shows a folder for each file you loaded. The contents of each folder are the individual actograms of the corresponding file, numbered consecutively. In this browser, you can select one or more actograms, which will then be displayed in the canvas on the right hand side. To remove a folder (unload a file), you can right-click on it and choose "Remove actograms".</p>
+<p>At the bottom of the window there's a status bar. Amongst other information, it displays the current mouse pointer position while you move the mouse over an actogram.</p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name=displayparams>4. Change the way actograms are displayed</a></h3>
+<p>The most obvious thing you will want to change is the <b>zoom level</b> which defines to which details the displayed actograms are rendered. You can change the zoom level using the drop down menu in the status bar:</p>
+<p align=center><img src=ZoomDropdown.png/></p>
+<p>A zoom value of "1 : 2.0" means for example that the resulting actogram will be half of the size of the original actogram. In this case, values will be averaged pairwise, i.e. the first and the second value, the third and the fourth value, etc.</p>
+
+<p>Several other display settings can be adjusted. These are the number of plots shown per line, the upper limit of the displayed activity values, the maximum number of actograms drawn in a row, the number of ticks in the calibration bar, the width to heigth ratio of the displayed actograms and the units used for displaying the freerunning period in the status bar:</p>
+<p align=center><img src=PropertiesDialog.png/></p>
+<ul>
+<li><b>Number of plots:</b><br>
+Usually, two plots are shown in a line. Following the above example, this means that one line displays two consecutive days (2 * 1440 minutes). The first line starts in the middle and displays the first day only. The second line displays the first day again and the second day, etc. The number of plots per line can be changed here.<br><br>
+
+<li><b>Upper limit:</b><br>
+Basically, an actogram is a list of activity values. The upper limit is something like an upper threshold: All values which are above this threshold are treated as they were equal to the threshold. If the upper limit is set to 1.0 (the default), this means that higher activity values are painted in the actogram as if they were 1. This makes sense if one wants to display the sleep cycle for example. An animal is not sleeping if it shows an activity, independant if this activity is high or low. <br><br>
+
+<li><b>Maximum number of columns on sheet:</b><br>
+This defines the maximum number of actograms drawn in a row in the right canvas of the main window. If you select more actograms (in the left-hand-side browser), they will be displayed in several rows. <br><br>
+
+<li><b>Number of ticks in the calibration bar.</b><br>
+On the top of each displayed actogram a calibration bar is shown. This calibration bar is by default subdivided into 8 regions. Here you can change this number. <br><br>
+
+<li><b>Ratio w:h</b><br>
+This defines the ratio between width and height of the displayed actograms. <br><br>
+
+<li><b>Unit of freerunning period:</b><br>
+When you infer the freerunning period manually (see later), its value is shown in the status bar. Here you can choose the units in which the value is displayed.<br><br>
+</ul>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name="envbar">5. Add environmental bars, e.g. for light</a></h3>
+<p>You can show additional bars for each actogram, which indicate the state of external influences like light or temperature. To do so, right-click on a folder in the actogram browser and choose 'Add environmental bar':</p>
+<p align=center><img src=AddEnvironmentalBar.png/></p>
+<p>A window opens which lets you adjust the name of the external influence and
+the intervals where this influence is either on or off:</p>
+<p align=center><img src=EnvironmentalBarDialog.png/></p>
+<p>By clicking on 'Add a new interval', you can specify various intervals in which the external variable is on or off. Additionally, you can change the color for the 'on' and 'off' state. The figure above shows e.g. an external influence 'light' with an 'on' interval from 360 to 1080 (from an entire period length of 1440 minutes, conforming to the example introduced earlier). The color for the 'on' state was changed to yellow. The result is illustrated in the following figure:</p>
+<p align=center><img src=ActogramWithEnvironmentalBar.png/></p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+<h3><a name=export>6. Exporting actograms to pdf</a></h3>
+<p>It is possible to export one or more actograms to pdf. To do so, click on the menu item "File"&rarr"Export PDF" or on the corresponding icon in the tool bar. This will render all actograms which are shown on the right canvas into a single pdf file. All bars, like the calibration bar and optionally environmental bars, will be exported, too. In particular, the currently used zoom level will be used to render the actograms into pdf. To create a file with higher resolution, you may want to adjust the zoom level before.</p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name=calculations>7. Calculations on actograms</a></h3>
+<p>Simple transformations and calculations can be applied to actograms. These transformations will always be applied to all actograms shown in the actogram canvas.</p>
+<p>To envoke calculations, click on "Analyze"&rarr"Calculate" or on the corresponding icon in the tool bar. The following dialog will appear:</p>
+<p align=center><img src=CalculateDialog.png/></p>
+<p>The following operations are currently available:</p>
+<ul>
+<li><b>Average</b><br>
+Calculates an average actogram from all currently displayed actograms.<br><br>
+<li><b>Sum</b><br>
+Calculates a new actogram which represents the sum of all currently displayed actograms.<br><br>
+<li><b>Smooth</b><br>
+Smoothes all currently displayed actograms, by convolving the original actograms with the specified kernel. The kernel can either be specified manually as a sequence of numbers, or alternatively created automatically by clicking on 'Make kernel':
+<p align=center><img src=MakeKernel.png/></p>
+Two methods are available, to create either a Gaussian kernel with a specified standard deviation or a uniform kernel with a given length. Both methods represent a form of sliding window averaging.
+</ul>
+<p>The resulting actograms of such calculations are stored in a seperate folder "Calculated" in the browser. The figure below shows the result of applying the "Average" operator with an automatically generated Gaussian kernel with standard deviation (sigma) of 100.</p>
+<p align=center><img src=SmoothedActogram.png/></p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name=fp>8. Determining the freerunning period manually</a></h3>
+<p>The freerunning period can either be determined automatically or manually. This section describes how to do so manually.</p>
+<p>ActogramJ can currently be in three modes. These modes are "pointing" (the default), "selecting" or "freerunning period". Enter now the "freerunning period" mode by selecting "Edit"&rarr"Period tool" from the menu or click on the corresponding icon in the tool bar. You can now draw a triangle by dragging the mouse over the corresponding area in an actogram:</p>
+<p align=center><img src=FreerunningPeriodManually.png/></p>
+<p>Vertically, the number of cycles is indicated. Horizontally, the time delay is indicated. The freerunning period can be seen in the status bar (27.17h) in the figure above).</p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name="periodogram">9. Determining the freerunning period automatically</a></h3>
+The freerunning period can also be determined automatically. For this, you need to enter "selecting mode" ("Edit"&rarr"Selection tool") and select a region over which the freerunning period is to be determined.</p>
+<p>After selecting a region, choose "Analyze"&rarr"Periodogram" from the menu or click on the corresponding icon in the tool bar. A dialog opens, which asks for a few parameters:</p>
+<p align=center><img src=PeriodogramDialog.png/></p>
+<ul>
+<li><b>Method</b><br>
+Choose here which method to use, either "Fourier", "Chi-Square" or "Lomb-Scargle". Details about each methods are found in TODO.<br><br>
+<li><b>from Period, toPeriod</b><br>
+Specify here the interval in which you assume the freerunning period. Sensible default values are proposed.<br><br>
+<li><b>Number of peaks</b><br>
+Enter here the number of peaks which will be highlighted in the result (see below).<br><br>
+<li><b>Downsampling factor</b><br>
+By default, periodograms are calculated on the original actograms (and not the displayed ones, which are downsampled depending on the zoom level). You can specify a downsampling factor here, to make the resulting periodogram smoother.<br><br>
+</ul>
+
+<p>Using the actogram, the interval and the parameters as shown above, the following periodogram is calculated:</p>
+<p align=center><img src=PeriodogramResult.png/></p>
+<p>Three peaks are highlighted, and it is easy to confirm that the desired peak is the one at 1625.</p>
+<p>The p value level for the actogram is displayed as a red line.</p>
+<p>Both periodogram values and p values can be shown as a list (by clicking on 'List'), and saved as an Excel sheet for further analyzis with third-party software.</p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+
+<h3><a name="normalization">10. Normalizing actograms</a></h3>
+<p>Sometimes one wishes to compare several actograms, where one may show an overall high activity level while the other one has an overall low activity. To facilitate comparison, one would like to normalize the overall activity.</p>
+<p>This can be done by clicking on "Analyze"&rarr"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
+<p align=right><a href=#top>&uarr top</a></p>
+
+</body>
+</html>
