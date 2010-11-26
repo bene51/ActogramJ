@@ -40,6 +40,10 @@ public class ActoToolBar extends JToolBar implements ModeChangeListener {
 
 		add(new FittingAction(win.canvas));
 		add(new NormalizeAction(win));
+
+		addSeparator();
+		add(new HelpAction());
+
 	}
 
 	public void modeChanged(ActogramCanvas.Mode mode) {

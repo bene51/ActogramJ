@@ -39,6 +39,10 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 		menu.addSeparator();
 		menu.add(new FittingAction(win.canvas));
 		add(menu);
+
+		menu = new JMenu("Help");
+		menu.add(new HelpAction());
+		add(menu);
 	}
 
 	public void modeChanged(ActogramCanvas.Mode mode) {
