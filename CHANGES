@@ -36,3 +36,9 @@ Version v0.2:
 * The preview table in the open dialog does not crash any more when
   the file to open contains plain text at the beginning.
 * Fix the constant shift at the beginning of the actograms.
+
+
+Version v0.1:
+-------------
+* First public version.
+
