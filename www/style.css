@@ -8,18 +8,16 @@ body {
   margin-top: 50;
 }
 
-body #hline {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-size: 0pt;
-  display: block;
-  height:5px;
-  background: url('bg.png');
+body h5 { color: black; margin-top: 2px}
+body h3 { color: #114466; margin-top: 50px}
+body img { border-color: #000000; border-width: 0px; border-style: solid; }
+
+#header {
+  height: 140;
+  width: 700;
+  background-image: url('banner.png');
+  background-repeat: no-repeat;
 }
 
 body a { color: #114466; }
-body h5 { color: black; margin-top: 2px}
-body h3 { color: #114466; margin-top: 50px}
-body h1 a{ color: #114466; margin-top: 50px; margin-bottom: 0px; }
-body img { border-color: #000000; border-width: 0px; border-style: solid };
 
