@@ -1,3 +1,24 @@
+Version v0.3:
+-------------
+* Make preview table in the 'Open' dialog capable of reading lines with a
+  different number of columns.
+* Introduce three modes for pointing, selecting and manual determination of
+  the freerunning period.
+* Implement generic drawing to do screen and pdf rendering with the same code.
+* Allow to change the ratio w:h of an actogram.
+* Introduce environmental bars for light, temperature, etc.
+* Automatic determination of the freerunning period with the Fourier, Chi-Square
+  (Enright) and Lomb-Scargle methods.
+* Simplify the 'Calculate' window.
+* Fix wrong sorting for multiple selected actograms.
+* Adjustable units for the freerunning period string.
+* Introduce zoom out.
+* Allow to open several actogram files with the same parameters simultaneously.
+* Add a menu bar.
+* Implement normalizing of multiple actograms to the same overall activity.
+* Add documentation.
+
+
 Version v0.2:
 -------------
 * Calibration bar with adjustable number of subdivisions
