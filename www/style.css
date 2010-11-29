@@ -1,32 +1,25 @@
 body {
-  padding-left: 0; /* 150; */
-  background: #fff /*#eeeeee*/; font: 9pt helvetica; color: black; width: 600;
+  padding-left: 0;
+  background: #fff;
+  font: 10pt helvetica;
+  color: black;
+  width: 700;
   margin-left: 50;
   margin-top: 50;
 }
-body a { color: #114466; }
-h3 { color: #114466; margin-top: 50px}
-pre { font: 8pt monospace;}
-img { border-color: #000000; border-width: 0px; border-style: solid };
 
-table {
-  background: #eeeeee; font: 9pt helvetica; color: black; width: 600;
-  border-spacing: 3; border-style: solid; border-width: 1px;
-}
-
-#header {
+body #hline {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 0pt;
   display: block;
-  font: 20pt helvetica;
-  height: 100;
-  background-image: url('pegasus-banner.png');
-  margin-left:-150;
+  height:5px;
+  background: url('bg.png');
 }
 
-#navigation { float:left; display: inline; width: 150; margin-left: -180; padding-top: 40;}
-
-#navigation ul li { display: block; font: 9pt helvetica; padding-bottom: 5; }
-
-#navigation a { color: #009300; text-decoration: none; font-weight: bold; }
-
-#navigation a:hover { color: #000000; }
+body a { color: #114466; }
+body h5 { color: black; margin-top: 2px}
+body h3 { color: #114466; margin-top: 50px}
+body h1 a{ color: #114466; margin-top: 50px; margin-bottom: 0px; }
+body img { border-color: #000000; border-width: 0px; border-style: solid };
 
