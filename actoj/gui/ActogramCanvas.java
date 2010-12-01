@@ -271,6 +271,8 @@ public class ActogramCanvas extends JPanel
 
 		double[] yminmax = Tools.getMinMax(values);
 		double[] xminmax = Tools.getMinMax(periods);
+		/* pad a bit */
+		yminmax[0] -= 0.1 * (yminmax[1] - yminmax[0]);
 
 		Plot plot = new Plot(
 			"Periodogram (" + fp.getMethod() + ") - " + acto.name,
@@ -282,11 +284,7 @@ public class ActogramCanvas extends JPanel
 		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
 		int H = 200 + Plot.TOP_MARGIN + Plot.BOTTOM_MARGIN;
 		plot.setSize(W, H);
-		plot.setLimits(
-			xminmax[0],
-			xminmax[1],
-			yminmax[0] - 0.1 * (yminmax[1] - yminmax[0]),
-			yminmax[1]);
+		plot.setLimits(xminmax[0], xminmax[1], yminmax[0], yminmax[1]);
 
 		plot.setColor(Color.BLUE);
 		plot.draw();
@@ -298,7 +296,11 @@ public class ActogramCanvas extends JPanel
 		/* draw the peaks */
 		for(int i = 0; i < nPeaks && i < peaks.length; i++) {
 			int p = peaks[i];
-			plot.drawLine(p + fromPeriod, 0, p + fromPeriod, values[p]);
+			plot.drawLine(
+				(p + fromPeriod) * factor,
+				yminmax[0],
+				(p + fromPeriod) * factor,
+				values[p]);
 			float x = p / (float)(toPeriod - fromPeriod);
 			float y = ( - values[p]) / (float)yminmax[1];
 			float period = (fromPeriod + p) * downsamplingFactor;
