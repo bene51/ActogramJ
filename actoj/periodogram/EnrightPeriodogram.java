@@ -27,11 +27,12 @@ public class EnrightPeriodogram extends Periodogram {
 			M += measurements[i];
 		M /= N;
 
-		double squareError = 0;
+		double mse = 0;
 		for(int i = 0; i < N; i++) {
 			double diff = measurements[i] - M;
-			squareError += diff * diff;
+			mse += diff * diff;
 		}
+		mse /= N;
 
 		for(int P = fromPeriod; P < toPeriod; P++) {
 			double Qp = 0;
@@ -44,7 +45,7 @@ public class EnrightPeriodogram extends Periodogram {
 				double diff = Mh - M;
 				Qp += diff * diff;
 			}
-			Qp = Qp * K * N / squareError;
+			Qp = Qp * K / mse;
 			period[P - fromPeriod] = P;
 			periodogramValues[P - fromPeriod] = (float)Qp;
 			pValues[P - fromPeriod] = (float)chisquare_cdf_inv(0.05, P);
