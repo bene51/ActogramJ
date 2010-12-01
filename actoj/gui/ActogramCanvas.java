@@ -255,16 +255,18 @@ public class ActogramCanvas extends JPanel
 		float[] values = fp.getPeriodogramValues();
 		float[] pValues = fp.getPValues();
 		float[] periods = fp.getPeriod();
-		for(int i = 0; i < periods.length; i++)
-			periods[i] *= downsamplingFactor;
 
+		/* incorporate calibration */
 		float factor = acto.interval.intervalIn(acto.unit);
-		for(int i = 0; i < values.length; i++)
-			values[i] *= factor;
+		for(int i = 0; i < periods.length; i++)
+			periods[i] *= factor;
 
+		/* use pvalues as references */
 		float[] relatives = new float[values.length];
 		for(int i = 0; i < values.length; i++)
 			relatives[i] = values[i] - pValues[i];
+
+		/* find peaks */
 		int[] peaks = PeakFinder.findPeaks(relatives);
 
 		double[] yminmax = Tools.getMinMax(values);
