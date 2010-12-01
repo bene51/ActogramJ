@@ -294,15 +294,13 @@ public class ActogramCanvas extends JPanel
 		plot.addPoints(periods, pValues, Plot.LINE);
 		plot.draw();
 		plot.setColor(Color.BLACK);
-		float maxV = 0;
-		for(float v : values)
-			if(v > maxV)
-				maxV = v;
+
+		/* draw the peaks */
 		for(int i = 0; i < nPeaks && i < peaks.length; i++) {
 			int p = peaks[i];
 			plot.drawLine(p + fromPeriod, 0, p + fromPeriod, values[p]);
 			float x = p / (float)(toPeriod - fromPeriod);
-			float y = (maxV - values[p]) / (float)(maxV);
+			float y = ( - values[p]) / (float)yminmax[1];
 			float period = (fromPeriod + p) * downsamplingFactor;
 			plot.addLabel(x, y, df.format(period));
 		}
