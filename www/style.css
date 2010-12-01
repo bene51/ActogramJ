@@ -21,6 +21,9 @@ body img { border-color: #000000; border-width: 0px; border-style: solid; }
 
 body a { color: #114466; }
 
+table {border-spacing: 5pt;}
+td { vertical-align: top; font-size: 10pt; padding-top: 10pt;}
+
 body img {
 	-moz-box-shadow: 8px 8px 4px #999;
 	-webkit-box-shadow: 3px 3px 4px #000;
