@@ -29,9 +29,9 @@ public class CalibAction extends AbstractAction {
 
 	public CalibAction(ImageCanvas canvas) {
 		this.canvas = canvas;
-		putValue(SHORT_DESCRIPTION, "Calibration");
-		putValue(LONG_DESCRIPTION, "Calibration");
-		putValue(NAME, "Period tool");
+		putValue(SHORT_DESCRIPTION, "Eye fit tool");
+		putValue(LONG_DESCRIPTION, "Eye fit tool");
+		putValue(NAME, "Eye fit tool");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/calib.png")));
 	}
