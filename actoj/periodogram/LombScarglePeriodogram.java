@@ -6,9 +6,9 @@ import actoj.core.Actogram;
 public class LombScarglePeriodogram extends Periodogram {
 
 	// to exclusive
-	public LombScarglePeriodogram(Actogram acto,
-		int fromData, int toData, int fromPeriod, int toPeriod) {
-		super(acto, fromData, toData, fromPeriod, toPeriod);
+	public LombScarglePeriodogram(Actogram acto, int fromData,
+		int toData, int fromPeriod, int toPeriod, double pLevel) {
+		super(acto, fromData, toData, fromPeriod, toPeriod, pLevel);
 	}
 
 	public String getMethod() {
@@ -19,7 +19,7 @@ public class LombScarglePeriodogram extends Periodogram {
 		return "PN";
 	}
 
-	protected void calculatePeriodogram() {
+	protected void calculatePeriodogram(double pLevel) {
 		int n = toPeriod - fromPeriod;
 
 		// calculate mean
@@ -69,7 +69,6 @@ public class LombScarglePeriodogram extends Periodogram {
 		}
 
 		// calculate p values
-		double pLevel = 0.05;
 		double pV = -Math.log(1 - Math.pow(1 - pLevel, 1.0 / N));
 
 		for(int i = 0; i < pValues.length; i++)

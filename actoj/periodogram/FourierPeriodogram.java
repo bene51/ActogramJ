@@ -5,9 +5,9 @@ import actoj.core.Actogram;
 
 public class FourierPeriodogram extends Periodogram {
 
-	public FourierPeriodogram(Actogram acto,
-			int fromData, int toData, int fromPeriod, int toPeriod) {
-		super(acto, fromData, toData, fromPeriod, toPeriod);
+	public FourierPeriodogram(Actogram acto, int fromData,
+		int toData, int fromPeriod, int toPeriod, double pLevel) {
+		super(acto, fromData, toData, fromPeriod, toPeriod, pLevel);
 	}
 
 	public String getMethod() {
@@ -18,7 +18,7 @@ public class FourierPeriodogram extends Periodogram {
 		return "R^2";
 	}
 
-	protected void calculatePeriodogram() {
+	protected void calculatePeriodogram(double pLevel) {
 		int n = toPeriod - fromPeriod;
 		float sumR2 = 0f;
 		for(int i = 0; i < n; i++) {
@@ -31,7 +31,6 @@ public class FourierPeriodogram extends Periodogram {
 			sumR2 += r2;
 			IJ.showProgress(i + 1, n);
 		}
-		double pLevel = 0.05;
 		double pV = sumR2 * (1 - Math.pow(pLevel / N, 1.0 / (N - 1)));
 		for(int i = 0; i < n; i++)
 			pValues[i] = (float)pV;

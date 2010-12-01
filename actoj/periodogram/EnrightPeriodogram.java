@@ -6,9 +6,9 @@ import actoj.core.Actogram;
 public class EnrightPeriodogram extends Periodogram {
 
 	// to exclusive
-	public EnrightPeriodogram(Actogram acto,
-			int fromData, int toData, int fromPeriod, int toPeriod) {
-		super(acto, fromData, toData, fromPeriod, toPeriod);
+	public EnrightPeriodogram(Actogram acto, int fromData,
+		int toData, int fromPeriod, int toPeriod, double pLevel) {
+		super(acto, fromData, toData, fromPeriod, toPeriod, pLevel);
 	}
 
 	public String getMethod() {
@@ -19,7 +19,7 @@ public class EnrightPeriodogram extends Periodogram {
 		return "Qp";
 	}
 
-	protected void calculatePeriodogram() {
+	protected void calculatePeriodogram(double pLevel) {
 		int n = toPeriod - fromPeriod;
 
 		double M = 0;
@@ -49,7 +49,7 @@ public class EnrightPeriodogram extends Periodogram {
 			period[P - fromPeriod] = P;
 			periodogramValues[P - fromPeriod] = (float)Qp;
 			pValues[P - fromPeriod] =
-				(float)chisquare_cdf_inv(0.05, P-1);
+				(float)chisquare_cdf_inv(pLevel, P-1);
 		}
 	}
 

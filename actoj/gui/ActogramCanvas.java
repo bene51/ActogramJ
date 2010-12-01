@@ -207,7 +207,8 @@ public class ActogramCanvas extends JPanel
 	 * @param method: 0 - Fourier, 1 - Enright, 2 - Lomb-Scargle
 	 */
 	public void calculatePeriodogram(int fromPeriod, int toPeriod,
-			int method, int nPeaks, float downsamplingFactor) {
+			int method, int nPeaks,
+			float downsamplingFactor, double pLevel) {
 
 		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
@@ -236,16 +237,16 @@ public class ActogramCanvas extends JPanel
 		Periodogram fp = null;
 		switch(method) {
 			case 0:
-				fp = new FourierPeriodogram(
-					acto, sIdx, cIdx, fromPeriod, toPeriod);
+				fp = new FourierPeriodogram(acto, sIdx,
+					cIdx, fromPeriod, toPeriod, pLevel);
 				break;
 			case 1:
-				fp = new EnrightPeriodogram(
-					acto, sIdx, cIdx, fromPeriod, toPeriod);
+				fp = new EnrightPeriodogram(acto, sIdx,
+					cIdx, fromPeriod, toPeriod, pLevel);
 				break;
 			case 2:
-				fp = new LombScarglePeriodogram(
-					acto, sIdx, cIdx, fromPeriod, toPeriod);
+				fp = new LombScarglePeriodogram(acto, sIdx,
+					cIdx, fromPeriod, toPeriod, pLevel);
 				break;
 			default: throw new RuntimeException(
 					   "Invalid periodogram method");

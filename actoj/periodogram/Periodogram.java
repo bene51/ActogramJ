@@ -16,8 +16,8 @@ public abstract class Periodogram {
 	protected final float[] pValues;
 
 	// to exclusive
-	public Periodogram(Actogram acto,
-		int fromData, int toData, int fromPeriod, int toPeriod) {
+	public Periodogram(Actogram acto, int fromData, int toData,
+		int fromPeriod, int toPeriod, double pLevel) {
 
 		this.N = toData - fromData;
 		this.measurements = new float[N];
@@ -30,7 +30,7 @@ public abstract class Periodogram {
 		this.period = new float[nResult];
 		this.pValues = new float[nResult];
 
-		calculatePeriodogram();
+		calculatePeriodogram(pLevel);
 	}
 
 	public float[] getPeriodogramValues() {
@@ -45,7 +45,7 @@ public abstract class Periodogram {
 		return pValues;
 	}
 
-	protected abstract void calculatePeriodogram();
+	protected abstract void calculatePeriodogram(double pLevel);
 
 	public abstract String getMethod();
 

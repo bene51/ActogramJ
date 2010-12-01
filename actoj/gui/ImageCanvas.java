@@ -131,6 +131,7 @@ public class ImageCanvas extends JPanel {
 		int nPeaks = 3;
 		int methodIdx = 0;
 		float downsample = 1f;
+		double pLevel = 0.05;
 
 		GenericDialog gd = new GenericDialog("Create Periodogram");
 		String[] methods = new String[] {
@@ -140,6 +141,7 @@ public class ImageCanvas extends JPanel {
 		gd.addNumericField("to_period", toPeriod, 0, 6, "samples");
 		gd.addNumericField("Number of peaks", nPeaks, 0);
 		gd.addNumericField("Downsampling factor", downsample, 2);
+		gd.addNumericField("p level", pLevel, 3);
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;
@@ -149,12 +151,13 @@ public class ImageCanvas extends JPanel {
 		final int tp = (int)gd.getNextNumber();
 		final int np = (int)gd.getNextNumber();
 		final float factor = (float)gd.getNextNumber();
+		final double pV = gd.getNextNumber();
 		new Thread() {
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection())
-						ac.calculatePeriodogram(
-							fp, tp, m, np, factor);
+						ac.calculatePeriodogram(fp,
+							tp, m, np, factor, pV);
 				}
 			}
 		}.start();
