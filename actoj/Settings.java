@@ -20,11 +20,11 @@ public class Settings {
 	/** Default start column */
 	public static final int DEFAULT_START_COL = 11;
 	/** Default column count */
-	public static final int DEFAULT_COL_COUNT = 32;
+	public static final int DEFAULT_END_COL = -1;
 	/** Default start row */
 	public static final int DEFAULT_START_ROW = 1;
 	/** Default row count */
-	public static final int DEFAULT_ROW_COUNT = -1;
+	public static final int DEFAULT_END_ROW = -1;
 	/** Default samples per period */
 	public static final int DEFAULT_SPP       = 24 * 60;
 	/** Default interval value */
@@ -33,9 +33,9 @@ public class Settings {
 	public static final int DEFAULT_CAL_UNIT  = 2; // MINUTES
 
 	public static final String START_COL = "start_column";
-	public static final String COL_COUNT = "column_count";
+	public static final String END_COL   = "end_column";
 	public static final String START_ROW = "start_row";
-	public static final String ROW_COUNT = "row_count";
+	public static final String END_ROW   = "end_row";
 	public static final String SPP       = "samples_per_period";
 	public static final String CAL_VALUE = "calibration_value";
 	public static final String CAL_UNIT  = "calibration_unit";
@@ -45,9 +45,9 @@ public class Settings {
 
 	static {
 		defaults.put(START_COL, Integer.toString(DEFAULT_START_COL));
-		defaults.put(COL_COUNT, Integer.toString(DEFAULT_COL_COUNT));
+		defaults.put(END_COL,   Integer.toString(DEFAULT_END_COL));
 		defaults.put(START_ROW, Integer.toString(DEFAULT_START_ROW));
-		defaults.put(ROW_COUNT, Integer.toString(DEFAULT_ROW_COUNT));
+		defaults.put(END_ROW,   Integer.toString(DEFAULT_END_ROW));
 		defaults.put(SPP,       Integer.toString(DEFAULT_SPP));
 		defaults.put(CAL_UNIT,  Integer.toString(DEFAULT_CAL_UNIT));
 		defaults.put(CAL_VALUE, Integer.toString(DEFAULT_CAL_VALUE));

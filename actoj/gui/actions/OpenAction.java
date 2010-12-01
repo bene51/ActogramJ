@@ -83,13 +83,13 @@ public class OpenAction extends AbstractAction {
 		private final File[] files;
 		private final TreeView treeview;
 
-		private int numRows, numCols, startCol, startRow, spp, calValue;
+		private int endRow, endCol, startCol, startRow, spp, calValue;
 
 		private TimeInterval.Units calUnit;
 
 		private PreviewTable preview;
-		private JTextField startRowField, numRowField,
-			startColField, numColField, sppField, calValueField;
+		private JTextField startRowField, endRowField,
+			startColField, endColField, sppField, calValueField;
 		private JComboBox calUnitBox;
 
 		public PreviewDialog(File[] files, TreeView treeview) {
@@ -107,8 +107,8 @@ public class OpenAction extends AbstractAction {
 		void createGUI() throws IOException {
 			startCol = i(Settings.get(Settings.START_COL));
 			startRow = i(Settings.get(Settings.START_ROW));
-			numCols  = i(Settings.get(Settings.COL_COUNT));
-			numRows  = i(Settings.get(Settings.ROW_COUNT));
+			endCol   = i(Settings.get(Settings.END_COL));
+			endRow   = i(Settings.get(Settings.END_ROW));
 			spp      = i(Settings.get(Settings.SPP));
 			calValue = i(Settings.get(Settings.CAL_VALUE));
 
@@ -135,10 +135,10 @@ public class OpenAction extends AbstractAction {
 			gridbag.setConstraints(scroll, c);
 			add(scroll);
 
-			if(numCols == -1)
-				numCols = preview.getColumnCount();
-			if(numRows == -1)
-				numRows = preview.getRowCount();
+			if(endCol == -1)
+				endCol = preview.getColumnCount();
+			if(endRow == -1)
+				endRow = preview.getRowCount();
 
 			c.weighty = 0;
 			c.weightx = 0.5;
@@ -150,9 +150,9 @@ public class OpenAction extends AbstractAction {
 			colp.add(new JLabel("Start column"));
 			startColField = createNumberField(startCol);
 			colp.add(startColField);
-			colp.add(new JLabel("Column count"));
-			numColField = createNumberField(numCols);
-			colp.add(numColField);
+			colp.add(new JLabel("End column"));
+			endColField = createNumberField(endCol);
+			colp.add(endColField);
 			colp.setBorder(BorderFactory.createTitledBorder(
 				"Columns"));
 			gridbag.setConstraints(colp, c);
@@ -163,9 +163,9 @@ public class OpenAction extends AbstractAction {
 			rowp.add(new JLabel("Start row"));
 			startRowField = createNumberField(startRow);
 			rowp.add(startRowField);
-			rowp.add(new JLabel("Row count"));
-			numRowField = createNumberField(numRows);
-			rowp.add(numRowField);
+			rowp.add(new JLabel("End row"));
+			endRowField = createNumberField(endRow);
+			rowp.add(endRowField);
 			rowp.setBorder(BorderFactory.createTitledBorder(
 				"Rows"));
 			gridbag.setConstraints(rowp, c);
@@ -208,11 +208,11 @@ public class OpenAction extends AbstractAction {
 		public void readFields() {
 			startCol = i(startColField.getText());
 			startRow = i(startRowField.getText());
-			numCols = i(numColField.getText());
-			numRows = i(numRowField.getText());
-			spp = i(sppField.getText());
+			endCol   = i(endColField.getText());
+			endRow   = i(endRowField.getText());
+			spp      = i(sppField.getText());
 			calValue = i(calValueField.getText());
-			calUnit = (TimeInterval.Units)calUnitBox.getSelectedItem();
+			calUnit  = (TimeInterval.Units)calUnitBox.getSelectedItem();
 		}
 
 		private static final int i(String s) {
@@ -234,12 +234,14 @@ public class OpenAction extends AbstractAction {
 
 		public void saveDefaults() {
 			try {
-				int rts = numRows == preview.getRowCount()
-					? -1 : numRows;
+				int rts = endRow == preview.getRowCount()
+					? -1 : endRow;
+				int cts = endCol == preview.getColumnCount()
+					? -1 : endCol;
 				Settings.set(Settings.START_COL, startCol);
-				Settings.set(Settings.COL_COUNT, numCols);
+				Settings.set(Settings.END_COL, cts);
 				Settings.set(Settings.START_ROW, startRow);
-				Settings.set(Settings.ROW_COUNT, rts);
+				Settings.set(Settings.END_ROW, rts);
 				Settings.set(Settings.SPP, spp);
 				Settings.set(Settings.CAL_UNIT, calUnit.ordinal());
 				Settings.set(Settings.CAL_VALUE, calValue);
@@ -251,8 +253,8 @@ public class OpenAction extends AbstractAction {
 
 		public void readFile(String file) throws IOException {
 			treeview.add(ActogramReader.readActograms(
-				file, startCol - 1, numCols,
-				startRow - 1, numRows, spp,
+				file, startCol - 1, endCol - startCol + 1,
+				startRow - 1, endRow - startRow + 1, spp,
 				new TimeInterval(calValue, calUnit),
 				calUnit));
 		}
