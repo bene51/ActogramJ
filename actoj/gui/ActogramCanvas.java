@@ -304,7 +304,7 @@ public class ActogramCanvas extends JPanel
 
 			float x = p / (float)(toPeriod - fromPeriod);
 			float y = (float)((yminmax[1] - values[p]) / (yminmax[1] - yminmax[0]));
-			float period = (fromPeriod + p) * downsamplingFactor;
+			float period = (fromPeriod + p) * factor;
 			plot.addLabel(x, y, df.format(period));
 		}
 		plot.show();
