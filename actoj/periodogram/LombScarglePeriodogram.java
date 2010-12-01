@@ -69,12 +69,9 @@ public class LombScarglePeriodogram extends Periodogram {
 		}
 
 		// calculate p values
-		float PN_max = periodogramValues[0];
-		for(int i = 1; i < periodogramValues.length; i++)
-			if(periodogramValues[i] > PN_max)
-				PN_max = periodogramValues[i];
+		double pLevel = 0.05;
+		double pV = -Math.log(1 - Math.pow(1 - pLevel, 1.0 / N));
 
-		double pV = 1 - Math.pow(1 - Math.exp(-PN_max), N);
 		for(int i = 0; i < pValues.length; i++)
 			pValues[i] = (float)pV;
 	}

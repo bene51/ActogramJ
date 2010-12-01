@@ -20,7 +20,6 @@ public class FourierPeriodogram extends Periodogram {
 
 	protected void calculatePeriodogram() {
 		int n = toPeriod - fromPeriod;
-		float maxR2 = 0f;
 		float sumR2 = 0f;
 		for(int i = 0; i < n; i++) {
 			int p = fromPeriod + i;
@@ -30,13 +29,10 @@ public class FourierPeriodogram extends Periodogram {
 			float r2 = R2(j);
 			periodogramValues[i] = r2;
 			sumR2 += r2;
-			if(r2 > maxR2)
-				maxR2 = r2;
 			IJ.showProgress(i + 1, n);
 		}
-		double pV = 1 - maxR2 / sumR2;
-		pV = Math.pow(pV, N - 1);
-		pV *= N;
+		double pLevel = 0.05;
+		double pV = sumR2 * (1 - Math.pow(pLevel / N, 1.0 / (N - 1)));
 		for(int i = 0; i < n; i++)
 			pValues[i] = (float)pV;
 	}
