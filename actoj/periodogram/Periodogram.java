@@ -17,7 +17,8 @@ public abstract class Periodogram {
 
 	// to exclusive
 	public Periodogram(Actogram acto,
-			int fromData, int toData, int fromPeriod, int toPeriod) {
+		int fromData, int toData, int fromPeriod, int toPeriod) {
+
 		this.N = toData - fromData;
 		this.measurements = new float[N];
 		System.arraycopy(acto.getData(), fromData, measurements, 0, N);

@@ -48,7 +48,8 @@ public class EnrightPeriodogram extends Periodogram {
 			Qp = Qp * K / mse;
 			period[P - fromPeriod] = P;
 			periodogramValues[P - fromPeriod] = (float)Qp;
-			pValues[P - fromPeriod] = (float)chisquare_cdf_inv(0.05, P);
+			pValues[P - fromPeriod] =
+				(float)chisquare_cdf_inv(0.05, P-1);
 		}
 	}
 
