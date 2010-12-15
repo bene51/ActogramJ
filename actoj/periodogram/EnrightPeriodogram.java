@@ -49,7 +49,7 @@ public class EnrightPeriodogram extends Periodogram {
 			period[P - fromPeriod] = P;
 			periodogramValues[P - fromPeriod] = (float)Qp;
 			pValues[P - fromPeriod] =
-				(float)chisquare_cdf_inv(pLevel, P-1);
+				(float)chisquare_cdf_inv(1 - pLevel, P-1);
 		}
 	}
 
@@ -152,5 +152,11 @@ public class EnrightPeriodogram extends Periodogram {
 		double lg = Math.log(1 - x * x);
 		double s = 2 / (Math.PI * a) + lg / 2;
 		return x / Math.abs(x) * Math.sqrt(Math.sqrt(s * s - lg / a) - s);
+	}
+
+	public static void main(String[] args) {
+		int x = 179;
+		double alpha = 0.05;
+		System.out.println("chisquare_cdf_inv(alpha, x) = " + chisquare_cdf_inv(1-alpha, x));
 	}
 }
