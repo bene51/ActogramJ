@@ -46,7 +46,7 @@ public class LombScarglePeriodogram extends Periodogram {
 				sin += Math.sin(t);
 				cos += Math.cos(t);
 			}
-			double delta = Math.atan2(cos, sin) / fourPiByP;
+			double delta = Math.atan2(sin, cos) / fourPiByP;
 
 			// calculate PN
 			double nom1 = 0, denom1 = 0, nom2 = 0, denom2 = 0;
