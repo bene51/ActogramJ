@@ -46,7 +46,7 @@ public class LombScarglePeriodogram extends Periodogram {
 				sin += Math.sin(t);
 				cos += Math.cos(t);
 			}
-			double delta = Math.atan2(sin, cos) / fourPiByP;
+			double delta = Math.atan(sin / cos) / fourPiByP;
 
 			// calculate PN
 			double nom1 = 0, denom1 = 0, nom2 = 0, denom2 = 0;
@@ -61,8 +61,7 @@ public class LombScarglePeriodogram extends Periodogram {
 				denom2 += (s * s);
 			}
 			double PN = ((nom1 * nom1 / denom1) +
-					(nom2 * nom2 / denom2)) /
-				(2 * sigma * sigma);
+					(nom2 * nom2 / denom2)) / (2 * sigma);
 			period[P - fromPeriod] = P;
 			periodogramValues[P - fromPeriod] = (float)PN;
 			IJ.showProgress(P - fromPeriod + 1, n);
