@@ -29,8 +29,8 @@ public class FittingAction extends AbstractAction {
 
 	public FittingAction(ImageCanvas canvas) {
 		this.canvas = canvas;
-		putValue(SHORT_DESCRIPTION, "Fitting");
-		putValue(LONG_DESCRIPTION, "Fitting");
+		putValue(SHORT_DESCRIPTION, "Periodogram");
+		putValue(LONG_DESCRIPTION, "Periodogram");
 		putValue(NAME, "Periodogram");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/fitting.png")));
