@@ -2,6 +2,8 @@ package actoj.gui;
 
 import javax.swing.*;
 
+import ij.IJ;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.ItemEvent;
@@ -27,7 +29,15 @@ public class StatusBar extends JPanel {
 		zoomBox.setSelectedIndex(Zoom.DEFAULT_ZOOM);
 		zoomBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				win.canvas.getZoom().zoom(zoomBox.getSelectedIndex());
+				try {
+					win.canvas.getZoom().zoom(zoomBox.getSelectedIndex());
+				} catch(Error ex) {
+					IJ.error(ex.getClass() + ": " + ex.getMessage());
+					ex.printStackTrace();
+				} catch(Exception ex) {
+					IJ.error(ex.getClass() + ": " + ex.getMessage());
+					ex.printStackTrace();
+				}
 			}
 		});
 		add(zoomBox);

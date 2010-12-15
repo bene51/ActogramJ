@@ -28,9 +28,11 @@ public class ActogramProcessor {
 
 	public ActogramProcessor(Actogram actogram, double zoom, float uLimit, int ppl, float whRatio) {
 		this.original = actogram;
-		this.downsampled = actogram.downsample(zoom);
 
-		this.zoom = zoom;
+		int newSPP = (int)Math.round(actogram.SAMPLES_PER_PERIOD / zoom);
+		this.zoom = actogram.SAMPLES_PER_PERIOD / (double)newSPP;
+		this.downsampled = actogram.downsample(this.zoom);
+
 		this.uLimit = uLimit;
 		this.ppl = ppl;
 		this.whRatio = whRatio;

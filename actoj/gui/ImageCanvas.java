@@ -155,9 +155,15 @@ public class ImageCanvas extends JPanel {
 		new Thread() {
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
-					if(ac.hasSelection())
-						ac.calculatePeriodogram(fp,
-							tp, m, np, factor, pV);
+					if(ac.hasSelection()) {
+						try {
+							ac.calculatePeriodogram(fp,
+								tp, m, np, factor, pV);
+						} catch(Exception e) {
+							IJ.error(e.getClass() + ": " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}.start();

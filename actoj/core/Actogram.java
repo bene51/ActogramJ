@@ -168,7 +168,8 @@ public class Actogram {
 	}
 
 	public Actogram downsampleDouble(double factor) {
-		if(SAMPLES_PER_PERIOD % factor != 0)
+		double d = Math.IEEEremainder(SAMPLES_PER_PERIOD, factor);
+		if(Math.abs(d) > 10e-6)
 			throw new IllegalArgumentException("Invalid zoom factor: " + factor);
 
 		int l = (int)Math.ceil(data.length / factor);
@@ -185,14 +186,14 @@ public class Actogram {
 			int uInt = (int)Math.floor((newIdx + 1) * factor);
 			double partialOver = (newIdx + 1) * factor - uInt;
 			double c = cumOld[uInt] - cumNew[newIdx];
-			if(partialOver > 0)
+			if(partialOver > 10e-6 && uInt < data.length)
 				c += partialOver * data[uInt];
 			newdata[newIdx] = (float)(c / factor);
 			cumNew[newIdx + 1] = cumNew[newIdx] + c;
 		}
 
 		return new Actogram(name, newdata,
-			(int)(SAMPLES_PER_PERIOD / factor),
+			(int)Math.round(SAMPLES_PER_PERIOD / factor),
 			new TimeInterval(interval.millis * factor),
 			unit);
 	}
