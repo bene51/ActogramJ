@@ -3,12 +3,14 @@ package actoj.gui;
 import actoj.core.Actogram;
 import actoj.core.TimeInterval.Units;
 
+import java.util.Vector;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import java.awt.event.*;
 import java.awt.*;
 
 import ij.IJ;
@@ -137,11 +139,21 @@ public class ImageCanvas extends JPanel {
 		String[] methods = new String[] {
 			"Fourier", "Chi-Square", "Lomb-Scargle" };
 		gd.addChoice("Method", methods, methods[methodIdx]);
+		Vector v = gd.getChoices();
+		final Choice c = (Choice)v.get(v.size() - 1);
 		gd.addNumericField("from_period", fromPeriod, 0, 6, "samples");
 		gd.addNumericField("to_period", toPeriod, 0, 6, "samples");
 		gd.addNumericField("Number of peaks", nPeaks, 0);
 		gd.addNumericField("Downsampling factor", downsample, 2);
 		gd.addNumericField("p level", pLevel, 3);
+		v = gd.getNumericFields();
+		final TextField tf = (TextField)v.get(v.size() - 1);
+		c.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				tf.setEnabled(c.getSelectedIndex() != 0);
+			}
+		});
+		tf.setEnabled(false);
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;

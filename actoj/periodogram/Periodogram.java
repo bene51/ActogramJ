@@ -33,6 +33,10 @@ public abstract class Periodogram {
 		calculatePeriodogram(pLevel);
 	}
 
+	public boolean canCalculatePValues() {
+		return true;
+	}
+
 	public float[] getPeriodogramValues() {
 		return periodogramValues;
 	}

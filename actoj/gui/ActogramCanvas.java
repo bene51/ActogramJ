@@ -264,8 +264,11 @@ public class ActogramCanvas extends JPanel
 
 		/* use pvalues as references */
 		float[] relatives = new float[values.length];
-		for(int i = 0; i < values.length; i++)
-			relatives[i] = values[i] - pValues[i];
+		System.arraycopy(values, 0, relatives, 0, values.length);
+		if(fp.canCalculatePValues()) {
+			for(int i = 0; i < values.length; i++)
+				relatives[i] -= pValues[i];
+		}
 
 		/* find peaks */
 		int[] peaks = PeakFinder.findPeaks(relatives);
@@ -289,8 +292,10 @@ public class ActogramCanvas extends JPanel
 
 		plot.setColor(Color.BLUE);
 		plot.draw();
-		plot.setColor(Color.RED);
-		plot.addPoints(periods, pValues, Plot.LINE);
+		if(fp.canCalculatePValues()) {
+			plot.setColor(Color.RED);
+			plot.addPoints(periods, pValues, Plot.LINE);
+		}
 		plot.draw();
 		plot.setColor(Color.BLACK);
 

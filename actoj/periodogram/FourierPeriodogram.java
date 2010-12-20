@@ -18,6 +18,10 @@ public class FourierPeriodogram extends Periodogram {
 		return "R^2";
 	}
 
+	public boolean canCalculatePValues() {
+		return false;
+	}
+
 	protected void calculatePeriodogram(double pLevel) {
 		int n = toPeriod - fromPeriod;
 		float sumR2 = 0f;
