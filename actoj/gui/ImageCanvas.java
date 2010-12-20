@@ -114,6 +114,48 @@ public class ImageCanvas extends JPanel {
 		return res;
 	}
 
+	public void calculateAverageActivity() {
+		ActogramCanvas first = null;
+		for(ActogramCanvas ac : actograms) {
+			if(ac.hasSelection()) {
+				first = ac;
+				break;
+			}
+		}
+		if(first == null) {
+			IJ.error("Selection required");
+			return;
+		}
+		Actogram a = first.processor.original;
+
+		int period = a.SAMPLES_PER_PERIOD;
+		float sigma = period / 100f;
+
+		GenericDialog gd = new GenericDialog("Create Average Activity Pattern");
+		gd.addNumericField("Period", period, 0, 6, "samples");
+		gd.addNumericField("Smooting gaussian sigma", sigma, 0, 6, "samples");
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		final int p = (int)gd.getNextNumber();
+		final float s = (int)gd.getNextNumber();
+		new Thread() {
+			public void run() {
+				for(ActogramCanvas ac : actograms) {
+					if(ac.hasSelection()) {
+						try {
+							ac.calculateAverageActivity(p, s);
+						} catch(Exception e) {
+							IJ.error(e.getClass() + ": " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}.start();
+	}
+
 	public void calculatePeriodogram() {
 		ActogramCanvas first = null;
 		for(ActogramCanvas ac : actograms) {

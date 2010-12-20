@@ -39,6 +39,7 @@ public class ActoToolBar extends JToolBar implements ModeChangeListener {
 		addSeparator();
 
 		add(new FittingAction(win.canvas));
+		add(new AverageActivityAction(win.canvas));
 		add(new NormalizeAction(win));
 
 		addSeparator();

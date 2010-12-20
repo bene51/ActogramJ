@@ -2,9 +2,11 @@ package actoj.gui;
 
 import actoj.core.*;
 import actoj.core.TimeInterval.Units;
+import actoj.util.Filters;
 import actoj.util.PeakFinder;
 import actoj.fitting.FitSine;
 import actoj.periodogram.*;
+import actoj.AverageActivity;
 
 import ij.util.Tools;
 
@@ -201,6 +203,58 @@ public class ActogramCanvas extends JPanel
 		TimeInterval tv = getFreerunningPeriod();
 		return tv == null ? "" : df.format(
 			tv.intervalIn(fpUnit)) + fpUnit.abbr;
+	}
+
+	public void calculateAverageActivity(int period, float sigma) {
+		if(selStart == null || selCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
+		if(st.y == cu.y && st.x > cu.x) {
+			Point tmp = st; st = cu; cu = tmp;
+		}
+		int sIdx = processor.getIndex(st.x, st.y);
+		if(sIdx < 0) return;
+		int cIdx = processor.getIndex(cu.x, cu.y);
+		if(cIdx < 0) return;
+
+		sIdx = processor.getIndexInOriginal(sIdx);
+		cIdx = processor.getIndexInOriginal(cIdx);
+
+		Actogram acto = processor.original;
+		float[] kernel = Filters.makeGaussianKernel(sigma);
+		acto = acto.convolve(kernel);
+
+		float[] values = AverageActivity.calculateAverageActivity(
+				acto, sIdx, cIdx, period);
+
+		String unit = acto.unit.abbr;
+		float[] time = new float[period];
+		float factor = acto.interval.intervalIn(acto.unit);
+		for(int i = 0; i < period; i++)
+			time[i] = i * factor;
+
+		double[] yminmax = Tools.getMinMax(values);
+		double[] xminmax = Tools.getMinMax(time);
+		/* pad a bit */
+		yminmax[0] -= 0.1 * (yminmax[1] - yminmax[0]);
+
+		Plot plot = new Plot(
+			"Average Activity Pattern - " + acto.name,
+			"Time (" + unit + ")",
+			"Average activity",
+			time,
+			values,
+			Plot.LINE);
+		int W = 450 + Plot.LEFT_MARGIN + Plot.RIGHT_MARGIN;
+		int H = 200 + Plot.TOP_MARGIN + Plot.BOTTOM_MARGIN;
+		plot.setSize(W, H);
+		plot.setLimits(xminmax[0], xminmax[1], yminmax[0], yminmax[1]);
+
+		plot.setColor(Color.BLUE);
+		plot.draw();
+		plot.show();
 	}
 
 	/**

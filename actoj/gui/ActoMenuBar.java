@@ -38,6 +38,8 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 		menu.add(new NormalizeAction(win));
 		menu.addSeparator();
 		menu.add(new FittingAction(win.canvas));
+		menu.addSeparator();
+		menu.add(new AverageActivityAction(win.canvas));
 		add(menu);
 
 		menu = new JMenu("Help");
