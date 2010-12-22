@@ -42,6 +42,7 @@ If you are using ImageJ, you need to download <a href="versions/current/Actogram
 
 
 <h3><a name="opening">2. Opening an actogram file</a></h3>
+<p>ActogramJ supports actogram files in ASCII format, which store the activity data in columns. A file usually contains at least as many columns as there are independant measurements, i.e. if the activity of 10 flies is measured over time, there would be at least 10 columns, one for each fly. The number of rows in the file corresponds to the number of measurements taken for each fly. If a file contains additional information at the top or bottom (which does not belong to the tabular structure described above), it is still possible to open these files.</p> 
 <p>To open an actogram file, choose "File"&rarr"Open" from the menu bar or click on the "Open" icon in the tool bar. A dialog comes up which lets you choose one or multiple files. Upon your selection, the first selected file will then show up in a preview window, and you can enter some parameters regarding the files to be opened:</p>
 <p align=center><img src="OpenDialog.png"/></p>
 <ul>
@@ -50,10 +51,12 @@ Enter here the first column and the number of columns s which should be loaded. 
 <li><b>Rows:</b> <br>
 Enter here the first row and the number of rows which should be loaded.<br><br>
 <li><b>Samples per period:</b> <br>
-Specify the number of sample measurements per period. If one period is a day, and a measurement is taken every minute, this number is 24 * 60 * 60 = 1440 minutes.<br><br>
+Specify the number of sample measurements per period.<br><br>
 <li><b>Interval duration:</b> <br>
 Specify here the interval between measurements. In the example, this would be 1, and the unit is MINUTES.<br><br>
 </ul>
+<p>Here is an example: Imagine activity data is collected every minute to investigate the circadian rhythm of an animal. The interval duration is thus one minute, and since the period (1 day) contains 24 * 60 * 60 (= 1440) minutes, "Samples per period" is 1440.<br>
+Another example: Data is not collected each minute, but all 10 minutes. Here, the interval duration is 10 minutes, which means that in 1 day (= the period) 1440 / 10 = 144 samples are measured. </p>
 <p align=right><a href=#top>&uarr top</a></p>
 
 
