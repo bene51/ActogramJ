@@ -112,6 +112,13 @@ public class Actogram {
 	}
 
 	/**
+	 * Returns the index for a given time interval.
+	 */
+	public int getIndexForTime(TimeInterval time) {
+		return (int)Math.round(time.millis / interval.millis);
+	}
+
+	/**
 	 * Returns the time for the specified index.
 	 * This is the start time of the corresponding interval.
 	 */

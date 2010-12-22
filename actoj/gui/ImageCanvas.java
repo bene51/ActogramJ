@@ -1,6 +1,7 @@
 package actoj.gui;
 
 import actoj.core.Actogram;
+import actoj.core.TimeInterval;
 import actoj.core.TimeInterval.Units;
 
 import java.util.Vector;
@@ -132,20 +133,21 @@ public class ImageCanvas extends JPanel {
 		float sigma = period / 100f;
 
 		GenericDialog gd = new GenericDialog("Create Average Activity Pattern");
-		gd.addNumericField("Period", period, 0, 6, "samples");
-		gd.addNumericField("Smooting gaussian sigma", sigma, 0, 6, "samples");
+		gd.addNumericField("Period", period, 0, 6, a.unit.toString());
+		gd.addNumericField("Smooting gaussian sigma", sigma, 0, 6, a.unit.toString());
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;
 
 		final int p = (int)gd.getNextNumber();
 		final float s = (int)gd.getNextNumber();
+		final TimeInterval pi = new TimeInterval(p, a.unit);
 		new Thread() {
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection()) {
 						try {
-							ac.calculateAverageActivity(p, s);
+							ac.calculateAverageActivity(pi, s);
 						} catch(Exception e) {
 							IJ.error(e.getClass() + ": " + e.getMessage());
 							e.printStackTrace();
@@ -183,8 +185,8 @@ public class ImageCanvas extends JPanel {
 		gd.addChoice("Method", methods, methods[methodIdx]);
 		Vector v = gd.getChoices();
 		final Choice c = (Choice)v.get(v.size() - 1);
-		gd.addNumericField("from_period", fromPeriod, 0, 6, "samples");
-		gd.addNumericField("to_period", toPeriod, 0, 6, "samples");
+		gd.addNumericField("from_period", fromPeriod, 0, 6, a.unit.toString());
+		gd.addNumericField("to_period", toPeriod, 0, 6, a.unit.toString());
 		gd.addNumericField("Number of peaks", nPeaks, 0);
 		gd.addNumericField("Downsampling factor", downsample, 2);
 		gd.addNumericField("p level", pLevel, 3);
@@ -206,13 +208,15 @@ public class ImageCanvas extends JPanel {
 		final int np = (int)gd.getNextNumber();
 		final float factor = (float)gd.getNextNumber();
 		final double pV = gd.getNextNumber();
+		final TimeInterval fi = new TimeInterval(fp, a.unit);
+		final TimeInterval ti = new TimeInterval(tp, a.unit);
 		new Thread() {
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection()) {
 						try {
-							ac.calculatePeriodogram(fp,
-								tp, m, np, factor, pV);
+							ac.calculatePeriodogram(fi,
+								ti, m, np, factor, pV);
 						} catch(Exception e) {
 							IJ.error(e.getClass() + ": " + e.getMessage());
 							e.printStackTrace();

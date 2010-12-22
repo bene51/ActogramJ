@@ -205,7 +205,7 @@ public class ActogramCanvas extends JPanel
 			tv.intervalIn(fpUnit)) + fpUnit.abbr;
 	}
 
-	public void calculateAverageActivity(int period, float sigma) {
+	public void calculateAverageActivity(TimeInterval period, float sigma) {
 		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
 
@@ -226,13 +226,15 @@ public class ActogramCanvas extends JPanel
 		float[] kernel = Filters.makeGaussianKernel(sigma);
 		acto = acto.convolve(kernel);
 
+		int periodIdx = acto.getIndexForTime(period);
+
 		float[] values = AverageActivity.calculateAverageActivity(
-				acto, sIdx, cIdx, period);
+				acto, sIdx, cIdx, periodIdx);
 
 		String unit = acto.unit.abbr;
-		float[] time = new float[period];
+		float[] time = new float[periodIdx];
 		float factor = acto.interval.intervalIn(acto.unit);
-		for(int i = 0; i < period; i++)
+		for(int i = 0; i < periodIdx; i++)
 			time[i] = i * factor;
 
 		double[] yminmax = Tools.getMinMax(values);
@@ -260,7 +262,7 @@ public class ActogramCanvas extends JPanel
 	/**
 	 * @param method: 0 - Fourier, 1 - Enright, 2 - Lomb-Scargle
 	 */
-	public void calculatePeriodogram(int fromPeriod, int toPeriod,
+	public void calculatePeriodogram(TimeInterval fromPeriod, TimeInterval toPeriod,
 			int method, int nPeaks,
 			float downsamplingFactor, double pLevel) {
 
@@ -285,22 +287,23 @@ public class ActogramCanvas extends JPanel
 
 		Actogram acto = processor.original.downsample(
 				downsamplingFactor);
-		fromPeriod /= downsamplingFactor;
-		toPeriod /= downsamplingFactor;
+
+		int fromPeriodIdx = acto.getIndexForTime(fromPeriod);
+		int toPeriodIdx = acto.getIndexForTime(toPeriod);
 
 		Periodogram fp = null;
 		switch(method) {
 			case 0:
 				fp = new FourierPeriodogram(acto, sIdx,
-					cIdx, fromPeriod, toPeriod, pLevel);
+					cIdx, fromPeriodIdx, toPeriodIdx, pLevel);
 				break;
 			case 1:
 				fp = new EnrightPeriodogram(acto, sIdx,
-					cIdx, fromPeriod, toPeriod, pLevel);
+					cIdx, fromPeriodIdx, toPeriodIdx, pLevel);
 				break;
 			case 2:
 				fp = new LombScarglePeriodogram(acto, sIdx,
-					cIdx, fromPeriod, toPeriod, pLevel);
+					cIdx, fromPeriodIdx, toPeriodIdx, pLevel);
 				break;
 			default: throw new RuntimeException(
 					   "Invalid periodogram method");
@@ -357,14 +360,14 @@ public class ActogramCanvas extends JPanel
 		for(int i = 0; i < nPeaks && i < peaks.length; i++) {
 			int p = peaks[i];
 			plot.drawLine(
-				(p + fromPeriod) * factor,
+				(p + fromPeriodIdx) * factor,
 				yminmax[0],
-				(p + fromPeriod) * factor,
+				(p + fromPeriodIdx) * factor,
 				values[p]);
 
-			float x = p / (float)(toPeriod - fromPeriod);
+			float x = p / (float)(toPeriodIdx - fromPeriodIdx);
 			float y = (float)((yminmax[1] - values[p]) / (yminmax[1] - yminmax[0]));
-			float period = (fromPeriod + p) * factor;
+			float period = (fromPeriodIdx + p) * factor;
 			plot.addLabel(x, y, df.format(period));
 		}
 		plot.show();
