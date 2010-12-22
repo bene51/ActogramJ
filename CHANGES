@@ -1,3 +1,17 @@
+Version v0.4:
+-------------
+* Fix the calculation of p values in the periodograms. For the Fourier method,
+  p values are disabled because they would require the periodogram to be
+  calculated for all possible period lengths, which in general takes too long
+  to calculate.
+* For other types of periodograms, the user can now specify the p value level.
+* Fix axis calibration in the periodogram diagrams.
+* In the "Open" dialog, the input fields "number of rows" and "number of
+  columns" are replaced by "end row" and "end column".
+* Fix some problems with zooming.
+* Implement the calculation of average activity patterns.
+
+
 Version v0.3:
 -------------
 * Make preview table in the 'Open' dialog capable of reading lines with a

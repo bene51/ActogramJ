@@ -199,6 +199,20 @@ By default, periodograms are calculated on the original actograms (and not the d
 
 <h3><a name="versions">11. Versions and Changes</a></h3>
 <ul>
+  <li><b>Version v0.4</b> (<a href="versions/v0.4/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>Fix the calculation of p values in the periodograms. For the Fourier method,
+        p values are disabled because they would require the periodogram to be
+        calculated for all possible period lengths, which in general takes too long
+        to calculate.
+    <li>For other types of periodograms, the user can now specify the p value level.
+    <li>Fix axis calibration in the periodogram diagrams.
+    <li>In the "Open" dialog, the input fields "number of rows" and "number of
+        columns" are replaced by "end row" and "end column".
+    <li>Fix some problems with zooming.
+    <li>Implement the calculation of average activity patterns.
+  </ul><br><br>
+
   <li><b>Version v0.3</b> (<a href="versions/v0.3/ActogramJ_.jar">download</a>)<br>
   <ul>
     <li>Make preview table in the 'Open' dialog capable of reading lines with a different number of columns.
