@@ -223,8 +223,10 @@ public class ActogramCanvas extends JPanel
 		cIdx = processor.getIndexInOriginal(cIdx);
 
 		Actogram acto = processor.original;
-		float[] kernel = Filters.makeGaussianKernel(sigma);
-		acto = acto.convolve(kernel);
+		if(sigma > 0) {
+			float[] kernel = Filters.makeGaussianKernel(sigma);
+			acto = acto.convolve(kernel);
+		}
 
 		int periodIdx = acto.getIndexForTime(period);
 

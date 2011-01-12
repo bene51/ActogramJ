@@ -130,7 +130,7 @@ public class ImageCanvas extends JPanel {
 		Actogram a = first.processor.original;
 
 		int period = a.SAMPLES_PER_PERIOD;
-		float sigma = period / 100f;
+		float sigma = 0;
 
 		GenericDialog gd = new GenericDialog("Create Average Activity Pattern");
 		gd.addNumericField("Period", period, 0, 6, a.unit.toString());
