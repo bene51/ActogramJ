@@ -129,7 +129,7 @@ public class ImageCanvas extends JPanel {
 		}
 		Actogram a = first.processor.original;
 
-		int period = a.SAMPLES_PER_PERIOD;
+		float period = a.SAMPLES_PER_PERIOD * a.interval.intervalIn(a.unit);
 		float sigma = 0;
 
 		GenericDialog gd = new GenericDialog("Create Average Activity Pattern");
@@ -139,8 +139,8 @@ public class ImageCanvas extends JPanel {
 		if(gd.wasCanceled())
 			return;
 
-		final int p = (int)gd.getNextNumber();
-		final float s = (int)gd.getNextNumber();
+		final float p = (float)gd.getNextNumber();
+		final float s = (float)gd.getNextNumber();
 		final TimeInterval pi = new TimeInterval(p, a.unit);
 		new Thread() {
 			public void run() {
