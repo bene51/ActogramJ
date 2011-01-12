@@ -172,8 +172,9 @@ public class ImageCanvas extends JPanel {
 		}
 		Actogram a = first.processor.original;
 
-		int fromPeriod = a.SAMPLES_PER_PERIOD / 2;
-		int toPeriod = a.SAMPLES_PER_PERIOD * 2;
+		float per = a.SAMPLES_PER_PERIOD * a.interval.intervalIn(a.unit);
+		int fromPeriod = (int)Math.round(per - per / 3);
+		int toPeriod = (int)Math.round(per + per / 3);
 		int nPeaks = 3;
 		int methodIdx = 0;
 		float downsample = 1f;
