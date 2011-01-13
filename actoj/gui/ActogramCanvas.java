@@ -266,7 +266,7 @@ public class ActogramCanvas extends JPanel
 	 */
 	public void calculatePeriodogram(TimeInterval fromPeriod, TimeInterval toPeriod,
 			int method, int nPeaks,
-			float downsamplingFactor, double pLevel) {
+			float sigma, double pLevel) {
 
 		if(selStart == null || selCurr == null)
 			throw new RuntimeException("Interval required");
@@ -284,11 +284,11 @@ public class ActogramCanvas extends JPanel
 		sIdx = processor.getIndexInOriginal(sIdx);
 		cIdx = processor.getIndexInOriginal(cIdx);
 
-		sIdx /= downsamplingFactor;
-		cIdx /= downsamplingFactor;
-
-		Actogram acto = processor.original.downsample(
-				downsamplingFactor);
+		Actogram acto = processor.original;
+		if(sigma > 0) {
+			float[] kernel = Filters.makeGaussianKernel(sigma);
+			acto = acto.convolve(kernel);
+		}
 
 		int fromPeriodIdx = acto.getIndexForTime(fromPeriod);
 		int toPeriodIdx = acto.getIndexForTime(toPeriod);

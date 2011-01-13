@@ -134,7 +134,7 @@ public class ImageCanvas extends JPanel {
 
 		GenericDialog gd = new GenericDialog("Create Average Activity Pattern");
 		gd.addNumericField("Period", period, 0, 6, a.unit.toString());
-		gd.addNumericField("Smooting gaussian sigma", sigma, 0, 6, a.unit.toString());
+		gd.addNumericField("Smooting gaussian std dev", sigma, 0, 6, a.unit.toString());
 		gd.showDialog();
 		if(gd.wasCanceled())
 			return;
@@ -177,7 +177,7 @@ public class ImageCanvas extends JPanel {
 		int toPeriod = (int)Math.round(per + per / 3);
 		int nPeaks = 3;
 		int methodIdx = 0;
-		float downsample = 1f;
+		float sigma = 0f;
 		double pLevel = 0.05;
 
 		GenericDialog gd = new GenericDialog("Create Periodogram");
@@ -189,7 +189,7 @@ public class ImageCanvas extends JPanel {
 		gd.addNumericField("from_period", fromPeriod, 0, 6, a.unit.toString());
 		gd.addNumericField("to_period", toPeriod, 0, 6, a.unit.toString());
 		gd.addNumericField("Number of peaks", nPeaks, 0);
-		gd.addNumericField("Downsampling factor", downsample, 2);
+		gd.addNumericField("Smoothing gaussian std dev", sigma, 2);
 		gd.addNumericField("p level", pLevel, 3);
 		v = gd.getNumericFields();
 		final TextField tf = (TextField)v.get(v.size() - 1);
@@ -207,7 +207,7 @@ public class ImageCanvas extends JPanel {
 		final int fp = (int)gd.getNextNumber();
 		final int tp = (int)gd.getNextNumber();
 		final int np = (int)gd.getNextNumber();
-		final float factor = (float)gd.getNextNumber();
+		final float sig = (float)gd.getNextNumber();
 		final double pV = gd.getNextNumber();
 		final TimeInterval fi = new TimeInterval(fp, a.unit);
 		final TimeInterval ti = new TimeInterval(tp, a.unit);
@@ -217,7 +217,7 @@ public class ImageCanvas extends JPanel {
 					if(ac.hasSelection()) {
 						try {
 							ac.calculatePeriodogram(fi,
-								ti, m, np, factor, pV);
+								ti, m, np, sig, pV);
 						} catch(Exception e) {
 							IJ.error(e.getClass() + ": " + e.getMessage());
 							e.printStackTrace();
