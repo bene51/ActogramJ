@@ -192,7 +192,8 @@ public class Actogram {
 		for(int newIdx = 0; newIdx < l; newIdx++) {
 			int uInt = (int)Math.floor((newIdx + 1) * factor);
 			double partialOver = (newIdx + 1) * factor - uInt;
-			double c = cumOld[uInt] - cumNew[newIdx];
+			double c = uInt >= cumOld.length ? cumOld[cumOld.length - 1] : cumOld[uInt];
+			c -= cumNew[newIdx];
 			if(partialOver > 10e-6 && uInt < data.length)
 				c += partialOver * data[uInt];
 			newdata[newIdx] = (float)(c / factor);
