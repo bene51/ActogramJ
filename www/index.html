@@ -201,6 +201,17 @@ In all methods except the Fourier one a p level can be chosen. Only peaks above 
 
 <h3><a name="versions">11. Versions and Changes</a></h3>
 <ul>
+  <li><b>Version v0.5</b> (<a href="versions/v0.5/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>In the average activity pattern dialog, use a default sigma of 0.
+    <li>In the average activity pattern dialog, take the interval duration into
+        account when calculating the default period.
+    <li>Same for the periodogram dialog.
+    <li>In the periodogram dialog, narrow the lower and upper period limits
+        for faster computation.
+    <li>Periodograms: Use gaussian smoothing instead of downsampling.
+  </ul><br><br>
+
   <li><b>Version v0.4</b> (<a href="versions/v0.4/ActogramJ_.jar">download</a>)<br>
   <ul>
     <li>Fix the calculation of p values in the periodograms. For the Fourier method,

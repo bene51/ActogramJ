@@ -1,3 +1,13 @@
+Version v0.5:
+-------------
+* In the average activity pattern dialog, use a default sigma of 0.
+* In the average activity pattern dialog, take the interval duration into
+  account when calculating the default period.
+* Same for the periodogram dialog.
+* In the periodogram dialog, narrow the lower and upper period limits
+  for faster computation.
+* Periodograms: Use gaussian smoothing instead of downsampling.
+
 Version v0.4:
 -------------
 * Fix the calculation of p values in the periodograms. For the Fourier method,
