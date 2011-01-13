@@ -47,9 +47,9 @@ If you are using ImageJ, you need to download <a href="versions/current/Actogram
 <p align=center><img src="OpenDialog.png"/></p>
 <ul>
 <li><b>Columns:</b> <br>
-Enter here the first column and the number of columns s which should be loaded. Each column is loaded as a separate actogram.<br><br>
+Enter here the number of the first and the last column that should be loaded. Each column is loaded as a separate actogram.<br><br>
 <li><b>Rows:</b> <br>
-Enter here the first row and the number of rows which should be loaded.<br><br>
+Enter here the number of the first and the last row that should be loaded.<br><br>
 <li><b>Samples per period:</b> <br>
 Specify the number of sample measurements per period.<br><br>
 <li><b>Interval duration:</b> <br>
@@ -173,13 +173,15 @@ Choose here which method to use, either "Fourier", "Chi-Square" or "Lomb-Scargle
 Specify here the interval in which you assume the freerunning period. Sensible default values are proposed.<br><br>
 <li><b>Number of peaks</b><br>
 Enter here the number of peaks which will be highlighted in the result (see below).<br><br>
-<li><b>Downsampling factor</b><br>
-By default, periodograms are calculated on the original actograms (and not the displayed ones, which are downsampled depending on the zoom level). You can specify a downsampling factor here, to make the resulting periodogram smoother.<br><br>
+<li><b>Smoothing gaussian standard deviation</b><br>
+By default, periodograms are calculated on the original actograms (and not the displayed ones, which are downsampled depending on the zoom level). Often the resulting periodograms, particularly when using the Chi-Square method, look noisy. To obtain smoother results, you can specify a non-zero standard deviation for gaussian smoothing here.<br><br>
+<li><b>p level</b><br>
+In all methods except the Fourier one a p level can be chosen. Only peaks above the p-level line can be assumed to be significant.</br><br>
 </ul>
 
 <p>Using the actogram, the interval and the parameters as shown above, the following periodogram is calculated:</p>
 <p align=center><img src="PeriodogramResult.png"/></p>
-<p>Three peaks are highlighted, and it is easy to confirm that the desired peak is the one at 1625.</p>
+<p>Three peaks are highlighted, and it is easy to confirm that the desired peak is the one at 1623.</p>
 <p>The p value level for the actogram is displayed as a red line.</p>
 <p>Both periodogram values and p values can be shown as a list (by clicking on 'List'), and saved as an Excel sheet for further analyzis with third-party software.</p>
 <p align=right><a href=#top>&uarr top</a></p>
