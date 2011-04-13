@@ -13,6 +13,7 @@ import ij.util.Tools;
 import javax.swing.JPanel;
 import javax.swing.JComponent;
 
+import java.awt.RenderingHints;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -85,8 +86,14 @@ public class ActogramCanvas extends JPanel
 	 */
 	private Point selCurr = null;
 
+	/** The width of the y calibration bar. */
+	private int YCALIB_WIDTH = 20;
+
 	/** Distance between left border and the actogram. */
 	private int INT_LEFT = 5;
+
+	/** The total left intent */
+	private int INT_LEFT_TOTAL = YCALIB_WIDTH + INT_LEFT;
 
 	/** Distance between right border and the actogram. */
 	private int INT_RIGHT = 5;
@@ -143,7 +150,7 @@ public class ActogramCanvas extends JPanel
 		INT_TOP_ALL = INT_TOP + (1 + nExternals) * extVarHeight;
 
 		BufferedImage ip = processor.processor;
-		width = ip.getWidth() + INT_LEFT + INT_RIGHT;
+		width = ip.getWidth() + INT_LEFT_TOTAL + INT_RIGHT;
 		height = ip.getHeight() + INT_TOP_ALL + INT_BOTTOM;
 
 		this.setPreferredSize(new Dimension(width, height));
@@ -173,9 +180,9 @@ public class ActogramCanvas extends JPanel
 
 	// x and y are coordinates within this component
 	public String getPositionString(int x, int y) {
-		if(x < INT_LEFT || y < INT_TOP_ALL || x >= width - INT_RIGHT || y >= height - INT_BOTTOM)
+		if(x < INT_LEFT_TOTAL || y < INT_TOP_ALL || x >= width - INT_RIGHT || y >= height - INT_BOTTOM)
 			return "outside";
-		int idx = processor.getIndex(x - INT_LEFT, y - INT_TOP_ALL);
+		int idx = processor.getIndex(x - INT_LEFT_TOTAL, y - INT_TOP_ALL);
 		if(idx < 0)
 			return "outside";
 		Actogram a = processor.downsampled;
@@ -426,46 +433,56 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D)g;
+		g2d.setRenderingHint(
+			RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
+
 		GraphicsBackend gb = new GraphicsBackend(g);
 
 		clearBackground(gb);
-		drawCalibration(gb);
+		drawXCalibration(gb);
 
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
-			gb.setOffsX(INT_LEFT);
+			gb.setOffsX(INT_LEFT_TOTAL);
 			gb.setOffsY(INT_TOP + (i + 1) * extVarHeight);
 			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
-		g.drawImage(processor.processor, INT_LEFT, INT_TOP_ALL, null);
-
 		gb.setOffsX(0);
 		gb.setOffsY(0);
+
+		g.drawImage(processor.processor, INT_LEFT_TOTAL, INT_TOP_ALL, null);
+
+		drawYCalibration(gb);
+
 		drawSelection(gb);
 		drawFPTriangle(gb);
 	}
 
 	public void paint(DrawingBackend gb) {
 		clearBackground(gb);
-		drawCalibration(gb);
+		drawXCalibration(gb);
 
 		float offX = gb.getOffsX(), offY = gb.getOffsY();
 
 		ExternalVariable[] ev = processor.original.getExternalVariables();
 		for(int i = 0; i < ev.length; i++) {
-			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
+			gb.setOffsX(offX + gb.getFactorX() * INT_LEFT_TOTAL);
 			gb.setOffsY(offY + gb.getFactorY() * (INT_TOP + (i + 1) * extVarHeight));
 			ev[i].paint(gb, processor.width, extVarHeight, processor.ppl);
 		}
 
-		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT);
+		gb.setOffsX(offX + gb.getFactorX() * INT_LEFT_TOTAL);
 		gb.setOffsY(offY + gb.getFactorY() * INT_TOP_ALL);
 		processor.clearBackground(gb);
 		processor.drawInto(processor.downsampled,
 				new ActogramProcessor.Histogram(gb), Color.BLACK);
 		gb.setOffsX(offX);
 		gb.setOffsY(offY);
+
+		drawYCalibration(gb);
 
 		drawSelection(gb);
 		drawFPTriangle(gb);
@@ -494,11 +511,11 @@ public class ActogramCanvas extends JPanel
 		if(cIdx < 0) return;
 
 
-		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP_ALL);
-		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP_ALL);
+		Point s = new Point(st.x + INT_LEFT_TOTAL, st.y + INT_TOP_ALL);
+		Point c = new Point(cu.x + INT_LEFT_TOTAL, cu.y + INT_TOP_ALL);
 
-		int x0 = INT_LEFT;
-		int x1 = INT_LEFT + processor.processor.getWidth();
+		int x0 = INT_LEFT_TOTAL;
+		int x1 = INT_LEFT_TOTAL + processor.processor.getWidth();
 		int sh = processor.signalHeight;
 
 		// draw start marker
@@ -543,8 +560,8 @@ public class ActogramCanvas extends JPanel
 		int cIdx = processor.getIndex(cu.x, cu.y);
 		if(cIdx < 0) return;
 
-		Point s = new Point(st.x + INT_LEFT, st.y + INT_TOP_ALL);
-		Point c = new Point(cu.x + INT_LEFT, cu.y + INT_TOP_ALL);
+		Point s = new Point(st.x + INT_LEFT_TOTAL, st.y + INT_TOP_ALL);
+		Point c = new Point(cu.x + INT_LEFT_TOTAL, cu.y + INT_TOP_ALL);
 
 		g.setLineColor(color.getRGB());
 		g.setLineWidth(stroke);
@@ -588,28 +605,53 @@ public class ActogramCanvas extends JPanel
 		g.drawText(h);
 	}
 
-	private void drawCalibration(DrawingBackend g) {
-		int w = width - INT_LEFT - INT_RIGHT;
+	private void drawXCalibration(DrawingBackend g) {
+		int left = INT_LEFT_TOTAL;
+		int w = width - left - INT_RIGHT;
 		int h = extVarHeight;
 
 		g.setLineColor(0, 0, 0, 255);
 		g.setLineWidth(1f);
-		g.moveTo(INT_LEFT, INT_TOP + h/2);
+		g.moveTo(left, INT_TOP + h/2);
 		g.lineTo(width - INT_RIGHT, INT_TOP + h/2);
 		for(int i = 0; i <= nSubdivisions; i++) {
-			int x = INT_LEFT + (int)Math.round((float)i * w / nSubdivisions);
+			int x = left + (int)Math.round((float)i * w / nSubdivisions);
 			g.moveTo(x, INT_TOP + h/2 - h/4);
 			g.lineTo(x, INT_TOP + h/2 + h/4);
 		}
 	}
 
+	private void drawYCalibration(DrawingBackend g) {
+		Font font = new Font("Helvetica", Font.BOLD, 8);
+		g.setFont(font);
+		int nLines = processor.periods + 1;
+		String[] numbers = new String[nLines];
+		int[] widths = new int[nLines];
+		FontMetrics fm = getFontMetrics(font);
+		int h = fm.getHeight();
+		for(int i = 0; i < nLines; i++) {
+			numbers[i] = Integer.toString(i + 1);
+			widths[i] = fm.stringWidth(numbers[i]);
+		}
+
+		g.setLineColor(0, 0, 0, 255);
+		g.setLineWidth(1f);
+
+		for(int i = 0; i < nLines - 1; i++) {
+			int x = INT_LEFT_TOTAL - widths[i] - 5;
+			int y = INT_TOP_ALL + (i + 1) * processor.baselineDist + processor.baselineDist;
+			g.moveTo(x, y);
+			g.drawText(numbers[i]);
+		}
+	}
+
 	public Point snap(Point in) {
-		if(in.x < INT_LEFT || in.y < INT_TOP_ALL ||
+		if(in.x < INT_LEFT_TOTAL || in.y < INT_TOP_ALL ||
 			in.x >= width - INT_RIGHT || in.y >= height - INT_BOTTOM)
 			return null;
 		int bd = processor.baselineDist;
 		int idx = (in.y - INT_TOP_ALL)/ bd;
-		return new Point(in.x - INT_LEFT, (idx + 1) * bd);
+		return new Point(in.x - INT_LEFT_TOTAL, (idx + 1) * bd);
 	}
 
 	private static Point upper(Point p1, Point p2) {
