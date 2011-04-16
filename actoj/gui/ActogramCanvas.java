@@ -99,7 +99,7 @@ public class ActogramCanvas extends JPanel
 	private int INT_RIGHT = 5;
 
 	/** Distance between top border and the actogram. */
-	private int INT_TOP = 5;
+	private int INT_TOP = 30; // accomodates the title
 
 	private int INT_TOP_ALL;
 
@@ -441,6 +441,7 @@ public class ActogramCanvas extends JPanel
 		GraphicsBackend gb = new GraphicsBackend(g);
 
 		clearBackground(gb);
+		drawTitle(gb);
 		drawXCalibration(gb);
 
 		ExternalVariable[] ev = processor.original.getExternalVariables();
@@ -463,6 +464,7 @@ public class ActogramCanvas extends JPanel
 
 	public void paint(DrawingBackend gb) {
 		clearBackground(gb);
+		drawTitle(gb);
 		drawXCalibration(gb);
 
 		float offX = gb.getOffsX(), offY = gb.getOffsY();
@@ -603,6 +605,28 @@ public class ActogramCanvas extends JPanel
 		g.setFillColor(text.getRGB());
 		g.moveTo(hr.x, hr.y);
 		g.drawText(h);
+	}
+
+	private void drawTitle(DrawingBackend g) {
+		String title = processor.original.name + ":";
+		Font font = new Font("Helvetica", Font.BOLD, 14);
+		g.setFont(font);
+		FontMetrics fm = getFontMetrics(font);
+		int h = fm.getHeight();
+		int w = fm.stringWidth(title);
+		int x = width / 2 - w / 2;
+		int y = INT_TOP / 2 + h / 2;
+		g.setLineColor(0, 0, 0, 255);
+		g.setLineWidth(1);
+		g.moveTo(x, y - h);
+		g.setFillColor(150, 150, 150, 255);
+		g.fillRectangle(w + 1, h + 1);
+		g.moveTo(x, y + 1);
+		g.lineTo(x + w, y + 1);
+		g.moveTo(x, y);
+		g.setFillColor(0, 0, 0, 255);
+		g.setLineColor(0, 0, 0, 255);
+		g.drawText(title);
 	}
 
 	private void drawXCalibration(DrawingBackend g) {
