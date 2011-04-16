@@ -629,7 +629,7 @@ public class ActogramCanvas extends JPanel
 		int[] widths = new int[nLines];
 		FontMetrics fm = getFontMetrics(font);
 		int h = fm.getHeight();
-		for(int i = 0; i < nLines; i++) {
+		for(int i = 0; i < nLines - 1; i++) {
 			numbers[i] = Integer.toString(i + 1);
 			widths[i] = fm.stringWidth(numbers[i]);
 		}
@@ -637,9 +637,13 @@ public class ActogramCanvas extends JPanel
 		g.setLineColor(0, 0, 0, 255);
 		g.setLineWidth(1f);
 
-		for(int i = 0; i < nLines - 1; i++) {
-			int x = INT_LEFT_TOTAL - widths[i] - 5;
-			int y = INT_TOP_ALL + (i + 1) * processor.baselineDist + processor.baselineDist;
+		int x = INT_LEFT_TOTAL - widths[0] - 5;
+		int y = INT_TOP_ALL + processor.baselineDist + processor.baselineDist;
+		g.moveTo(x, y);
+		g.drawText(numbers[0]);
+		for(int i = 4; i < nLines - 1; i += 5) {
+			x = INT_LEFT_TOTAL - widths[i] - 5;
+			y = INT_TOP_ALL + (i + 1) * processor.baselineDist + processor.baselineDist;
 			g.moveTo(x, y);
 			g.drawText(numbers[i]);
 		}
