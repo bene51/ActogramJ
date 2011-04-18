@@ -185,6 +185,28 @@ In all methods except the Fourier one a p level can be chosen. Only peaks above 
 <p>Three peaks are highlighted, and it is easy to confirm that the desired peak is the one at 1623.</p>
 <p>The p value level for the actogram is displayed as a red line.</p>
 <p>Both periodogram values and p values can be shown as a list (by clicking on 'List'), and saved as an Excel sheet for further analyzis with third-party software.</p>
+<p>
+As mentioned above, periodograms are calculated using either the "Fourier", "Chi-Square" or "Lomb-Scargle" method. For completeness, the formulas are given here. They are taken from <a href=#references>[3]</a>, were more detailed explanations can be found. The following formulas assume a data set with N values (i.e. x<sub>i</sub> for i = 1 to N):
+<ul>
+<li>Fourier:<br>
+<blockquote>In Fourier analysis, the spectral energy (R<sup>2</sup>) of each frequency j/N [for j = 1 to (N-1)/2] can be calculated as:<br>
+<img src="FourierFormula.png" /><br>
+</blockquote>
+<li>Chi-Square:<br>
+<blockquote>
+For a data set which can be folded into K blocks of period P, the QP statistic used in the chi square periodogram procedure is computed as:<br>
+<img src="ChiSquareFormula.png" /><br>
+where M<sub>h</sub> is the mean of K values under each time unit of the period length [M<sub>h</sub>=(sum x<sub>i</sub>)/K, for i = 1 to (N-K) in P increments], and M is the mean of all N values.
+</blockquote>
+<li>Lomb-Scargle:<br>
+<blockquote>
+The Lomb-Scargle periodogram is computed as:<br>
+<img src="LombScargleFormula1.png" /><br>
+where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all N values, P is the period being tested, and &delta; is a term used to adjust the times of unequally spaced data that can be computed as:<br>
+<img src="LombScargleFormula2.png" /><br>
+</blockquote>
+</ul>
+</p>
 <p align=right><a href=#top>&uarr top</a></p>
 
 
