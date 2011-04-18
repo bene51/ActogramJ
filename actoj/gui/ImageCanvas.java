@@ -175,7 +175,7 @@ public class ImageCanvas extends JPanel {
 		float per = a.SAMPLES_PER_PERIOD * a.interval.intervalIn(a.unit);
 		int fromPeriod = (int)Math.round(per - per / 3);
 		int toPeriod = (int)Math.round(per + per / 3);
-		int nPeaks = 3;
+		int nPeaks = 1;
 		int methodIdx = 0;
 		float sigma = 0f;
 		double pLevel = 0.05;
