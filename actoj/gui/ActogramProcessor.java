@@ -54,8 +54,22 @@ public class ActogramProcessor {
 			new GraphicsBackend(processor.getGraphics())), Color.BLACK);
 	}
 
+	/**
+	 * Transforms the given index in the downsampled
+	 * actogram to the corresponding index in the original
+	 * actogram.
+	 */
 	public int getIndexInOriginal(int i) {
 		return (int)Math.floor(i * zoom);
+	}
+
+	/**
+	 * Transforms the given index in the original
+	 * actogram to the corresponding index in the downsampled
+	 * actogram.
+	 */
+	public int getIndexInDownsampled(int i) {
+		return (int)Math.round(i / zoom);
 	}
 
 	public int getIndex(int x, int y) {

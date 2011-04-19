@@ -176,6 +176,8 @@ Specify here the interval in which you assume the freerunning period. Sensible d
 Enter here the number of peaks which will be highlighted in the result (see below).<br><br>
 <li><b>Smoothing gaussian standard deviation</b><br>
 By default, periodograms are calculated on the original actograms (and not the displayed ones, which are downsampled depending on the zoom level). Often the resulting periodograms, particularly when using the Chi-Square method, look noisy. To obtain smoother results, you can specify a non-zero standard deviation for gaussian smoothing here.<br><br>
+<li><b>Step size</b><br>
+By default, periodograms are calculated on the original actograms. To apply downsampling first, an optional step size can be specified here. If it is greater than 1, the periodogram is downsampled by the given factor before calculating the periodogram (and after the smoothing). Downsampling artificially reduces the number of measurements, which influences the p value calculation; periodograms may show peaks above the significance level when calculated without downsampling, but the same peaks may fall below the significance level if downsampling is performed.<br><br>
 <li><b>p level</b><br>
 In all methods except the Fourier one a p level can be chosen. Only peaks above the p-level line can be assumed to be significant.</br><br>
 </ul>
