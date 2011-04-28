@@ -21,10 +21,11 @@
 <li><a href="#calculations">7. Calculations on actograms</a></h3>
 <li><a href="#fp">8. Determining the freerunning period manually</a></h3>
 <li><a href="#periodogram">9. Determining the freerunning period automatically</a>
-<li><a href="#normalization">10. Normalizing actograms</a>
-<li><a href="#api">11. Developer documentation</a>
-<li><a href="#versions">12. Versions and Changes</a>
-<li><a href="#references">13. References</a>
+<li><a href="#averageactivity">10. Displaying an average activity pattern</a>
+<li><a href="#normalization">11. Normalizing actograms</a>
+<li><a href="#api">12. Developer documentation</a>
+<li><a href="#versions">13. Versions and Changes</a>
+<li><a href="#references">14. References</a>
 </ul>
 
 
@@ -214,21 +215,31 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 
 
 
+<h3><a name="averageactivity">10. Displaying an average activity pattern</a></h3>
+<p>A natural way for visualizing the activity over the length of one period is to create an average activity pattern. This is done by subdividing the entire actogram into equal intervals, then sum them up and devide the result by the number of cycles. The result is an average activity diagram for a single animal.</p>
 
-<h3><a name="normalization">10. Normalizing actograms</a></h3>
+<img src="AverageActivityDialog.png" /><br>
+<p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
+<img src="AverageActivityDiagram.png" /><br>
+<p align=right><a href=#top>&uarr top</a></p>
+
+
+
+
+<h3><a name="normalization">11. Normalizing actograms</a></h3>
 <p>Sometimes one wishes to compare several actograms, where one may show an overall high activity level while the other one has an overall low activity. To facilitate comparison, one would like to normalize the overall activity.</p>
 <p>This can be done by clicking on "Analyze"&rarr"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
 <p align=right><a href=#top>&uarr top</a></p>
 
 
-<h3><a name="api">11. Developer documentation</a></h3>
+<h3><a name="api">12. Developer documentation</a></h3>
 Users can download the full source code and extend it as needed. Beginning
 with version 0.6, the complete source code is contained in the JAR archives.
 API documentation can be found <a href="api/index.html" target="_BLANK">here</a>.
 
 
 
-<h3><a name="versions">12. Versions and Changes</a></h3>
+<h3><a name="versions">13. Versions and Changes</a></h3>
 <ul>
   <li><b>Version v0.5</b> (<a href="versions/v0.5/ActogramJ_.jar">download</a>)<br>
   <ul>
@@ -305,7 +316,7 @@ API documentation can be found <a href="api/index.html" target="_BLANK">here</a>
 
 
 
-<h3><a name="references">13. References</a></h3>
+<h3><a name="references">14. References</a></h3>
 <table border=0>
 <tr><td>[1]<td>Van Dongen HP, Olofsen E, VanHartevelt JH, Kruyt EW: <b>A procedure of multiple period searching in unequally spaced time-series with the Lomb-Scargle method.</b> Biol Rhythm Res 1999, <b>30</b>(2):149-77.
 </tr>
