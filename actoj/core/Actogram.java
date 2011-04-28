@@ -300,7 +300,7 @@ public class Actogram {
 				n[i] += kernel[j] * v;
 			}
 		}
-		return new Actogram(name + "_convolved", n,
+		return new Actogram(name + "_smoothed", n,
 			SAMPLES_PER_PERIOD, interval, unit);
 	}
 
