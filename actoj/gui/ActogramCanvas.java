@@ -87,24 +87,24 @@ public class ActogramCanvas extends JPanel
 	private Point selCurr = null;
 
 	/** The width of the y calibration bar. */
-	private int YCALIB_WIDTH = 20;
+	private final int YCALIB_WIDTH;
 
 	/** Distance between left border and the actogram. */
-	private int INT_LEFT = 5;
+	private final int INT_LEFT = 5;
 
 	/** The total left intent */
-	private int INT_LEFT_TOTAL = YCALIB_WIDTH + INT_LEFT;
+	private final int INT_LEFT_TOTAL;
 
 	/** Distance between right border and the actogram. */
-	private int INT_RIGHT = 5;
+	private final int INT_RIGHT = 5;
 
 	/** Distance between top border and the actogram. */
-	private int INT_TOP = 30; // accomodates the title
+	private final int INT_TOP = 30; // accomodates the title
 
-	private int INT_TOP_ALL;
+	private final int INT_TOP_ALL;
 
 	/** Distance between bottom border and the actogram. */
-	private int INT_BOTTOM = 5;
+	private final int INT_BOTTOM = 5;
 
 	/** Stroke for the freerunning period triangle */
 	private final float stroke = 3f;
@@ -148,6 +148,9 @@ public class ActogramCanvas extends JPanel
 
 		int nExternals = actogram.getExternalVariables().length;
 		INT_TOP_ALL = INT_TOP + (1 + nExternals) * extVarHeight;
+
+		YCALIB_WIDTH = calculateYCalibrationWidth();
+		INT_LEFT_TOTAL = INT_LEFT + YCALIB_WIDTH;
 
 		BufferedImage ip = processor.processor;
 		width = ip.getWidth() + INT_LEFT_TOTAL + INT_RIGHT;
@@ -658,8 +661,23 @@ public class ActogramCanvas extends JPanel
 		}
 	}
 
+	private int calculateYCalibrationWidth() {
+		int fs = (int)(0.6 * processor.baselineDist);
+		Font font = new Font("Helvetica", Font.PLAIN, fs);
+		int nLines = processor.periods + 1;
+		FontMetrics fm = getFontMetrics(font);
+		int max = 0;
+		for(int i = 0; i < nLines - 1; i++) {
+			int w = fm.stringWidth(Integer.toString(i + 1));
+			if(w > max)
+				max = w;
+		}
+		return max + 5;
+	}
+
 	private void drawYCalibration(DrawingBackend g) {
-		Font font = new Font("Helvetica", Font.BOLD, 8);
+		int fs = (int)(0.6 * processor.baselineDist);
+		Font font = new Font("Helvetica", Font.PLAIN, fs);
 		g.setFont(font);
 		int nLines = processor.periods + 1;
 		String[] numbers = new String[nLines];
