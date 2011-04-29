@@ -1,0 +1,42 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>ActogramJ</title>
+</head>
+
+<body>
+<div class="navigation">
+  <ul>
+    <li><a href="index.html">Home</a>
+    <li><a href="manual.html">Manual</a>
+    <li><a href="versions.html">Download</a>
+    <li><a href="about.html">About</a>
+  </ul>
+</div>
+<div id=header></div>
+
+<h5>&copy Benjamin Schmid and Taishi Yoshii</h5>
+
+<h3>Cautions for Chi-sqare periodogram using high resolution time series data!</h3>
+<p>Before you apply chi-sqare periodogram to a high resolution time serise data, we would like to show you the effects of smoothing functions the in analysis.</p>
+
+<p>As an example, we analyze a free-running rhythm of a fly activity in constant darkness. The data were collected with 1 min-bins.<p>
+<p align=center><img src="Fig1.jpg"/></p>
+
+<p>If we apply chi-sqare periodogram to this data without any smoothing, the periodogram displays a peak at 1425 min above a significant line (red line) with many small and sharp peaks over the graph.</p>
+<p align=center><img width="700px" src="Fig2.jpg"/></p>
+
+<p>This significant peak can be pronounced by smoothing the data, by which the noise peaks are diminished. In the next periodogram, we smoothed the data by a Gaussian kernel. As you see, the significant peak is now very high.</p>
+<p align=center><img width="700px" src="Fig3.jpg"/></p>
+
+
+<p>A similar effect can be achieved by changing the step size. Here we tranform 1 min data to 6 min data. A problem is that the resolution of the periodogram is also reduced, because the resolution of the chi-sqare periodogram analysis depends on the resolution of the data.</p>
+<p align=center><img width="700px" src="Fig4.jpg"/></p>
+
+
+<p>If you compare all periodograms, you will see that smoothing influences the power of the peak very much.</p>
+
+
+
+</body>
+</html>

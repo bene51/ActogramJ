@@ -1,0 +1,48 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>ActogramJ</title>
+</head>
+
+<body>
+<div class="navigation">
+  <ul>
+    <li><a href="index.html">Home</a>
+    <li><a href="manual.html">Manual</a>
+    <li><a href="versions.html">Download</a>
+    <li><a href="about.html">About</a>
+  </ul>
+</div>
+<div id=header></div>
+
+<h5>&copy Benjamin Schmid and Taishi Yoshii</h5>
+
+
+<h3>A brief review of automatic period estimation methods</h3>
+<p>The period estimation by eye fit line was the classically used method, whereas today the automatic calculations are preferred because of their objectivity. However, the automatic methods should not be overestimated because most of biological data contain noise, which prevents or influences precise period estimation. Therefore the eye fit line is still useful and sometimes necessary to confirm the automatic periodogram analyses. Also, the period estimation by eye fitted line is still useful when the rhythms are composed of multiple components, the periods of which are often difficult to find automatically. </p>
+<p>Fourier analysis is a classical periodogram analysis technique and is still widely used today. This method is often employed for short-term rhythms such as bioluminescence of transgenic organisms (<a href=#references>[8]</a>). Chi-square periodogram analysis is the most widely used method today. However, since at least 10 cycles of the rhythms are required to apply the statistical test (<a href=#references>[3]</a>), we alternatively implemented the Lomb-Scargle periodogram method in ActogramJ. The Lomb-Scargle periodogram is especially suited to analyze unequally spaced time series data, but it also shows an outstanding performance for equally spaced data (<a href=#references>[1, 2]</a>). The Lomb-Scargle periodogram is based on Fourier analysis (<a href=#references>[7]</a>), so that both methods show almost the same result when the data points are equally spaced. Recently the Lomb-Scargle periodogram was even satisfactorily applied to gene expression data by DNA-array studies (<a href=#references>[6]</a>), suggesting the reliability of the statistical evaluation for short term data. Furthermore the Lomb-Scargle periodogram is noise tolerant in comparison to the chi-square periodogram (<a href=#references>[3]</a>). Thus there are several superior features in Lomb-Scargle periodogram compared to chi-square periodogram. Van Dongen et al. <a href=#references>[1]</a> even recommended using it as a default method. However, the Lomb-Scargle periodogram is not the best method for all data: because the periodogram is based on the least-square fitting of sine waves to the data, the period estimation for non-sinusoidal rhythms such as bimodal rhythms is less precise (<a href=#references>[9]</a>). Therefore the chi-square and Lomb-Scargle periodograms would be complementary. These periodogram analyses can be applied readily with a few mouse clicks in ActogramJ. One can quickly compare the results obtained by the different methods, which provides an additional check for their correctness.</p>
+
+
+
+<h3><a name="references">References</a></h3>
+<table border=0>
+<tr><td>[1]<td>Van Dongen HP, Olofsen E, VanHartevelt JH, Kruyt EW: <b>A procedure of multiple period searching in unequally spaced time-series with the Lomb-Scargle method.</b> Biol Rhythm Res 1999, <b>30</b>(2):149-77.
+</tr>
+<tr><td>[2]<td>Ruf T: <b>The Lomb-Scargle Periodogram in Biological Rhythm Research: Analysis of Incomplete and Unequally Spaced Time-Series.</b> Biol Rhythm Res 1999, <b>30</b>(2):178-201.
+</tr>
+<tr><td>[3]<td>Refinetti R, Corn&iacute;lissen G, and Halberg F: <b>Procedures for numerical analysis of circadian rhythms.</b> Biol Rhythm Res 2007, <b>38</b>(4): 275-325.
+</tr>
+<tr><td>[4]<td>Helfrich-F&ouml;rster C: <b>Differential control of morning and evening components in the activity rhythm of Drosophila melanogaster--sex-specific differences suggest a different quality of activity.</b> J Biol Rhythms 2000, <b>15</b>(2):135-54.
+</tr>
+<tr><td>[5]<td>Canal-Corretger MM, Vilaplana J, Cambras T, D&iacute;ez-Noguera A: <b>Functioning of the rat circadian system is modified by light applied in critical postnatal days.</b> Am J Physiol Regul Integr Comp Physiol 2001, <b>280</b>(4):R1023-30.
+</tr>
+<tr><td>[6]<td>Glynn EF, Chen J and Mushegian AR: <b>Detecting periodic patterns in unevenly spaced gene expression time series using Lomb-Scargle periodograms.</b> Bioinformatics (2006) <b>22</b>:310-316.
+<tr><td>[7]<td>Lomb N: <b>Least-squares frequency analysis of unequally spaced data.</b> Astrophys Space Sci (1976) <b>39</b>:447-462.
+<tr><td>[8]<td>Plautz JD, Straume M, Stanewsky R, Jamison CF, Brandes C, Dowse HB, Hall JC and Kay SA: <b>Quantitative analysis of Drosophila period gene transcription in living animals.</b> J Biol Rhythms (1997) <b>12</b>:204-217.
+<tr><td>[9]<td>Schimmel M: <b>Emphasizing difficulties in the detection of rhythms with Lomb-Scargle periodograms.</b> Biol Rhythm Res (2001) <b>32</b>:341-345.
+</table>
+
+
+</body>
+</html>
+

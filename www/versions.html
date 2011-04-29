@@ -1,0 +1,91 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>ActogramJ</title>
+</head>
+
+<body>
+
+<div class="navigation">
+  <ul>
+    <li><a href="index.html">Home</a>
+    <li><a href="manual.html">Manual</a>
+    <li><a href="versions.html">Download</a>
+    <li><a href="about.html">About</a>
+  </ul>
+</div>
+<div id=header></div>
+<h5>&copy Benjamin Schmid and Taishi Yoshii</h5>
+
+<h3>Versions and Changes</h3>
+<ul>
+  <li><b>Version v0.5</b> (<a href="versions/v0.5/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>In the average activity pattern dialog, use a default sigma of 0.
+    <li>In the average activity pattern dialog, take the interval duration into
+        account when calculating the default period.
+    <li>Same for the periodogram dialog.
+    <li>In the periodogram dialog, narrow the lower and upper period limits
+        for faster computation.
+    <li>Periodograms: Use gaussian smoothing instead of downsampling.
+  </ul><br><br>
+
+  <li><b>Version v0.4</b> (<a href="versions/v0.4/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>Fix the calculation of p values in the periodograms. For the Fourier method,
+        p values are disabled because they would require the periodogram to be
+        calculated for all possible period lengths, which in general takes too long
+        to calculate.
+    <li>For other types of periodograms, the user can now specify the p value level.
+    <li>Fix axis calibration in the periodogram diagrams.
+    <li>In the "Open" dialog, the input fields "number of rows" and "number of
+        columns" are replaced by "end row" and "end column".
+    <li>Fix some problems with zooming.
+    <li>Implement the calculation of average activity patterns.
+  </ul><br><br>
+
+  <li><b>Version v0.3</b> (<a href="versions/v0.3/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>Make preview table in the 'Open' dialog capable of reading lines with a different number of columns.
+    <li>Introduce three modes for pointing, selecting and manual determination of the freerunning period.
+    <li> Implement generic drawing to do screen and pdf rendering with the same code.
+    <li> Allow to change the ratio w:h of an actogram.
+    <li> Introduce environmental bars for light, temperature, etc.
+    <li> Automatic determination of the freerunning period with the Fourier, Chi-Square (Enright) and Lomb-Scargle methods.
+    <li> Simplify the 'Calculate' window.
+    <li> Fix wrong sorting for multiple selected actograms.
+    <li> Adjustable units for the freerunning period string.
+    <li> Introduce zoom out.
+    <li> Allow to open several actogram files with the same parameters simultaneously.
+    <li> Add a menu bar.
+    <li> Implement normalizing of multiple actograms to the same overall activity.
+    <li> Add documentation.
+  </ul><br><br>
+
+  <li><b>Version v0.2</b> (<a href=versions/v0.2/ActogramJ_.jar>download</a>)<br>
+  <ul>
+    <li> Calibration bar with adjustable number of subdivisions
+      The number of subdivisions can be adjusted by clicking on the
+      'Preferences' icon.
+    <li> Allow to remove files from the display by right-clicking.
+    <li> 'Freerunning period' is in black now.
+    <li> In the 'Preferences' dialog, 'number of periods per line' is changed to 'number of plots'.
+    <li> Simple calculations of actograms, invoked by clicking on the 'Calculate' icon.
+    <ul>
+      <li>Summing or averaging the displayed/selected actograms.
+      <li>Smoothing individual actograms.
+    </ul>
+    The results of the calculations are displayed under the tree entry 'Calculated'.
+    <li> The preview table in the open dialog does not crash any more when
+      the file to open contains plain text at the beginning.
+    <li> Fix the constant shift at the beginning of the actograms.
+  </ul><br><br>
+
+  <li><b>Version v0.1</b> (<a href=versions/v0.1/ActogramJ_.jar>download</a>)<br>
+  <ul>
+    <li> First public version.
+  </ul>
+</ul>
+</body>
+</html>
+

@@ -1,11 +1,11 @@
 body {
-  padding-left: 0;
-  background: #fff;
+  padding-left: 0px;
+  background: #ffffff;
   font: 10pt helvetica;
   color: black;
-  width: 700;
-  margin-left: 50;
-  margin-top: 50;
+  width: 700px;
+  margin-left: 50px;
+  margin-top: 50px;
 }
 
 body h5 { color: black; margin-top: 2px}
@@ -13,8 +13,8 @@ body h3 { color: #114466; margin-top: 50px}
 body img { border-color: #000000; border-width: 0px; border-style: solid; }
 
 #header {
-  height: 140;
-  width: 700;
+  height: 140px;
+  width: 700px;
   background-image: url('banner.png');
   background-repeat: no-repeat;
 }
@@ -33,4 +33,37 @@ body img {/*
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";*/
 	/* For IE 5.5 - 7 */
 	/* filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');*/
+}
+
+body .navigation {
+	text-align: center;
+	font-size: 11pt;
+	width: 700px;
+	margin: 0px auto;
+	margin-bottom: 30px;
+}
+
+body .navigation a {
+	color: #114466;
+	/* font-weight: bold; */
+	text-decoration: none;
+}
+
+body .navigation a:hover {
+	color: black;
+}
+
+body .navigation ul {
+	padding-left: 0px;
+	list-style-type: none;
+	list-style-position: inside;
+	border-top: solid 1px #114466;
+	border-bottom: solid 1px #114466;
+	background-color: #babbff;
+}
+
+body .navigation ul li {
+	display: inline;
+	margin-left: 30px;
+	margin-right: 30px;
 }
