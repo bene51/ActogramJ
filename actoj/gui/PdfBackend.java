@@ -87,7 +87,13 @@ public class PdfBackend extends DrawingBackend {
 
 	@Override
 	public void drawText(String text) {
+		g.beginText();
+
+		g.setTextMatrix(x, y);
+		g.setFontAndSize(baseFont, fontSize);
 		g.showText(text);
+
+		g.endText();
 	}
 
 	private float getX(float x) {
@@ -125,11 +131,11 @@ public class PdfBackend extends DrawingBackend {
 		this.baseFont = null;
 		this.fontSize = f.getSize() * factorX;
 		try {
-			baseFont = BaseFont.createFont(f.getFamily(), "", false);
+			baseFont = BaseFont.createFont(f.getFamily(), BaseFont.CP1252, true);
 		} catch(Exception e) {
 			// falling back to Helvetica
 			try {
-				baseFont = BaseFont.createFont(BaseFont.HELVETICA, "", false);
+				baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, true);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
