@@ -99,7 +99,7 @@ public class ActogramCanvas extends JPanel
 	private final int INT_RIGHT = 5;
 
 	/** Distance between top border and the actogram. */
-	private final int INT_TOP = 30; // accomodates the title
+	private final int INT_TOP; // accomodates the title
 
 	private final int INT_TOP_ALL;
 
@@ -145,6 +145,8 @@ public class ActogramCanvas extends JPanel
 		this.nSubdivisions = subd;
 		this.fpUnit = fpUnit;
 		this.extVarHeight = 2 * processor.signalHeight;
+
+		INT_TOP = (int) (1.5 * getTitleHeight());
 
 		int nExternals = actogram.getExternalVariables().length;
 		INT_TOP_ALL = INT_TOP + (1 + nExternals) * extVarHeight;
@@ -623,9 +625,17 @@ public class ActogramCanvas extends JPanel
 		g.drawText(h);
 	}
 
+	private int getTitleHeight() {
+		int fs = (int)(1.0 * processor.baselineDist);
+		Font font = new Font("Helvetica", Font.BOLD, fs);
+		FontMetrics fm = getFontMetrics(font);
+		return fm.getHeight();
+	}
+
 	private void drawTitle(DrawingBackend g) {
+		int fs = (int)(1.0 * processor.baselineDist);
 		String title = processor.original.name + ":";
-		Font font = new Font("Helvetica", Font.BOLD, 14);
+		Font font = new Font("Helvetica", Font.BOLD, fs);
 		g.setFont(font);
 		FontMetrics fm = getFontMetrics(font);
 		int h = fm.getHeight();
@@ -662,7 +672,7 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private int calculateYCalibrationWidth() {
-		int fs = (int)(0.6 * processor.baselineDist);
+		int fs = (int)(0.5 * processor.baselineDist);
 		Font font = new Font("Helvetica", Font.PLAIN, fs);
 		int nLines = processor.periods + 1;
 		FontMetrics fm = getFontMetrics(font);
