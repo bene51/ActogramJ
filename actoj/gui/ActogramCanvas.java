@@ -626,14 +626,14 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private int getTitleHeight() {
-		int fs = (int)(1.0 * processor.baselineDist);
+		int fs = (int)(0.6 * processor.baselineDist);
 		Font font = new Font("Helvetica", Font.BOLD, fs);
 		FontMetrics fm = getFontMetrics(font);
 		return fm.getHeight();
 	}
 
 	private void drawTitle(DrawingBackend g) {
-		int fs = (int)(1.0 * processor.baselineDist);
+		int fs = (int)(0.6 * processor.baselineDist);
 		String title = processor.original.name + ":";
 		Font font = new Font("Helvetica", Font.BOLD, fs);
 		g.setFont(font);
