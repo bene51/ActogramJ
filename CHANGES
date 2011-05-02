@@ -1,3 +1,14 @@
+Version v0.6:
+-------------
+* Fix an error which occurred sometimes when zooming in.
+* Draw line numbers in the actograms.
+* Draw a title for each actogram.
+* The default number of indicated peaks in periodograms is now 1.
+* Allow for optional downsampling before calculating periodograms.
+* Replace "_convolved" with "_smoothed" in the name of calculated actograms.
+* Fix an error in writing text to Pdfs.
+* The jar archive contains now the source code.
+
 Version v0.5:
 -------------
 * In the average activity pattern dialog, use a default sigma of 0.
