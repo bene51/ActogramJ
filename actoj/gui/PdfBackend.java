@@ -1,19 +1,18 @@
 package actoj.gui;
 
-import java.awt.Color;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Image;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-
-import com.lowagie.text.pdf.PdfGState;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
 
 public class PdfBackend extends DrawingBackend {
 
@@ -41,8 +40,8 @@ public class PdfBackend extends DrawingBackend {
 
 	private void setOpacities() {
 		g.restoreState();
-		g.setColorStroke(new Color(linecolor));
-		g.setColorFill(new Color(fillcolor));
+		g.setColorStroke(new BaseColor(linecolor));
+		g.setColorFill(new BaseColor(fillcolor));
 		g.setFontAndSize(baseFont, fontSize);
 		PdfGState gstate = new PdfGState();
 		gstate.setStrokeOpacity(alphaStroke / 255f);
@@ -51,7 +50,8 @@ public class PdfBackend extends DrawingBackend {
 		g.setGState(gstate);
 	}
 
-	private void resetOpacities() {
+	// Needs to be called before document.close()
+	public void restoreState() {
 		g.restoreState();
 	}
 

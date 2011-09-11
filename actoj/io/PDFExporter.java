@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Class to export the actograms of an image canvas to pdf.
@@ -59,8 +59,8 @@ public class PDFExporter {
 	public PDFExporter(ImageCanvas ic, String file) {
 		this.ic = ic;
 		Rectangle r = PageSize.A4;
-		this.w = r.width();
-		this.h = r.height();
+		this.w = r.getWidth();
+		this.h = r.getHeight();
 		this.file = file;
 	}
 
@@ -131,6 +131,7 @@ public class PDFExporter {
 			}
 		}
 
+		content.restoreState();
 		document.close();
 	}
 
