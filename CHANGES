@@ -1,3 +1,8 @@
+Version v0.7:
+-------------
+* Update ActogramJ so that it now works (and needs) the itext
+  version which is currently included in Fiji, i.e. itextpdf-5.1.1.jar
+
 Version v0.6:
 -------------
 * Fix an error which occurred sometimes when zooming in.
