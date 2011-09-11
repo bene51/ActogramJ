@@ -8,7 +8,7 @@ FIJIF="$PWD/../../"
 JARF="$FIJIF/jars/"
 VIBF="$FIJIF/src-plugins/VIB-lib/"
 
-JAVACOPTS="-source 1.5 -target 1.5 -classpath .:$JARF/ij.jar:$JARF/itext-1.3.jar:$JARF/pal-optimization.jar"
+JAVACOPTS="-source 1.5 -target 1.5 -classpath .:$JARF/ij.jar:$JARF/itextpdf-5.1.1.jar:$JARF/pal-optimization.jar"
 SRC="actoj www CHANGES plugins.config"
 
 test ! -d tempdir || rm -rf tempdir
