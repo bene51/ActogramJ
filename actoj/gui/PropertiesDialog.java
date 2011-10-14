@@ -1,8 +1,7 @@
 package actoj.gui;
 
-import actoj.core.TimeInterval.Units;
-
 import ij.gui.GenericDialog;
+import actoj.core.TimeInterval.Units;
 
 public class PropertiesDialog {
 
@@ -10,6 +9,7 @@ public class PropertiesDialog {
 		ImageCanvas ic = win.canvas;
 		int ppl  = ic.getPeriodsPerLine();
 		float ul = ic.getUpperLimit();
+		float ll = ic.getLowerLimit();
 		int cols = ic.getMaxColumns();
 		int subd = ic.getCalibrationSubdivisions();
 		float whRatio = ic.getWHRatio();
@@ -17,6 +17,7 @@ public class PropertiesDialog {
 		GenericDialog gd = new GenericDialog("Edit Properties");
 		gd.addNumericField("Number of plots", ppl, 0);
 		gd.addNumericField("Upper limit", ul, 1);
+		gd.addNumericField("Lower limit", ll, 1);
 		gd.addNumericField("Max. number of columns on sheet", cols, 0);
 		gd.addNumericField("Number of ticks in the calibration bar", subd, 0);
 		gd.addNumericField("Ratio w:h", whRatio, 2);
@@ -31,13 +32,14 @@ public class PropertiesDialog {
 
 		ppl  = (int)gd.getNextNumber();
 		ul   = (float)gd.getNextNumber();
-		cols = (int)gd.getNextNumber(); 
+		ll   = (float)gd.getNextNumber();
+		cols = (int)gd.getNextNumber();
 		subd = (int)gd.getNextNumber();
 		whRatio = (float)gd.getNextNumber();
 		Units fpUnit = Units.values()[
 			gd.getNextChoiceIndex()];
 
-		ic.set(ppl, ul, cols, subd, whRatio, fpUnit);
+		ic.set(ppl, ul, ll, cols, subd, whRatio, fpUnit);
 	}
 }
 

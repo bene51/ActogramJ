@@ -38,6 +38,7 @@ public class ImageCanvas extends JPanel {
 	final Zoom zoom;
 	private double zoomf;
 	private float uLimit = 1f;
+	private float lLimit = 0f;
 	private int ppl = 2;
 	private float whRatio = 2f / 3f;
 	private Units fpUnits = Units.HOURS;
@@ -288,6 +289,17 @@ public class ImageCanvas extends JPanel {
 		return uLimit;
 	}
 
+	public float getLowerLimit() {
+		return lLimit;
+	}
+
+	public void setLowerLimit(float lLimit) {
+		if(this.lLimit != lLimit) {
+			this.lLimit = lLimit;
+			update();
+		}
+	}
+
 	public void setUpperLimit(float uLimit) {
 		if(this.uLimit != uLimit) {
 			this.uLimit = uLimit;
@@ -306,9 +318,10 @@ public class ImageCanvas extends JPanel {
 		}
 	}
 
-	public void set(int ppl, float uLimit, int maxColumns, int nSubdivisions, float whRatio, Units fpUnits) {
+	public void set(int ppl, float uLimit, float lLimit, int maxColumns, int nSubdivisions, float whRatio, Units fpUnits) {
 		this.ppl = ppl;
 		this.uLimit = uLimit;
+		this.lLimit = lLimit;
 		this.maxColumns = maxColumns;
 		this.nSubdivisions = nSubdivisions;
 		this.whRatio = whRatio;
@@ -356,7 +369,7 @@ public class ImageCanvas extends JPanel {
 				ac.add(displayed.get(a));
 			else
 				ac.add(new ActogramCanvas(
-					a, zoomf, uLimit, ppl,
+					a, zoomf, uLimit, lLimit, ppl,
 					nSubdivisions, whRatio,
 					fpUnits, feedback));
 		}
@@ -372,7 +385,7 @@ public class ImageCanvas extends JPanel {
 		ArrayList<ActogramCanvas> ac = new ArrayList<ActogramCanvas>();
 		for(ActogramCanvas old : actograms)
 			ac.add(new ActogramCanvas(
-				old.processor.original, zoomf, uLimit, ppl,
+				old.processor.original, zoomf, uLimit, lLimit, ppl,
 				nSubdivisions, whRatio, fpUnits, feedback));
 
 		clear();

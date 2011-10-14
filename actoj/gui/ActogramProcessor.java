@@ -14,6 +14,7 @@ public class ActogramProcessor {
 
 	public final double zoom;
 	public final float uLimit;
+	public final float lLimit;
 	public final int ppl;
 
 	public final int baselineDist;
@@ -25,7 +26,7 @@ public class ActogramProcessor {
 
 	public final float whRatio;
 
-	public ActogramProcessor(Actogram actogram, double zoom, float uLimit, int ppl, float whRatio) {
+	public ActogramProcessor(Actogram actogram, double zoom, float uLimit, float lLimit, int ppl, float whRatio) {
 		this.original = actogram;
 
 		int newSPP = (int)Math.round(actogram.SAMPLES_PER_PERIOD / zoom);
@@ -33,6 +34,7 @@ public class ActogramProcessor {
 		this.downsampled = actogram.downsample(this.zoom);
 
 		this.uLimit = uLimit;
+		this.lLimit = lLimit;
 		this.ppl = ppl;
 		this.whRatio = whRatio;
 
@@ -156,7 +158,14 @@ public class ActogramProcessor {
 		style.newline(x, y);
 		for(int i = offs; i < offs + length; i++, x++) {
 			float v = actogram.get(i);
-			int sh = Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
+			// Clamp it to [lLimit, uLimit]
+			if(v > uLimit)
+				v = uLimit;
+			if(v < lLimit)
+				v = lLimit;
+			// normalize it to [lLimit, uLimit]
+			v = (v - lLimit) / (uLimit - lLimit);
+			int sh = Math.round(signalHeight * v);
 			style.newData(sh);
 		}
 	}
