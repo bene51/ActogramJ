@@ -1,6 +1,5 @@
 package actoj.periodogram;
 
-import ij.IJ;
 import actoj.core.Actogram;
 
 public class EnrightPeriodogram extends Periodogram {
@@ -11,17 +10,18 @@ public class EnrightPeriodogram extends Periodogram {
 		super(acto, fromData, toData, fromPeriod, toPeriod, pLevel);
 	}
 
+	@Override
 	public String getMethod() {
 		return "Chi-Square";
 	}
 
+	@Override
 	public String getResponseName() {
 		return "Qp";
 	}
 
+	@Override
 	protected void calculatePeriodogram(double pLevel) {
-		int n = toPeriod - fromPeriod;
-
 		double M = 0;
 		for(int i = 0; i < N; i++)
 			M += measurements[i];
@@ -54,6 +54,7 @@ public class EnrightPeriodogram extends Periodogram {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static double chiSquare(float x, int v) {
 		double g = v % 2 == 0 ? gammaN(v / 2) : gammaNPlusHalf(v / 2);
 		double halfX = x / 2.0;
@@ -113,6 +114,7 @@ public class EnrightPeriodogram extends Periodogram {
 
 	}
 
+	@SuppressWarnings("unused")
 	private static final double chisquare_cdf(double x, int k) {
 		double h = 1 - (2.0 * k * k) / (3.0 * k * k);
 		double p = 1.0 / k;

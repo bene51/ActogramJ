@@ -1,25 +1,41 @@
 package actoj.gui.actions;
 
-import actoj.Settings;
-import actoj.ActogramJ_;
-import actoj.core.TimeInterval;
-import actoj.core.ActogramGroup;
-import actoj.io.ActogramReader;
-import actoj.gui.TreeView;
-import actoj.gui.PreviewTable;
-
 import ij.IJ;
 import ij.io.OpenDialog;
-import ij.gui.GenericDialog;
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-import java.io.IOException;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
+import actoj.ActogramJ_;
+import actoj.Settings;
+import actoj.core.TimeInterval;
+import actoj.gui.PreviewTable;
+import actoj.gui.TreeView;
+import actoj.io.ActogramReader;
+
+@SuppressWarnings("serial")
 public class OpenAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
@@ -28,7 +44,7 @@ public class OpenAction extends AbstractAction {
 	// 	MNEMONIC_KEY
 	// 	NAME
 	// 	SHORT_DESCRIPTION
-	// 	SMALL_ICON 
+	// 	SMALL_ICON
 
 	private final TreeView treeview;
 
@@ -41,6 +57,7 @@ public class OpenAction extends AbstractAction {
 			ActogramJ_.class.getResource("icons/fileopen.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String dir = OpenDialog.getLastDirectory();
 
@@ -222,6 +239,7 @@ public class OpenAction extends AbstractAction {
 		private static final JTextField createNumberField(int def) {
 			final JTextField ret = new JTextField(Integer.toString(def));
 			ret.addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyReleased(KeyEvent e) {
 					String t = ret.getText();
 					char c = t.charAt(t.length() - 1);
@@ -259,6 +277,7 @@ public class OpenAction extends AbstractAction {
 				calUnit));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getActionCommand().equals("Ok")) {
 				try {

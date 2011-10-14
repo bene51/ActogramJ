@@ -1,8 +1,9 @@
 package actoj.core;
 
-import actoj.gui.DrawingBackend;
-import java.awt.Font;
 import java.awt.Color;
+import java.awt.Font;
+
+import actoj.gui.DrawingBackend;
 
 public class ExternalVariable {
 
@@ -28,7 +29,6 @@ public class ExternalVariable {
 		int halfHeight = h / 2;
 		int fontsize = halfHeight - 2;
 		if(fontsize > 8) {
-			int fh = 12;
 			g.moveTo(0, halfHeight - 1);
 			g.setFont(new Font("Helvetica", Font.PLAIN, fontsize));
 			g.setLineColor(0, 0, 0, 255);
@@ -45,6 +45,7 @@ public class ExternalVariable {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}

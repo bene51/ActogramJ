@@ -1,19 +1,29 @@
 package actoj.gui;
 
-import ij.gui.GenericDialog;
 import ij.IJ;
+import ij.gui.GenericDialog;
 
-import actoj.core.Actogram;
-import actoj.util.Filters;
-
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.text.DecimalFormat;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import actoj.core.Actogram;
+import actoj.util.Filters;
 
 public class CalculateDialog {
 
@@ -42,6 +52,7 @@ public class CalculateDialog {
 		return null;
 	}
 
+	@SuppressWarnings("serial")
 	private static class CalcDialog extends JDialog {
 
 		private JComboBox operationBox;
@@ -89,6 +100,7 @@ public class CalculateDialog {
 			c.gridx++;
 			kernelButton = new JButton("Make kernel");
 			kernelButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					float[] k = makeKernel();
 					if(k != null)
@@ -102,6 +114,7 @@ public class CalculateDialog {
 			JPanel p = new JPanel(new FlowLayout());
 			JButton b = new JButton("Cancel");
 			b.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
@@ -109,6 +122,7 @@ public class CalculateDialog {
 			p.add(b);
 			b = new JButton("Ok");
 			b.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
 						calculate();
@@ -128,6 +142,7 @@ public class CalculateDialog {
 
 
 			operationBox.addItemListener(new ItemListener() {
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					adjustEnabled();
 				}

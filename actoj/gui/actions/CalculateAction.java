@@ -1,13 +1,15 @@
 package actoj.gui.actions;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+
 import actoj.ActogramJ_;
 import actoj.gui.CalculateDialog;
 import actoj.gui.CustomWindow;
 
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-
+@SuppressWarnings("serial")
 public class CalculateAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
@@ -29,6 +31,7 @@ public class CalculateAction extends AbstractAction {
 			ActogramJ_.class.getResource("icons/calculate.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		CalculateDialog.run(win);
 	}

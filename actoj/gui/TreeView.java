@@ -3,23 +3,32 @@ package actoj.gui;
 import ij.IJ;
 import ij.gui.GenericDialog;
 
-import actoj.core.ExternalVariable;
-import actoj.core.Actogram;
-import actoj.core.ActogramGroup;
-
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.TreePath;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
-import java.awt.Color;
-import java.awt.BorderLayout;
-import java.awt.event.*;
+import actoj.core.Actogram;
+import actoj.core.ActogramGroup;
+import actoj.core.ExternalVariable;
 
+@SuppressWarnings("serial")
 public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private final JTree tree;
@@ -30,7 +39,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private ArrayList<TreeViewListener> selectionListeners =
 		new ArrayList<TreeViewListener>();
-	
+
 	private final ArrayList<Actogram> selected = new ArrayList<Actogram>();
 
 	private boolean hasCalculated = false;
@@ -57,6 +66,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		final JPopupMenu popup = new JPopupMenu();
 		JMenuItem item = new JMenuItem("Remove actograms");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
 					remove(popupClicked);
@@ -70,6 +80,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		item = new JMenuItem("Add environmental bar");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
 					addExternalVariable(popupClicked);
@@ -81,6 +92,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		item = new JMenuItem("Remove environmental bar");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
 					removeExternalVariable(popupClicked);
@@ -92,6 +104,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		item = new JMenuItem("Edit environmental bars");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(popupClicked != null) {
 					editExternalVariables(popupClicked, 0);
@@ -103,10 +116,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 
 		tree.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				maybeShowPopup(e);
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				maybeShowPopup(e);
 			}
@@ -247,6 +262,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			l.externalVariablesChanged();
 	}
 
+	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		TreePath[] paths = tree.getSelectionPaths();
 		selected.clear();
@@ -280,6 +296,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 		private final ArrayList<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
 
+		@Override
 		public Object getChild(Object parent, int index) {
 			if(parent == root)
 				return actogroups.get(index);
@@ -288,6 +305,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			return null;
 		}
 
+		@Override
 		public int getChildCount(Object parent) {
 			if(parent == root)
 				return actogroups.size();
@@ -296,9 +314,10 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			return 0;
 		}
 
+		@Override
 		public int getIndexOfChild(Object parent, Object child) {
 			if(parent == root)
-				return actogroups.indexOf((ActogramGroup)child);
+				return actogroups.indexOf(child);
 			if(parent instanceof ActogramGroup)
 				return ((ActogramGroup)parent).indexOf((Actogram)child);
 			return -1;
@@ -323,22 +342,27 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			return null;
 		}
 
+		@Override
 		public Object getRoot() {
 			return root;
 		}
 
+		@Override
 		public boolean isLeaf(Object node) {
 			return (node instanceof Actogram);
 		}
 
+		@Override
 		public void addTreeModelListener(TreeModelListener l) {
 			listeners.add(l);
 		}
 
+		@Override
 		public void removeTreeModelListener(TreeModelListener l) {
 			listeners.remove(l);
 		}
 
+		@Override
 		public void valueForPathChanged(TreePath path, Object newValue) {}
 
 		void fireInserted(Object src, Object[] path, int[] indices, Object[] children) {

@@ -1,45 +1,44 @@
 package actoj.gui;
 
-import actoj.core.*;
-import actoj.core.TimeInterval.Units;
-import actoj.util.Filters;
-import actoj.util.PeakFinder;
-import actoj.fitting.FitSine;
-import actoj.periodogram.*;
-import actoj.AverageActivity;
-
+import ij.IJ;
+import ij.gui.Plot;
 import ij.util.Tools;
 
-import javax.swing.JPanel;
-import javax.swing.JComponent;
-
-import java.awt.RenderingHints;
-import java.awt.Point;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
-import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
-
-import java.awt.image.BufferedImage;
-
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
+import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 
-import ij.IJ;
-import ij.gui.Plot;
-import ij.gui.GenericDialog;
+import javax.swing.JPanel;
+
+import actoj.AverageActivity;
+import actoj.core.Actogram;
+import actoj.core.ExternalVariable;
+import actoj.core.TimeInterval;
+import actoj.core.TimeInterval.Units;
+import actoj.fitting.FitSine;
+import actoj.periodogram.EnrightPeriodogram;
+import actoj.periodogram.FourierPeriodogram;
+import actoj.periodogram.LombScarglePeriodogram;
+import actoj.periodogram.Periodogram;
+import actoj.util.Filters;
+import actoj.util.PeakFinder;
 
 /**
  * A JComponent representing one actogram plus accompanying data, like
  * calibration. It uses a ActogramProcessor to draw the actogram itself.
  */
+@SuppressWarnings("serial")
 public class ActogramCanvas extends JPanel
 			implements MouseMotionListener, MouseListener {
 
@@ -450,6 +449,7 @@ public class ActogramCanvas extends JPanel
 		IJ.showMessage(msg.toString());
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(
@@ -665,7 +665,7 @@ public class ActogramCanvas extends JPanel
 		g.moveTo(left, INT_TOP + h/2);
 		g.lineTo(width - INT_RIGHT, INT_TOP + h/2);
 		for(int i = 0; i <= nSubdivisions; i++) {
-			int x = left + (int)Math.round((float)i * w / nSubdivisions);
+			int x = left + Math.round((float)i * w / nSubdivisions);
 			g.moveTo(x, INT_TOP + h/2 - h/4);
 			g.lineTo(x, INT_TOP + h/2 + h/4);
 		}
@@ -693,7 +693,6 @@ public class ActogramCanvas extends JPanel
 		String[] numbers = new String[nLines];
 		int[] widths = new int[nLines];
 		FontMetrics fm = getFontMetrics(font);
-		int h = fm.getHeight();
 		for(int i = 0; i < nLines - 1; i++) {
 			numbers[i] = Integer.toString(i + 1);
 			widths[i] = fm.stringWidth(numbers[i]);
@@ -735,10 +734,14 @@ public class ActogramCanvas extends JPanel
 		return p1.y <= p2.y ? p2 : p1;
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {}
+	@Override
 	public void mouseExited(MouseEvent e) {}
+	@Override
 	public void mouseReleased(MouseEvent e) {}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(mode == Mode.FREERUNNING_PERIOD) {
 			fpStart = null;
@@ -753,6 +756,7 @@ public class ActogramCanvas extends JPanel
 		}
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if(mode == Mode.FREERUNNING_PERIOD) {
 			fpStart = snap(e.getPoint());
@@ -765,12 +769,14 @@ public class ActogramCanvas extends JPanel
 		}
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		if(feedback != null)
 			feedback.positionChanged(
 				getPositionString(e.getX(), e.getY()));
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		if(feedback != null)
 			feedback.positionChanged(

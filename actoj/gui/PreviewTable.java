@@ -1,12 +1,15 @@
 package actoj.gui;
 
-import javax.swing.JTable;
-import javax.swing.table.*;
-import javax.swing.event.TableModelListener;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
+@SuppressWarnings("serial")
 public class PreviewTable extends JTable {
 
 	public PreviewTable(String filename) throws IOException {
@@ -35,26 +38,33 @@ public class PreviewTable extends JTable {
 			this.columnCount = cols;
 		}
 
+		@Override
 		public void addTableModelListener(TableModelListener l) {}
+		@Override
 		public void removeTableModelListener(TableModelListener l) {}
 
+		@Override
 		public Class<?> getColumnClass(int columnIndex) {
 			return String.class;
 		}
 
+		@Override
 		public int getColumnCount() {
 			// one additional column for the row number
 			return columnCount + 1;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return col == 0 ? "Row" : "Column " + col;
 		}
 
+		@Override
 		public int getRowCount() {
 			return lines.length;
 		}
 
+		@Override
 		public Object getValueAt(int row, int col) {
 			if(col == 0)
 				return Integer.toString(row + 1);
@@ -65,10 +75,12 @@ public class PreviewTable extends JTable {
 				line.substring(start, end);
 		}
 
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return false;
 		}
 
+		@Override
 		public void setValueAt(Object aValue, int row, int col) {}
 
 		private static final int occurences(String st, char c) {

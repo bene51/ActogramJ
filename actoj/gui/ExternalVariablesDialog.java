@@ -1,22 +1,34 @@
 package actoj.gui;
 
-import ij.gui.GenericDialog;
 import ij.IJ;
+import ij.gui.GenericDialog;
 
-import actoj.core.ExternalVariable;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import actoj.core.ActogramGroup;
-import actoj.core.Actogram;
-import actoj.util.Filters;
+import actoj.core.ExternalVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.text.DecimalFormat;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
+@SuppressWarnings("serial")
 public class ExternalVariablesDialog extends JDialog {
 
 	public static final void run(ActogramGroup ag, int i) {
@@ -77,6 +89,7 @@ public class ExternalVariablesDialog extends JDialog {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		addInterval = new JButton("Add a new interval");
 		addInterval.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				addNewInterval();
 			}
@@ -84,6 +97,7 @@ public class ExternalVariablesDialog extends JDialog {
 		getContentPane().add(addInterval, c);
 
 		ColorChangeListener cl = new ColorChangeListener() {
+			@Override
 			public void colorChanged(Color c) {
 				curr.onColor = onColor.getTheColor().getRGB();
 				curr.offColor = offColor.getTheColor().getRGB();
@@ -116,6 +130,7 @@ public class ExternalVariablesDialog extends JDialog {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JButton b = new JButton("Cancel");
 		b.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -123,6 +138,7 @@ public class ExternalVariablesDialog extends JDialog {
 		p.add(b);
 		b = new JButton("Ok");
 		b.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				accept();
 				dispose();
@@ -133,6 +149,7 @@ public class ExternalVariablesDialog extends JDialog {
 
 
 		variableBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				variableChanged((ExternalVariable)variableBox.getSelectedItem());
 			}
@@ -203,6 +220,7 @@ public class ExternalVariablesDialog extends JDialog {
 			repaint();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Color res = JColorChooser.showDialog(this, "Change color", color);
 			if (res != null) {
@@ -214,8 +232,11 @@ public class ExternalVariablesDialog extends JDialog {
 		}
 
 		// Icon methods
+		@Override
 		public int getIconWidth() { return iconw; }
+		@Override
 		public int getIconHeight() { return iconh; }
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			Color old = g.getColor();
 			g.setColor(color);
@@ -252,6 +273,7 @@ public class ExternalVariablesDialog extends JDialog {
 			repaint();
 		}
 
+		@Override
 		public void paintComponent(Graphics g) {
 			ext.paint(new GraphicsBackend(g), width, fh + 10 + 2, 1);
 		}

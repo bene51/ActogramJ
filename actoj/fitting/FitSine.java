@@ -2,10 +2,10 @@ package actoj.fitting;
 
 import java.util.Arrays;
 
+import pal.math.ConjugateDirectionSearch;
+import pal.math.MultivariateFunction;
 import actoj.core.Actogram;
 import actoj.util.Filters;
-
-import pal.math.*;
 
 /**
  * Fit a function max(0, a * sin(b * t + c) + d)
@@ -38,7 +38,7 @@ public class FitSine {
 		return new Actogram("fitted", ret, a.SAMPLES_PER_PERIOD,
 			a.interval, a.unit);
 	}
-	
+
 	private FitSine(Actogram actogram, int from, int to) {
 		this.actogram = actogram;
 		this.from = from;
@@ -99,15 +99,8 @@ public class FitSine {
 		min[3] = -maximum;          max[3] = +maximum;
 	}
 
-	private static final void print(String label, double[] par) {
-		System.out.print(label + ": ");
-		for(double d : par)
-			System.out.print(d + " ");
-		System.out.println();
-	}
-
 	static double calculate(double t, double[] args) {
-		return Math.max(0, args[0] * Math.sin(args[1] * t + args[2]) + args[3]); 
+		return Math.max(0, args[0] * Math.sin(args[1] * t + args[2]) + args[3]);
 	}
 
 	private static abstract class NormalizedMultivariateFunction implements MultivariateFunction {
@@ -142,14 +135,17 @@ public class FitSine {
 				factor[i] = ax / factor[i];
 		}
 
+		@Override
 		public double getLowerBound(int n) {
 			return (min[n] - initial[n]) * factor[n];
 		}
 
+		@Override
 		public double getUpperBound(int n) {
 			return (max[n] - initial[n]) * factor[n];
 		}
 
+		@Override
 		public int getNumArguments() {
 			return N;
 		}
@@ -161,10 +157,11 @@ public class FitSine {
 			return param;
 		}
 
+		@Override
 		public abstract double evaluate(double[] args);
 	}
 
-	
+
 	private static class SineFunction extends NormalizedMultivariateFunction {
 
 		private final A actogram;
@@ -177,6 +174,7 @@ public class FitSine {
 			this.to = to;
 		}
 
+		@Override
 		public double evaluate(double[] args) {
 			double[] param = getRealParameters(args);
 			double diff = 0.0;

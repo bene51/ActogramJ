@@ -1,17 +1,17 @@
 package actoj.gui;
 
-import javax.swing.*;
-
 import ij.IJ;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.FlowLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+@SuppressWarnings("serial")
 public class StatusBar extends JPanel {
 
 	private final CustomWindow win;
@@ -28,6 +28,7 @@ public class StatusBar extends JPanel {
 		final JComboBox zoomBox = new JComboBox(getZoomlevelStrings());
 		zoomBox.setSelectedIndex(Zoom.DEFAULT_ZOOM);
 		zoomBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				try {
 					win.canvas.getZoom().zoom(zoomBox.getSelectedIndex());
@@ -46,6 +47,7 @@ public class StatusBar extends JPanel {
 
 		posLabel = new JLabel("") {
 			private JLabel l = new JLabel("mmmmmmmmmmmmmmmm");
+			@Override
 			public Dimension getPreferredSize() {
 				return l.getPreferredSize();
 			}

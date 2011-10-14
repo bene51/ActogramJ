@@ -1,21 +1,15 @@
 package actoj.gui.actions;
 
-import actoj.ActogramJ_;
-import actoj.core.Actogram;
-import actoj.core.ActogramGroup;
-import actoj.io.ActogramReader;
-import actoj.gui.CustomWindow;
-import actoj.gui.ActogramCanvas;
-
-import ij.IJ;
-import ij.io.OpenDialog;
-
-import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 
-import java.io.File;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 
+import actoj.ActogramJ_;
+import actoj.core.Actogram;
+import actoj.gui.CustomWindow;
+
+@SuppressWarnings("serial")
 public class NormalizeAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
@@ -24,7 +18,7 @@ public class NormalizeAction extends AbstractAction {
 	// 	MNEMONIC_KEY
 	// 	NAME
 	// 	SHORT_DESCRIPTION
-	// 	SMALL_ICON 
+	// 	SMALL_ICON
 
 	private final CustomWindow win;
 
@@ -37,6 +31,7 @@ public class NormalizeAction extends AbstractAction {
 			ActogramJ_.class.getResource("icons/normalize.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Actogram[] normalized = win.getCanvas().normalizeActograms();
 		if(normalized == null)

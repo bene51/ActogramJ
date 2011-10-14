@@ -2,11 +2,15 @@ package actoj.gui.actions;
 
 import ij.IJ;
 import ij.plugin.BrowserLauncher;
-import actoj.ActogramJ_;
-import javax.swing.ImageIcon;
-import javax.swing.AbstractAction;
+
 import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+
+import actoj.ActogramJ_;
+
+@SuppressWarnings("serial")
 public class HelpAction extends AbstractAction {
 
 	private final String url = "http://actogramj.neurofly.de";
@@ -19,6 +23,7 @@ public class HelpAction extends AbstractAction {
 			ActogramJ_.class.getResource("icons/help.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
 			BrowserLauncher.openURL(url);

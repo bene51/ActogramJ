@@ -1,13 +1,15 @@
 package actoj.gui.actions;
 
-import actoj.ActogramJ_;
-import actoj.gui.PropertiesDialog;
-import actoj.gui.CustomWindow;
-
-import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+
+import actoj.ActogramJ_;
+import actoj.gui.CustomWindow;
+import actoj.gui.PropertiesDialog;
+
+@SuppressWarnings("serial")
 public class PropertiesAction extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
@@ -16,7 +18,7 @@ public class PropertiesAction extends AbstractAction {
 	// 	MNEMONIC_KEY
 	// 	NAME
 	// 	SHORT_DESCRIPTION
-	// 	SMALL_ICON 
+	// 	SMALL_ICON
 
 	private final CustomWindow win;
 
@@ -29,6 +31,7 @@ public class PropertiesAction extends AbstractAction {
 			ActogramJ_.class.getResource("icons/properties.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		PropertiesDialog.changeProperties(win);
 	}

@@ -1,19 +1,20 @@
 package actoj;
 
+import ij.plugin.PlugIn;
+
 import javax.swing.SwingUtilities;
 
 import actoj.gui.CustomWindow;
-import ij.plugin.PlugIn;
 
 public class ActogramJ_ implements PlugIn {
 
-	private CustomWindow window;
-
+	@Override
 	public void run(String arg) {
 		SwingUtilities.invokeLater(
 			new Runnable() {
+				@Override
 				public void run() {
-					window = new CustomWindow();
+					new CustomWindow();
 				}
 			});
 	}

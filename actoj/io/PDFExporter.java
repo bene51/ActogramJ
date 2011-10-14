@@ -1,22 +1,17 @@
 package actoj.io;
 
-import actoj.core.*;
-import actoj.gui.*;
-
-import java.util.ArrayList;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import actoj.gui.ActogramCanvas;
+import actoj.gui.ImageCanvas;
+import actoj.gui.PdfBackend;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -24,11 +19,6 @@ import com.itextpdf.text.pdf.PdfWriter;
  * Class to export the actograms of an image canvas to pdf.
  */
 public class PDFExporter {
-
-	/**
-	 * Line width.
-	 */
-	private static final float LINE_WIDTH = 0.3f;
 
 	/** The ImageCanvas whose actograms are to be exported. */
 	private final ImageCanvas ic;
@@ -75,12 +65,10 @@ public class PDFExporter {
 			return;
 
 		int cols = ic.getCols();
-		int rows = ic.getRows();
 
 		// assuming all processors have the same size
 		// TODO use max size instead?
 		ActogramCanvas ac = canvasses.get(0);
-		ActogramProcessor ap = ac.processor;
 
 		int aWidthInPixel = ac.width;
 		int aHeightInPixels = ac.height;

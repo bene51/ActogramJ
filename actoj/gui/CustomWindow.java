@@ -1,22 +1,13 @@
 package actoj.gui;
 
-import actoj.core.Actogram;
-import actoj.io.ActogramReader;
-import actoj.gui.ActogramProcessor;
-import actoj.gui.TreeViewListener;
-
-import ij.process.ImageProcessor;
-
-import javax.swing.JFrame;
-import javax.swing.JSplitPane;
-import javax.swing.JScrollPane;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
+@SuppressWarnings("serial")
 public class CustomWindow extends JFrame
 		implements TreeViewListener, ActogramCanvas.Feedback {
 
@@ -61,18 +52,22 @@ public class CustomWindow extends JFrame
 		return tree;
 	}
 
+	@Override
 	public void externalVariablesChanged() {
 		canvas.update();
 	}
 
+	@Override
 	public void selectionChanged() {
 		canvas.display(tree.getSelected());
 	}
 
+	@Override
 	public void positionChanged(String pos) {
 		status.setPositionString(pos);
 	}
 
+	@Override
 	public void periodChanged(String per) {
 		status.setFreerunningPeriod(per);
 	}

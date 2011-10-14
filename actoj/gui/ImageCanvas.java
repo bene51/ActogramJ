@@ -1,22 +1,27 @@
 package actoj.gui;
 
+import ij.IJ;
+import ij.gui.GenericDialog;
+
+import java.awt.Choice;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.TextField;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Vector;
+
+import javax.swing.JPanel;
+
 import actoj.core.Actogram;
 import actoj.core.TimeInterval;
 import actoj.core.TimeInterval.Units;
 
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.swing.JPanel;
-
-import java.awt.event.*;
-import java.awt.*;
-
-import ij.IJ;
-import ij.gui.GenericDialog;
-
+@SuppressWarnings("serial")
 public class ImageCanvas extends JPanel {
 
 	public static final int PADDING = 20;
@@ -47,7 +52,7 @@ public class ImageCanvas extends JPanel {
 	public ImageCanvas(ActogramCanvas.Feedback feedback) {
 		this.feedback = feedback;
 		zoom = new Zoom(this);
-		zoomf = zoom.LEVELS[zoom.getZoomIndex()];
+		zoomf = Zoom.LEVELS[zoom.getZoomIndex()];
 
 		setLayout(gridbag);
 		c.gridx = maxColumns - 1; c.gridy = -1;
@@ -143,6 +148,7 @@ public class ImageCanvas extends JPanel {
 		final float s = (float)gd.getNextNumber();
 		final TimeInterval pi = new TimeInterval(p, a.unit);
 		new Thread() {
+			@Override
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection()) {
@@ -173,8 +179,8 @@ public class ImageCanvas extends JPanel {
 		Actogram a = first.processor.original;
 
 		float per = a.SAMPLES_PER_PERIOD * a.interval.intervalIn(a.unit);
-		int fromPeriod = (int)Math.round(per - per / 3);
-		int toPeriod = (int)Math.round(per + per / 3);
+		int fromPeriod = Math.round(per - per / 3);
+		int toPeriod = Math.round(per + per / 3);
 		int nPeaks = 1;
 		int methodIdx = 0;
 		int stepsize = 1;
@@ -185,7 +191,7 @@ public class ImageCanvas extends JPanel {
 		String[] methods = new String[] {
 			"Fourier", "Chi-Square", "Lomb-Scargle" };
 		gd.addChoice("Method", methods, methods[methodIdx]);
-		Vector v = gd.getChoices();
+		Vector<?> v = gd.getChoices();
 		final Choice c = (Choice)v.get(v.size() - 1);
 		gd.addNumericField("from_period", fromPeriod, 0, 6, a.unit.toString());
 		gd.addNumericField("to_period", toPeriod, 0, 6, a.unit.toString());
@@ -196,6 +202,7 @@ public class ImageCanvas extends JPanel {
 		v = gd.getNumericFields();
 		final TextField tf = (TextField)v.get(v.size() - 1);
 		c.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				tf.setEnabled(c.getSelectedIndex() != 0);
 			}
@@ -215,6 +222,7 @@ public class ImageCanvas extends JPanel {
 		final TimeInterval fi = new TimeInterval(fp, a.unit);
 		final TimeInterval ti = new TimeInterval(tp, a.unit);
 		new Thread() {
+			@Override
 			public void run() {
 				for(ActogramCanvas ac : actograms) {
 					if(ac.hasSelection()) {
@@ -335,7 +343,7 @@ public class ImageCanvas extends JPanel {
 		for(ActogramCanvas ac : a)
 			addActogram(ac);
 	}
-	
+
 	public void display(java.util.List<Actogram> selected) {
 		HashMap<Actogram, ActogramCanvas> displayed
 			= new HashMap<Actogram, ActogramCanvas>();

@@ -1,9 +1,23 @@
 package actoj.gui;
 
-import actoj.gui.actions.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
-import javax.swing.*;
+import actoj.gui.actions.AverageActivityAction;
+import actoj.gui.actions.CalculateAction;
+import actoj.gui.actions.CalibAction;
+import actoj.gui.actions.ExportPDF;
+import actoj.gui.actions.FittingAction;
+import actoj.gui.actions.HelpAction;
+import actoj.gui.actions.NormalizeAction;
+import actoj.gui.actions.OpenAction;
+import actoj.gui.actions.PointerAction;
+import actoj.gui.actions.PropertiesAction;
+import actoj.gui.actions.SelectingAction;
 
+@SuppressWarnings("serial")
 public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 
 	private JCheckBoxMenuItem pointer, calibration, selection;
@@ -47,6 +61,7 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 		add(menu);
 	}
 
+	@Override
 	public void modeChanged(ActogramCanvas.Mode mode) {
 		JCheckBoxMenuItem b = null;
 		switch(mode) {

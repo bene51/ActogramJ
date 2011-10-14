@@ -1,11 +1,10 @@
 package actoj.gui;
 
-import actoj.core.Actogram;
-
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
+import actoj.core.Actogram;
 
 public class ActogramProcessor {
 
@@ -126,7 +125,6 @@ public class ActogramProcessor {
 	}
 
 	public void drawInto(Actogram actogram, Style style, Color color) {
-		DrawingBackend g = style.getBackend();
 		int spp = actogram.SAMPLES_PER_PERIOD;
 		int nlines = periods + 1;
 
@@ -158,7 +156,7 @@ public class ActogramProcessor {
 		style.newline(x, y);
 		for(int i = offs; i < offs + length; i++, x++) {
 			float v = actogram.get(i);
-			int sh = (int)Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
+			int sh = Math.round(signalHeight * Math.min(uLimit, v) / uLimit);
 			style.newData(sh);
 		}
 	}
@@ -178,17 +176,20 @@ public class ActogramProcessor {
 			this.ba = ba;
 		}
 
+		@Override
 		public void newline(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
 
+		@Override
 		public void newData(int d) {
 			ba.moveTo(x, y - d);
 			ba.fillRectangle(1, d);
 			this.x++;
 		}
 
+		@Override
 		public DrawingBackend getBackend() {
 			return ba;
 		}
@@ -205,12 +206,14 @@ public class ActogramProcessor {
 			this.ba = ba;
 		}
 
+		@Override
 		public void newline(int x, int y) {
 			this.x = x;
 			this.y = y;
 			last = -1;
 		}
 
+		@Override
 		public void newData(int d) {
 			if(last == -1)
 				last = d;
@@ -220,6 +223,7 @@ public class ActogramProcessor {
 			this.x++;
 		}
 
+		@Override
 		public DrawingBackend getBackend() {
 			return ba;
 		}

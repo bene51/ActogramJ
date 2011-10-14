@@ -1,18 +1,19 @@
 package actoj.gui.actions;
 
+import ij.IJ;
+import ij.io.SaveDialog;
+
+import java.awt.event.ActionEvent;
+import java.io.File;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+
 import actoj.ActogramJ_;
 import actoj.gui.ImageCanvas;
 import actoj.io.PDFExporter;
 
-import ij.IJ;
-import ij.io.SaveDialog;
-
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-
-import java.io.File;
-
+@SuppressWarnings("serial")
 public class ExportPDF extends AbstractAction {
 	// 	ACCELERATOR_KEY
 	// 	ACTION_COMMAND_KEY
@@ -21,7 +22,7 @@ public class ExportPDF extends AbstractAction {
 	// 	MNEMONIC_KEY
 	// 	NAME
 	// 	SHORT_DESCRIPTION
-	// 	SMALL_ICON 
+	// 	SMALL_ICON
 
 	private final ImageCanvas canvas;
 
@@ -34,6 +35,7 @@ public class ExportPDF extends AbstractAction {
 			ActogramJ_.class.getResource("icons/exportpdf.png")));
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		SaveDialog od = new SaveDialog("Export as pdf...", "", ".pdf");
 		String dir = od.getDirectory();
