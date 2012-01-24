@@ -113,13 +113,15 @@ public class PDFExporter {
 				gridx = 0;
 				gridy++;
 				if(gridy >= rowsOnPage) {
+//					content.restoreState();
 					document.newPage();
+					// content.saveState();
 					gridy = 0;
 				}
 			}
 		}
 
-		content.restoreState();
+		// content.restoreState();
 		document.close();
 	}
 

@@ -24,26 +24,26 @@ public class PdfBackend extends DrawingBackend {
 		this.g = g;
 		setFont(this.font);
 		setLineWidth(linewidth);
-		g.saveState();
+//		g.saveState();
 		setOpacities();
 		this.paperHeight = paperHeight;
 	}
 
 	private void setOpacities() {
-		g.restoreState();
+//		g.restoreState();
 		g.setColorStroke(new BaseColor(linecolor));
 		g.setColorFill(new BaseColor(fillcolor));
 		g.setFontAndSize(baseFont, fontSize);
 		PdfGState gstate = new PdfGState();
 		gstate.setStrokeOpacity(alphaStroke / 255f);
 		gstate.setFillOpacity(alphaFill / 255f);
-		g.saveState();
+//		g.saveState();
 		g.setGState(gstate);
 	}
 
 	// Needs to be called before document.close()
 	public void restoreState() {
-		g.restoreState();
+//		g.restoreState();
 	}
 
 	@Override
