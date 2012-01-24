@@ -12,26 +12,38 @@ import javax.swing.table.TableModel;
 @SuppressWarnings("serial")
 public class PreviewTable extends JTable {
 
+	public static final char DEFAULT_DELIM = '\t';
+
 	public PreviewTable(String filename) throws IOException {
-		super(new PreviewTableModel(filename));
+		this(filename, DEFAULT_DELIM);
+	}
+
+	public PreviewTable(String filename, char delim) throws IOException {
+		super(new PreviewTableModel(filename, delim));
 		setAutoResizeMode(AUTO_RESIZE_OFF);
+	}
+
+	public void update(String filename, char delim) throws IOException {
+		setModel(new PreviewTableModel(filename, delim));
 	}
 
 	private static final class PreviewTableModel implements TableModel {
 
 		final String[] lines;
 		final int columnCount;
+		final char delim;
 
-		public PreviewTableModel(String file) throws IOException {
-			this(readLines(file));
+		public PreviewTableModel(String file, char delim) throws IOException {
+			this(readLines(file), delim);
 		}
 
-		public PreviewTableModel(String[] lines) {
+		public PreviewTableModel(String[] lines, char delim) {
 			this.lines = lines;
+			this.delim = delim;
 			int cols = 0;
 			for(int i = 0; i < lines.length; i++) {
-				lines[i] = lines[i] + "\t";
-				int c = occurences(lines[i], '\t');
+				lines[i] = lines[i] + delim;
+				int c = occurences(lines[i], delim);
 				if(c > cols)
 					cols = c;
 			}
@@ -69,8 +81,8 @@ public class PreviewTable extends JTable {
 			if(col == 0)
 				return Integer.toString(row + 1);
 			String line = lines[row];
-			int start = col == 1 ? 0 : nthIndexOf(line, '\t', col - 1);
-			int end   = nthIndexOf(line, '\t', col);
+			int start = col == 1 ? 0 : nthIndexOf(line, delim, col - 1);
+			int end   = nthIndexOf(line, delim, col);
 			return start == -1 || end == -1 ? "" :
 				line.substring(start, end);
 		}
@@ -83,10 +95,10 @@ public class PreviewTable extends JTable {
 		@Override
 		public void setValueAt(Object aValue, int row, int col) {}
 
-		private static final int occurences(String st, char c) {
+		private static final int occurences(String st, char delim) {
 			int ret = 0;
 			for(int i = 0; i < st.length(); i++)
-				if(st.charAt(i) == c)
+				if(st.charAt(i) == delim)
 					ret++;
 			return ret;
 		}

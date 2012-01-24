@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -107,7 +109,7 @@ public class OpenAction extends AbstractAction {
 		private PreviewTable preview;
 		private JTextField startRowField, endRowField,
 			startColField, endColField, sppField, calValueField;
-		private JComboBox calUnitBox;
+		private JComboBox calUnitBox, delimBox;
 
 		public PreviewDialog(File[] files, TreeView treeview) {
 			super();
@@ -141,6 +143,28 @@ public class OpenAction extends AbstractAction {
 			c.anchor = GridBagConstraints.WEST;
 			c.insets = new Insets(10, 5, 5, 5);
 
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1.0;
+			c.weighty = 0.0;
+			JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			p.add(new JLabel("Column delimiter:"));
+			delimBox = new JComboBox(new String[] {"TAB", ",", ":", ";"});
+			delimBox.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					try {
+						preview.update(files[0].getAbsolutePath(), getDelimiter());
+					} catch(Exception ex) {
+						IJ.error("Error reading " + files[0] + " for preview");
+						ex.printStackTrace();
+					}
+				}
+			});
+			p.add(delimBox);
+			gridbag.setConstraints(p, c);
+			add(p);
+
+			c.gridy++;
 			c.weightx = c.weighty = 1.0;
 			c.fill = GridBagConstraints.BOTH;
 
@@ -222,6 +246,16 @@ public class OpenAction extends AbstractAction {
 			add(buttons);
 		}
 
+		private char getDelimiter() {
+			switch(delimBox.getSelectedIndex()) {
+			case 0: return '\t';
+			case 1: return ',';
+			case 2: return ':';
+			case 3: return ';';
+			default: throw new RuntimeException("Unknown delimiter: " + delimBox.getSelectedItem());
+			}
+		}
+
 		public void readFields() {
 			startCol = i(startColField.getText());
 			startRow = i(startRowField.getText());
@@ -269,9 +303,9 @@ public class OpenAction extends AbstractAction {
 			}
 		}
 
-		public void readFile(String file) throws IOException {
+		public void readFile(String file, char delimiter) throws IOException {
 			treeview.add(ActogramReader.readActograms(
-				file, startCol - 1, endCol - startCol + 1,
+				file, delimiter, startCol - 1, endCol - startCol + 1,
 				startRow - 1, endRow - startRow + 1, spp,
 				new TimeInterval(calValue, calUnit),
 				calUnit));
@@ -290,7 +324,7 @@ public class OpenAction extends AbstractAction {
 				saveDefaults();
 				for(File f : files) {
 					try {
-						readFile(f.getAbsolutePath());
+						readFile(f.getAbsolutePath(), getDelimiter());
 					} catch(Exception ex) {
 						IJ.error("Error reading " + f + "\n"
 								+ ex.getClass() + ": " + ex.getMessage());
