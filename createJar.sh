@@ -2,6 +2,8 @@
 
 JAVAC="/home/bene/fiji/java/linux/jdk1.6.0_21/bin/javac"
 JAR="/home/bene/fiji/java/linux/jdk1.6.0_21/bin/jar"
+JAVAC="/usr/bin/javac"
+JAR="/usr/bin/jar"
 
 PWD=`pwd`
 FIJIF="$PWD/../../"
