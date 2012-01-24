@@ -1,3 +1,11 @@
+Version v0.8:
+-------------
+* Fix a bug when exporting multiple actograms to pdf.
+* Let the user choose an upper and a lower limit for the activity:
+  Lower values than the lower limit count as 0.
+  Higher values than the upper limit count as 'upper limit'
+* Allow to open files which are separated by other characters than tabs.
+
 Version v0.7:
 -------------
 * Update ActogramJ so that it now works (and needs) the itext
