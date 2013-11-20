@@ -55,8 +55,7 @@ public class OpenAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, "Open Actograms");
 		putValue(LONG_DESCRIPTION, "Open a group of actograms from file");
 		putValue(NAME, "Open");
-		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/fileopen.png")));
+		putValue(SMALL_ICON, new ImageIcon(ActogramJ_.class.getResource("icons/fileopen.png")));
 	}
 
 	@Override
