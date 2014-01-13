@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import actoj.activitypattern.OnOffset;
 import actoj.core.Actogram;
 import actoj.core.TimeInterval;
 import actoj.core.TimeInterval.Units;
@@ -119,6 +120,87 @@ public class ImageCanvas extends JPanel {
 			Actogram.multiply(res[i], factor);
 		}
 		return res;
+	}
+
+	public void calculateAcrophase() {
+		ActogramCanvas first = null;
+		for(ActogramCanvas ac : actograms) {
+			if(ac.hasSelection()) {
+				first = ac;
+				break;
+			}
+		}
+		if(first == null) {
+			IJ.error("Selection required");
+			return;
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				for(ActogramCanvas ac : actograms) {
+					if(ac.hasSelection()) {
+						try {
+							ac.calculateAcrophase();
+						} catch(Exception e) {
+							IJ.error(e.getClass() + ": " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}.start();
+	}
+
+	public void calculateOnAndOffsets() {
+		ActogramCanvas first = null;
+		for(ActogramCanvas ac : actograms) {
+			if(ac.hasSelection()) {
+				first = ac;
+				break;
+			}
+		}
+		if(first == null) {
+			IJ.error("Selection required");
+			return;
+		}
+		Actogram a = first.processor.original;
+
+		GenericDialog gd = new GenericDialog("Calculate on- and offsets");
+		gd.addNumericField("Smooting gaussian std dev", 5, 4, 6, a.unit.toString());
+		gd.addChoice("Threshold", OnOffset.thresholdMethods, OnOffset.thresholdMethods[OnOffset.ThresholdMethod.MedianWithoutZero.ordinal()]);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		final float sigma = (float)gd.getNextNumber();
+		final OnOffset.ThresholdMethod thresholdMethod = OnOffset.ThresholdMethod.values()[gd.getNextChoiceIndex()];
+		final boolean isManualThreshold = thresholdMethod == OnOffset.ThresholdMethod.Manual;
+		float threshold = 0;
+		if(isManualThreshold) {
+			threshold = (float)IJ.getNumber("Manual threshold", threshold);
+			if(threshold == IJ.CANCELED)
+				return;
+		}
+		final float manualThreshold = threshold;
+		new Thread() {
+			@Override
+			public void run() {
+				for(ActogramCanvas ac : actograms) {
+					if(ac.hasSelection()) {
+						try {
+							if(isManualThreshold)
+								ac.calculateOnAndOffsets(sigma, manualThreshold);
+							else
+								ac.calculateOnAndOffsets(sigma, thresholdMethod);
+						} catch(Exception e) {
+							IJ.error(e.getClass() + ": " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}.start();
 	}
 
 	public void calculateAverageActivity() {

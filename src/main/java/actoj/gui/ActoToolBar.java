@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+import actoj.gui.actions.AcrophaseAction;
 import actoj.gui.actions.AverageActivityAction;
 import actoj.gui.actions.CalculateAction;
 import actoj.gui.actions.CalibAction;
@@ -13,6 +14,7 @@ import actoj.gui.actions.ExportPDF;
 import actoj.gui.actions.FittingAction;
 import actoj.gui.actions.HelpAction;
 import actoj.gui.actions.NormalizeAction;
+import actoj.gui.actions.OnOffAction;
 import actoj.gui.actions.OpenAction;
 import actoj.gui.actions.PointerAction;
 import actoj.gui.actions.PropertiesAction;
@@ -52,6 +54,8 @@ public class ActoToolBar extends JToolBar implements ModeChangeListener {
 		add(makeButton(new FittingAction(win.canvas)));
 		add(makeButton(new AverageActivityAction(win.canvas)));
 		add(makeButton(new NormalizeAction(win)));
+		add(makeButton(new AcrophaseAction(win.canvas)));
+		add(makeButton(new OnOffAction(win.canvas)));
 
 		addSeparator();
 		add(makeButton(new HelpAction()));

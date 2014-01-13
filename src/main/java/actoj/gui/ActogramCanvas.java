@@ -18,10 +18,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import actoj.AverageActivity;
+import actoj.activitypattern.Acrophase;
+import actoj.activitypattern.OnOffset;
 import actoj.core.Actogram;
 import actoj.core.ExternalVariable;
 import actoj.core.MarkerList;
@@ -217,6 +220,107 @@ public class ActogramCanvas extends JPanel
 		TimeInterval tv = getFreerunningPeriod();
 		return tv == null ? "" : df.format(
 			tv.intervalIn(fpUnit)) + fpUnit.abbr;
+	}
+
+	public void calculateAcrophase() {
+		Actogram a = processor.original;
+		calculateAcrophase(new TimeInterval(a.SAMPLES_PER_PERIOD * a.interval.millis));
+	}
+
+	public void calculateAcrophase(TimeInterval T) {
+		if(selStart == null || selCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
+
+		int from = processor.getIndex(st.x, st.y);
+		int to = processor.getIndex(cu.x, cu.y);
+
+		Actogram a = processor.original;
+		from = processor.getIndexInOriginal(from);
+		to = processor.getIndexInOriginal(to);
+
+		ArrayList<Integer> m = Acrophase.calculate(a, from, to, T);
+		MarkerList ml = new MarkerList("Acrophase", m, a.interval.millis, Color.BLUE);
+		ml.addMarkerChangeListener(this);
+		ml.calculateRegression(T);
+		a.addMarker(ml);
+		repaint();
+	}
+
+	public void calculateOnAndOffsets(float gaussianSigma, OnOffset.ThresholdMethod thresholdMethod) {
+		if(selStart == null || selCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
+
+		int from = processor.getIndex(st.x, st.y);
+		int to = processor.getIndex(cu.x, cu.y);
+
+		Actogram org = processor.original;
+		Actogram a = org;
+		if(gaussianSigma > 0) {
+			float[] kernel = Filters.makeGaussianKernel(gaussianSigma);
+			a = org.convolve(kernel);
+		}
+
+		from = processor.getIndexInOriginal(from);
+		to = processor.getIndexInOriginal(to);
+		TimeInterval period = new TimeInterval(a.SAMPLES_PER_PERIOD * a.interval.millis);
+
+		OnOffset onoff = new OnOffset();
+		onoff.calculate(a, from, to, period, thresholdMethod);
+		ArrayList<Integer> on = onoff.getOnsets();
+		MarkerList onML = new MarkerList("Onset", on, a.interval.millis, Color.RED);
+		onML.calculateRegression(period);
+		onML.addMarkerChangeListener(this);
+		org.addMarker(onML);
+		ArrayList<Integer> off = onoff.getOffsets();
+		MarkerList offML = new MarkerList("Offset", off, a.interval.millis, Color.RED);
+		offML.calculateRegression(period);
+		offML.addMarkerChangeListener(this);
+		org.addMarker(offML);
+
+		repaint();
+	}
+
+	public void calculateOnAndOffsets(float gaussianSigma, float threshold) {
+		if(selStart == null || selCurr == null)
+			throw new RuntimeException("Interval required");
+
+		Point st = upper(selStart, selCurr);
+		Point cu = lower(selStart, selCurr);
+
+		int from = processor.getIndex(st.x, st.y);
+		int to = processor.getIndex(cu.x, cu.y);
+
+		Actogram org = processor.original;
+		Actogram a = org;
+		if(gaussianSigma > 0) {
+			float[] kernel = Filters.makeGaussianKernel(gaussianSigma);
+			a = org.convolve(kernel);
+		}
+
+		from = processor.getIndexInOriginal(from);
+		to = processor.getIndexInOriginal(to);
+		TimeInterval period = new TimeInterval(a.SAMPLES_PER_PERIOD * a.interval.millis);
+
+		OnOffset onoff = new OnOffset();
+		onoff.calculate(a, from, to, period, threshold);
+		ArrayList<Integer> on = onoff.getOnsets();
+		MarkerList onML = new MarkerList("Onset", on, a.interval.millis, Color.RED);
+		onML.calculateRegression(period);
+		onML.addMarkerChangeListener(this);
+		org.addMarker(onML);
+		ArrayList<Integer> off = onoff.getOffsets();
+		MarkerList offML = new MarkerList("Offset", off, a.interval.millis, Color.RED);
+		offML.calculateRegression(period);
+		offML.addMarkerChangeListener(this);
+		org.addMarker(offML);
+
+		repaint();
 	}
 
 	public void calculateAverageActivity(TimeInterval period, float sigma) {
