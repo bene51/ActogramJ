@@ -168,6 +168,16 @@ public class ActogramProcessor {
 		ba.setFillColor(255, 255, 255, 255);
 		ba.fillRectangle(width, height);
 
+//		int evenColor = Color.WHITE.getRGB();
+//		int oddColor  = Color.LIGHT_GRAY.getRGB();
+//
+//		for(int i = 0; i < ppl; i++) {
+//			ba.setFillColor(i % 2 == 0 ? evenColor : oddColor);
+//			ba.moveTo(i * width / ppl, 0);
+//			ba.fillRectangle(width / ppl, height);
+//		}
+//
+//		ba.moveTo(0, 0);
 		ba.setLineColor(50, 50, 50, 255);
 		ba.drawRectangle(width, height);
 	}
