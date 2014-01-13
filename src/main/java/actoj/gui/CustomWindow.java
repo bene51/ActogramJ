@@ -14,6 +14,7 @@ public class CustomWindow extends JFrame
 	final ImageCanvas canvas;
 	final TreeView tree;
 	final StatusBar status;
+	final ActoMenuBar menubar;
 
 	public CustomWindow() {
 		super("ActoJ");
@@ -33,7 +34,7 @@ public class CustomWindow extends JFrame
 
 		getContentPane().add(split);
 		ActoToolBar toolbar = new ActoToolBar(this);
-		ActoMenuBar menubar = new ActoMenuBar(this);
+		menubar = new ActoMenuBar(this);
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(status, BorderLayout.SOUTH);
 		setJMenuBar(menubar);
@@ -60,6 +61,7 @@ public class CustomWindow extends JFrame
 	@Override
 	public void selectionChanged() {
 		canvas.display(tree.getSelected());
+		canvas.setCanvasMode(menubar.getMode());
 	}
 
 	@Override

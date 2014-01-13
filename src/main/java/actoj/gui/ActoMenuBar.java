@@ -22,6 +22,8 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 
 	private JCheckBoxMenuItem pointer, calibration, selection;
 
+	private ActogramCanvas.Mode mode = null;
+
 	public ActoMenuBar(CustomWindow win) {
 		super();
 
@@ -37,6 +39,7 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 		menu.add(pointer);
 		bg.add(pointer);
 		pointer.setSelected(true);
+		this.mode = ActogramCanvas.Mode.POINTING;
 		selection = new JCheckBoxMenuItem(new SelectingAction(win.canvas));
 		menu.add(selection);
 		bg.add(selection);
@@ -61,6 +64,10 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 		add(menu);
 	}
 
+	public ActogramCanvas.Mode getMode() {
+		return mode;
+	}
+
 	@Override
 	public void modeChanged(ActogramCanvas.Mode mode) {
 		JCheckBoxMenuItem b = null;
@@ -70,6 +77,7 @@ public class ActoMenuBar extends JMenuBar implements ModeChangeListener {
 			case SELECTING: b = selection; break;
 		}
 		b.setSelected(true);
+		this.mode = mode;
 	}
 }
 
