@@ -526,11 +526,6 @@ public class ActogramCanvas extends JPanel
 		if(st.y == cu.y && st.x > cu.x) {
 			Point tmp = st; st = cu; cu = tmp;
 		}
-		int sIdx = processor.getIndex(st.x, st.y);
-		if(sIdx < 0) return;
-		int cIdx = processor.getIndex(cu.x, cu.y);
-		if(cIdx < 0) return;
-
 
 		Point s = new Point(st.x + INT_LEFT_TOTAL, st.y + INT_TOP_ALL);
 		Point c = new Point(cu.x + INT_LEFT_TOTAL, cu.y + INT_TOP_ALL);
@@ -715,12 +710,17 @@ public class ActogramCanvas extends JPanel
 	}
 
 	public Point snap(Point in) {
-		if(in.x < INT_LEFT_TOTAL || in.y < INT_TOP_ALL ||
-			in.x >= width - INT_RIGHT || in.y >= height - INT_BOTTOM)
-			return null;
+		if(in.x < INT_LEFT_TOTAL)
+			in.x = INT_LEFT_TOTAL;
+		if(in.y < INT_TOP_ALL)
+			in.y = INT_TOP_ALL;
+		if(in.x >= width - INT_RIGHT)
+			in.x = width - INT_RIGHT - 1;
+		if(in.y >= height - INT_BOTTOM)
+			in.y = height - INT_BOTTOM - 1;
 		int bd = processor.baselineDist;
 		int idx = (in.y - INT_TOP_ALL)/ bd;
-		return new Point(in.x - INT_LEFT_TOTAL, (idx + 1) * bd);
+		return processor.clamp(in.x - INT_LEFT_TOTAL, (idx + 1) * bd);
 	}
 
 	private static Point upper(Point p1, Point p2) {

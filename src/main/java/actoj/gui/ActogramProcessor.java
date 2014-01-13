@@ -92,6 +92,32 @@ public class ActogramProcessor {
 		return index;
 	}
 
+	public Point clamp(int x, int y) {
+		if(x < 1)
+			x = 1;
+		if(x >= width - 1)
+			x = width - 2;
+		if(y < 0)
+			y = 0;
+		if(y >= height)
+			y = height - 1;
+
+		x -= 1;
+
+		int spp = downsampled.SAMPLES_PER_PERIOD;
+		int lineIdx = (y - 1) / baselineDist;
+		int colIdx = x / spp;
+
+		int period = lineIdx - 1 + colIdx;
+		if(period < 0)
+			x = spp;
+		int index = period * spp + x % spp;
+		if(index >= downsampled.size())
+			x = downsampled.size() - 1 - (periods - 1) * spp;
+
+		return new Point(x + 1, y);
+	}
+
 	// points[xfold]
 	public void getPoint(int index, Point[] points) {
 		int spp = downsampled.SAMPLES_PER_PERIOD;
