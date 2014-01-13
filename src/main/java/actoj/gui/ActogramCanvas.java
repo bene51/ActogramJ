@@ -673,7 +673,7 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private int calculateYCalibrationWidth() {
-		int fs = (int)(0.5 * processor.baselineDist);
+		int fs = Math.min((int)(0.6 * processor.baselineDist), 12);
 		Font font = new Font("Helvetica", Font.PLAIN, fs);
 		int nLines = processor.periods + 1;
 		FontMetrics fm = getFontMetrics(font);
@@ -687,7 +687,7 @@ public class ActogramCanvas extends JPanel
 	}
 
 	private void drawYCalibration(DrawingBackend g) {
-		int fs = (int)(0.6 * processor.baselineDist);
+		int fs = Math.min((int)(0.6 * processor.baselineDist), 12);
 		Font font = new Font("Helvetica", Font.PLAIN, fs);
 		g.setFont(font);
 		int nLines = processor.periods + 1;
