@@ -250,6 +250,7 @@ public class ExternalVariablesDialog extends JDialog {
 		private ExternalVariable ext;
 		private int fh;
 		private int width;
+		@SuppressWarnings("unused")
 		private float factor;
 
 		public VarPanel(ExternalVariable ext, int width) {
