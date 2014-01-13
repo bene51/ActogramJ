@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import actoj.AverageActivity;
 import actoj.core.Actogram;
 import actoj.core.ExternalVariable;
+import actoj.core.MarkerList;
+import actoj.core.MarkerList.MarkerChangeListener;
 import actoj.core.TimeInterval;
 import actoj.core.TimeInterval.Units;
 import actoj.fitting.FitSine;
@@ -40,7 +42,7 @@ import actoj.util.PeakFinder;
  */
 @SuppressWarnings("serial")
 public class ActogramCanvas extends JPanel
-			implements MouseMotionListener, MouseListener {
+			implements MouseMotionListener, MouseListener, MarkerChangeListener {
 
 	public static enum Mode {
 		POINTING, FREERUNNING_PERIOD, SELECTING;
@@ -477,6 +479,9 @@ public class ActogramCanvas extends JPanel
 
 		drawYCalibration(gb);
 
+		for(int m = 0; m < processor.original.nMarkers(); m++)
+			drawMarkers(gb, processor.original.getMarker(m));
+
 		drawSelection(gb);
 		drawFPTriangle(gb);
 	}
@@ -504,6 +509,9 @@ public class ActogramCanvas extends JPanel
 		gb.setOffsY(offY);
 
 		drawYCalibration(gb);
+
+		for(int m = 0; m < processor.original.nMarkers(); m++)
+			drawMarkers(gb, processor.original.getMarker(m));
 
 		drawSelection(gb);
 		drawFPTriangle(gb);
@@ -581,6 +589,7 @@ public class ActogramCanvas extends JPanel
 
 		g.setLineColor(color.getRGB());
 		g.setLineWidth(stroke);
+		g.setLineDashPattern(new float[] {10, 0});
 		g.moveTo(c.x, c.y);
 		g.lineTo(s.x, s.y);
 		g.lineTo(s.x, c.y);
@@ -619,6 +628,115 @@ public class ActogramCanvas extends JPanel
 		g.setFillColor(text.getRGB());
 		g.moveTo(hr.x, hr.y);
 		g.drawText(h);
+	}
+
+	private void drawMarkers(DrawingBackend g, MarkerList markers) {
+		g.setFillColor(markers.getColor().getRGB());
+		g.setLineColor(markers.getColor().getRGB());
+		int radius = processor.signalHeight / 4;
+		double calibration = markers.getCalibration();
+
+		Point[] points = new Point[processor.ppl];
+		for(int i = 0; i < points.length; i++)
+			points[i] = new Point();
+
+		int indexInPlotPerLine = markers.getIndexInPlotPerLine();
+		for(int position : markers) {
+			double realpos = position * calibration;
+			int index = processor.downsampled.getIndexForTime(new TimeInterval(realpos));
+
+			processor.getPoint(index, points);
+
+			Point p = points[indexInPlotPerLine];
+			p.x += INT_LEFT_TOTAL;
+			p.y += INT_TOP_ALL;
+
+			float x0, x1, x2, y0, y1, y2;
+			x0 = p.x - radius;
+			x1 = p.x;
+			x2 = p.x + radius;
+			y0 = p.y + radius;
+			y1 = p.y;
+			y2 = p.y + radius;
+			g.fillTriangle(x0, y0, x1, y1, x2, y2);
+		}
+
+		MarkerList.RegressionLine regression = markers.getRegression();
+		if(regression == null)
+			return;
+
+		// calculate for first line:
+		processor.getPoint(0, points);
+		g.clip(points[indexInPlotPerLine].x + INT_LEFT_TOTAL, INT_TOP_ALL, processor.width / processor.ppl, processor.height);
+
+		double v = regression.t;
+		int i = processor.downsampled.getIndexForTime(new TimeInterval(v));
+		int shift = 0;
+		while(i < 0) {
+			i += processor.downsampled.SAMPLES_PER_PERIOD;
+			shift++;
+		}
+		while(i >= processor.downsampled.SAMPLES_PER_PERIOD) {
+			i -= processor.downsampled.SAMPLES_PER_PERIOD;
+			shift--;
+		}
+
+		g.setLineWidth(markers.getLinewidth());
+		for(int l = 1; l < processor.periods; l++) {
+			v = regression.t + regression.m * l;
+			i = processor.downsampled.getIndexForTime(new TimeInterval(v));
+			int shift1 = 0;
+			while(i < 0) {
+				i += processor.downsampled.SAMPLES_PER_PERIOD;
+				shift1++;
+			}
+			while(i >= processor.downsampled.SAMPLES_PER_PERIOD) {
+				i -= processor.downsampled.SAMPLES_PER_PERIOD;
+				shift1--;
+			}
+
+			if(shift1 != shift || l == processor.periods - 1) { // i.e. these we can now draw the lines for the prev. shift
+				int perl = -20;
+				int peru = processor.periods - 1 + 20;
+				double v0 = regression.t + regression.m * regression.firstPeriod;
+				double v1 = regression.t + regression.m * regression.lastPeriod;
+				double vl = regression.t + regression.m * perl;
+				double vu = regression.t + regression.m * peru;
+
+				// indices within period:
+				int i0 = shift * processor.downsampled.SAMPLES_PER_PERIOD + processor.downsampled.getIndexForTime(new TimeInterval(v0));
+				int i1 = shift * processor.downsampled.SAMPLES_PER_PERIOD + processor.downsampled.getIndexForTime(new TimeInterval(v1));
+				int il = shift * processor.downsampled.SAMPLES_PER_PERIOD + processor.downsampled.getIndexForTime(new TimeInterval(vl));
+				int iu = shift * processor.downsampled.SAMPLES_PER_PERIOD + processor.downsampled.getIndexForTime(new TimeInterval(vu));
+
+				Point p0 = processor.getPoint(regression.firstPeriod, i0, indexInPlotPerLine);
+				p0.x += INT_LEFT_TOTAL;
+				p0.y += INT_TOP_ALL;
+
+				Point p1 = processor.getPoint(regression.lastPeriod, i1, indexInPlotPerLine);
+				p1.x += INT_LEFT_TOTAL;
+				p1.y += INT_TOP_ALL;
+
+				Point pl = processor.getPoint(perl, il, indexInPlotPerLine);
+				pl.x += INT_LEFT_TOTAL;
+				pl.y += INT_TOP_ALL;
+
+				Point pu = processor.getPoint(peru, iu, indexInPlotPerLine);
+				pu.x += INT_LEFT_TOTAL;
+				pu.y += INT_TOP_ALL;
+
+				float lw = markers.getLinewidth();
+				g.moveTo(pl.x, pl.y);
+				g.setLineDashPattern(new float[] {lw, 4 * lw});
+				g.lineTo(p0.x, p0.y);
+				g.setLineDashPattern(new float[] {10, 0});
+				g.lineTo(p1.x, p1.y);
+				g.setLineDashPattern(new float[] {lw, 4 * lw});
+				g.lineTo(pu.x, pu.y);
+			}
+			shift = shift1;
+		}
+		g.resetClip();
 	}
 
 	private int getTitleHeight() {
@@ -794,6 +912,11 @@ public class ActogramCanvas extends JPanel
 			selCurr = snap(e.getPoint());
 			repaint();
 		}
+	}
+
+	@Override
+	public void markerChanged(MarkerList ml) {
+		repaint();
 	}
 
 	public static interface Feedback {

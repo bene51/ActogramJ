@@ -5,5 +5,7 @@ public interface TreeViewListener {
 	public void selectionChanged();
 
 	public void externalVariablesChanged();
+
+	public void markersChanged();
 }
 

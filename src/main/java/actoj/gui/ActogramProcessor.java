@@ -52,7 +52,7 @@ public class ActogramProcessor {
 
 		this.processor = createProcessor();
 		drawInto(downsampled, new Histogram(
-			new GraphicsBackend(processor.getGraphics())), Color.BLACK);
+			new GraphicsBackend(processor.getGraphics())), new Color(50, 50, 50));
 	}
 
 	/**
@@ -118,20 +118,40 @@ public class ActogramProcessor {
 		return new Point(x + 1, y);
 	}
 
+	public int getLineIndex(int y) {
+		return (y - 1) / baselineDist;
+	}
+
 	// points[xfold]
 	public void getPoint(int index, Point[] points) {
 		int spp = downsampled.SAMPLES_PER_PERIOD;
 		int period = index / spp;
 		int mod = index % spp;
 
+		// one point in the first line
 		// + 1 for the 1px border
 		points[0].x = (ppl - 1) * spp + mod + 1;
 		points[0].y = (period + 1) * baselineDist;
 
+		// ... and all other points in the next line
 		for(int i = 1; i < ppl; i++) {
 			points[i].x = (i - 1) * spp + mod + 1;
-			points[i].y = points[0].y + baselineDist;
+			points[i].y = (period + 2) * baselineDist;
 		}
+	}
+
+	public Point getPoint(int period, int iWithinPeriod, int indexInPlotPerLine) {
+		int spp = downsampled.SAMPLES_PER_PERIOD;
+		Point p = new Point();
+
+		if(indexInPlotPerLine == 0) {
+			p.x = (ppl - 1) * spp + iWithinPeriod + 1;
+			p.y = (period + 1) * baselineDist;
+		} else {
+			p.x = (indexInPlotPerLine - 1) * spp + iWithinPeriod + 1;
+			p.y = (period + 2) * baselineDist;
+		}
+		return p;
 	}
 
 	private BufferedImage createProcessor() {

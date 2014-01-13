@@ -1,5 +1,6 @@
 package actoj.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -38,6 +39,12 @@ public class Actogram {
 	 * Array of external variables.
 	 */
 	private ExternalVariable[] externals;
+
+	/**
+	 * A list of marker sets.
+	 */
+	private ArrayList<MarkerList> markers = new ArrayList<MarkerList>();
+
 
 	/**
 	 * Constructur.
@@ -88,6 +95,26 @@ public class Actogram {
 
 	public void setExternalVariables(ExternalVariable[] ext) {
 		this.externals = ext;
+	}
+
+	public void addMarker(MarkerList m) {
+		markers.add(m);
+	}
+
+	public MarkerList getMarker(int i) {
+		return markers.get(i);
+	}
+
+	public int nMarkers() {
+		return markers.size();
+	}
+
+	public void removeMarker(int i) {
+		markers.remove(i);
+	}
+
+	public void replaceMarker(int i, MarkerList ml) {
+		markers.set(i, ml);
 	}
 
 	/**
@@ -307,6 +334,7 @@ public class Actogram {
 	/**
 	 * Returns the name of this actogram.
 	 */
+	@Override
 	public String toString() {
 		return name;
 	}

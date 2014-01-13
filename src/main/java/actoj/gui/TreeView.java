@@ -57,20 +57,22 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		setLayout(new BorderLayout());
 		add(tree, BorderLayout.WEST);
 
-		createPopup();
+		createActogramGroupPopoup();
+		createSingleActogramPopoup();
 	}
 
-	private ActogramGroup popupClicked = null;
+	private ActogramGroup actogramGroupClicked = null;
+	private Actogram actogramClicked = null;
 
-	private void createPopup() {
+	private void createActogramGroupPopoup() {
 		final JPopupMenu popup = new JPopupMenu();
 		JMenuItem item = new JMenuItem("Remove actograms");
 		item.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(popupClicked != null) {
-					remove(popupClicked);
-					popupClicked = null;
+				if(actogramGroupClicked != null) {
+					remove(actogramGroupClicked);
+					actogramGroupClicked = null;
 				}
 			}
 		});
@@ -82,9 +84,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		item.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(popupClicked != null) {
-					addExternalVariable(popupClicked);
-					popupClicked = null;
+				if(actogramGroupClicked != null) {
+					addExternalVariable(actogramGroupClicked);
+					actogramGroupClicked = null;
 				}
 			}
 		});
@@ -94,9 +96,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		item.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(popupClicked != null) {
-					removeExternalVariable(popupClicked);
-					popupClicked = null;
+				if(actogramGroupClicked != null) {
+					removeExternalVariable(actogramGroupClicked);
+					actogramGroupClicked = null;
 				}
 			}
 		});
@@ -106,9 +108,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		item.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(popupClicked != null) {
-					editExternalVariables(popupClicked, 0);
-					popupClicked = null;
+				if(actogramGroupClicked != null) {
+					editExternalVariables(actogramGroupClicked, 0);
+					actogramGroupClicked = null;
 				}
 			}
 		});
@@ -132,7 +134,57 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 					return;
 				Object o = p.getLastPathComponent();
 				if(o != null && o instanceof ActogramGroup && e.isPopupTrigger()) {
-					popupClicked = (ActogramGroup)o;
+					actogramGroupClicked = (ActogramGroup)o;
+					popup.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+
+		});
+	}
+
+	private void createSingleActogramPopoup() {
+		final JPopupMenu popup = new JPopupMenu();
+		JMenuItem item = new JMenuItem("Edit marker");
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(actogramClicked != null) {
+					changeMarkerColor(actogramClicked);
+					actogramClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+		item = new JMenuItem("Remove marker");
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(actogramClicked != null) {
+					removeMarker(actogramClicked);
+					actogramClicked = null;
+				}
+			}
+		});
+		popup.add(item);
+
+		tree.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				maybeShowPopup(e);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				maybeShowPopup(e);
+			}
+
+			private void maybeShowPopup(MouseEvent e) {
+				TreePath p = tree.getPathForLocation(e.getX(), e.getY());
+				if(p == null)
+					return;
+				Object o = p.getLastPathComponent();
+				if(o != null && o instanceof Actogram && e.isPopupTrigger()) {
+					actogramClicked = (Actogram)o;
 					popup.show(e.getComponent(), e.getX(), e.getY());
 				}
 			}
@@ -179,6 +231,37 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			ag.get(i).removeExternalVariable(idx);
 
 		fireExternalVariablesChanged();
+	}
+
+	public void removeMarker(Actogram ag) {
+		int nMarkers = ag.nMarkers();
+		if(nMarkers == 0) {
+			IJ.showMessage("No marker");
+			return;
+		}
+		String[] names = new String[nMarkers];
+		for(int i = 0; i < nMarkers; i++)
+			names[i] = ag.getMarker(i).getName();
+		GenericDialog gd = new GenericDialog("Remove marker");
+		gd.addChoice("Marker", names, names[0]);
+		gd.showDialog();
+		if(gd.wasCanceled())
+			return;
+
+		int idx = gd.getNextChoiceIndex();
+		ag.removeMarker(idx);
+
+		fireMarkersChanged();
+	}
+
+	public void changeMarkerColor(Actogram ag) {
+		int nMarkers = ag.nMarkers();
+		if(nMarkers == 0) {
+			IJ.showMessage("No marker");
+			return;
+		}
+		MarkerDialog.run(ag, 0);
+		fireMarkersChanged();
 	}
 
 	public void clearSelection() {
@@ -260,6 +343,11 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	private void fireExternalVariablesChanged() {
 		for(TreeViewListener l : selectionListeners)
 			l.externalVariablesChanged();
+	}
+
+	private void fireMarkersChanged() {
+		for(TreeViewListener l : selectionListeners)
+			l.markersChanged();
 	}
 
 	@Override

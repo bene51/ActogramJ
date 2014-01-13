@@ -59,6 +59,11 @@ public class CustomWindow extends JFrame
 	}
 
 	@Override
+	public void markersChanged() {
+		canvas.repaint();
+	}
+
+	@Override
 	public void selectionChanged() {
 		canvas.display(tree.getSelected());
 		canvas.setCanvasMode(menubar.getMode());
