@@ -1,6 +1,8 @@
 package actoj.gui;
 
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
@@ -22,10 +24,10 @@ public class ActoToolBar extends JToolBar implements ModeChangeListener {
 	public JToggleButton pointer, selection, calibration;
 
 	public ActoToolBar(CustomWindow win) {
-		add(new OpenAction(win.tree));
-		add(new ExportPDF(win.canvas));
-		add(new PropertiesAction(win));
-		add(new CalculateAction(win));
+		add(makeButton(new OpenAction(win.tree)));
+		add(makeButton(new ExportPDF(win.canvas)));
+		add(makeButton(new PropertiesAction(win)));
+		add(makeButton(new CalculateAction(win)));
 
 		addSeparator();
 
@@ -47,13 +49,20 @@ public class ActoToolBar extends JToolBar implements ModeChangeListener {
 
 		addSeparator();
 
-		add(new FittingAction(win.canvas));
-		add(new AverageActivityAction(win.canvas));
-		add(new NormalizeAction(win));
+		add(makeButton(new FittingAction(win.canvas)));
+		add(makeButton(new AverageActivityAction(win.canvas)));
+		add(makeButton(new NormalizeAction(win)));
 
 		addSeparator();
-		add(new HelpAction());
+		add(makeButton(new HelpAction()));
 
+	}
+
+	private JButton makeButton(Action a) {
+		JButton button = new JButton(a);
+		button.setHideActionText(true);
+		button.setBorderPainted(false);
+		return button;
 	}
 
 	@Override
