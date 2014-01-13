@@ -1,10 +1,11 @@
 package actoj.gui;
 
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import java.awt.Font;
-import java.awt.Color;
 import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
 
 public class GraphicsBackend extends DrawingBackend {
 
@@ -36,6 +37,22 @@ public class GraphicsBackend extends DrawingBackend {
 	}
 
 	@Override
+	public void fillTriangle(float x0, float y0, float x1, float y1, float x2, float y2) {
+		Polygon p = new Polygon(new int[] {
+				(int)x0, (int)x1, (int)x2}, new int[] {(int)y0, (int)y1, (int)y2}, 3);
+		g.setColor(fColor);
+		g.fill(p);
+	}
+
+	@Override
+	public void drawTriangle(float x0, float y0, float x1, float y1, float x2, float y2) {
+		Polygon p = new Polygon(new int[] {
+				(int)x0, (int)x1, (int)x2}, new int[] {(int)y0, (int)y1, (int)y2}, 3);
+		g.setColor(lColor);
+		g.draw(p);
+	}
+
+	@Override
 	public void drawRectangle(float w, float h) {
 		g.setColor(lColor);
 		g.drawRect(x, y, (int)w - 1, (int) h - 1);
@@ -45,6 +62,18 @@ public class GraphicsBackend extends DrawingBackend {
 	public void fillRectangle(float w, float h) {
 		g.setColor(fColor);
 		g.fillRect(x, y, (int)w, (int) h);
+	}
+
+	@Override
+	public void drawOval(float w, float h) {
+		g.setColor(lColor);
+		g.drawOval(x, y, (int)w - 1, (int) h - 1);
+	}
+
+	@Override
+	public void fillOval(float w, float h) {
+		g.setColor(fColor);
+		g.fillOval(x, y, (int)w, (int) h);
 	}
 
 	@Override
@@ -64,7 +93,25 @@ public class GraphicsBackend extends DrawingBackend {
 	@Override
 	public void setLineWidth(float linewidth) {
 		super.setLineWidth(linewidth);
-		g.setStroke(new BasicStroke(linewidth));
+		g.setStroke(new BasicStroke(
+				linewidth,
+				BasicStroke.CAP_SQUARE,
+				BasicStroke.JOIN_MITER,
+				10.0f,
+				linedashpattern,
+				0));
+	}
+
+	@Override
+	public void setLineDashPattern(float[] pattern) {
+		super.setLineDashPattern(pattern);
+		g.setStroke(new BasicStroke(
+				linewidth,
+				BasicStroke.CAP_SQUARE,
+				BasicStroke.JOIN_MITER,
+				10.0f,
+				linedashpattern,
+				0));
 	}
 
 	@Override
@@ -91,6 +138,16 @@ public class GraphicsBackend extends DrawingBackend {
 	public void setFont(Font f) {
 		super.setFont(f);
 		g.setFont(f);
+	}
+
+	@Override
+	public void clip(float x, float y, float w, float h) {
+		g.clipRect(getX(x), getY(y), (int)w, (int)h);
+	}
+
+	@Override
+	public void resetClip() {
+		g.setClip(null);
 	}
 }
 

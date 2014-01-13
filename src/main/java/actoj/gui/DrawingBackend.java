@@ -5,6 +5,7 @@ import java.awt.Font;
 public abstract class DrawingBackend {
 
 	protected float linewidth = 1f;
+	protected float[] linedashpattern = new float[] {1};
 	protected int linecolor = 0;
 	protected int fillcolor = 0;
 	protected float offsX = 0;
@@ -19,6 +20,10 @@ public abstract class DrawingBackend {
 
 	public float getLineWidth() {
 		return linewidth;
+	}
+
+	protected void setLineDashPattern(float[] pattern) {
+		this.linedashpattern = pattern;
 	}
 
 	public void setLineColor(int linecolor) {
@@ -93,5 +98,17 @@ public abstract class DrawingBackend {
 
 	public abstract void fillRectangle(float w, float h);
 
+	public abstract void drawTriangle(float x0, float y0, float x1, float y1, float x2, float y2);
+
+	public abstract void fillTriangle(float x0, float y0, float x1, float y1, float x2, float y2);
+
+	public abstract void drawOval(float w, float h);
+
+	public abstract void fillOval(float w, float h);
+
 	public abstract void drawText(String text);
+
+	public abstract void clip(float x, float y, float w, float h);
+
+	public abstract void resetClip();
 }

@@ -77,6 +77,42 @@ public class PdfBackend extends DrawingBackend {
 	}
 
 	@Override
+	public void drawTriangle(float x0, float y0, float x1, float y1, float x2, float y2) {
+		g.moveTo(getX(x0), getY(y0));
+		g.lineTo(getX(x1), getY(y1));
+		g.lineTo(getX(x2), getY(y2));
+		g.lineTo(getX(x0), getY(y0));
+		g.closePath();
+		g.stroke();
+	}
+
+	@Override
+	public void fillTriangle(float x0, float y0, float x1, float y1, float x2, float y2) {
+		g.moveTo(getX(x0), getY(y0));
+		g.lineTo(getX(x1), getY(y1));
+		g.lineTo(getX(x2), getY(y2));
+		g.lineTo(getX(x0), getY(y0));
+		g.closePath();
+		g.fill();
+	}
+
+	@Override
+	public void drawOval(float w, float h) {
+		w *= factorX;
+		h *= factorY;
+		g.ellipse(x, y - h, x + w, y);
+		g.stroke();
+	}
+
+	@Override
+	public void fillOval(float w, float h) {
+		w *= factorX;
+		h *= factorY;
+		g.ellipse(x, y - h, x + w, y);
+		g.fill();
+	}
+
+	@Override
 	public void drawText(String text) {
 		g.beginText();
 
@@ -100,6 +136,15 @@ public class PdfBackend extends DrawingBackend {
 		linewidth *= factorX;
 		super.setLineWidth(linewidth);
 		g.setLineWidth(linewidth);
+	}
+
+	@Override
+	public void setLineDashPattern(float[] pattern) {
+		float[] pt = new float[pattern.length];
+		for(int i = 0; i < pattern.length; i++)
+			pt[i] = factorX * pattern[i];
+		super.setLineDashPattern(pt);
+		g.setLineDash(pt, 0);
 	}
 
 	@Override
@@ -132,6 +177,28 @@ public class PdfBackend extends DrawingBackend {
 			}
 		}
 		g.setFontAndSize(baseFont, fontSize);
+	}
+
+	@Override
+	public void clip(float x, float y, float w, float h) {
+		g.saveState();
+		x = getX(x);
+		y = getY(y);
+		w *= factorX;
+		h *= factorY;
+		g.moveTo(x, y - h);
+		g.lineTo(x, y);
+		g.lineTo(x + w, y);
+		g.lineTo(x + w, y - h);
+		g.closePath();
+		// g.rectangle(x, y-h, w, h);
+		g.clip();
+		g.newPath();
+	}
+
+	@Override
+	public void resetClip() {
+		g.restoreState();
 	}
 }
 
