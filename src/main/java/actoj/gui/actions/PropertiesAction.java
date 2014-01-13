@@ -28,7 +28,7 @@ public class PropertiesAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Edit properties");
 		putValue(NAME, "Properties");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/properties.png")));
+			ActogramJ_.class.getResource("icons/Settings.png")));
 	}
 
 	@Override

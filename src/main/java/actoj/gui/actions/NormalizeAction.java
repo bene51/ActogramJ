@@ -28,7 +28,7 @@ public class NormalizeAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Normalize");
 		putValue(NAME, "Normalize");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/normalize.png")));
+			ActogramJ_.class.getResource("icons/Normalize.png")));
 	}
 
 	@Override

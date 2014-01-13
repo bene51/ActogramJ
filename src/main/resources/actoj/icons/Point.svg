@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<rect x="0" width="24" height="24"/>
+<rect x="1" y="1" fill="#FFFFFF" width="22" height="22"/>
+<g>
+	<polygon fill="#AFAFAF" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" points="5.303,3 16.131,3 16.131,7.547 
+		19.303,7.547 19.303,21 5.303,21 	"/>
+	<line fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" x1="16.131" y1="3" x2="19.303" y2="7.547"/>
+	<line fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" x1="7.108" y1="6.473" x2="13.891" y2="6.473"/>
+	<line fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" x1="7.108" y1="9.841" x2="16.564" y2="9.841"/>
+	<line fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" x1="7.108" y1="13.211" x2="16.564" y2="13.211"/>
+	<line fill="none" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" x1="7.108" y1="16.58" x2="16.564" y2="16.58"/>
+</g>
+<g>
+	
+		<sodipodi:namedview  id="base" showguides="true" showgrid="true" inkscape:zoom="0.62906099" inkscape:window-y="29" inkscape:window-x="22" inkscape:window-width="992" inkscape:window-height="841" pagecolor="#ffffff" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:guide-points="true" inkscape:guide-bbox="true" inkscape:grid-points="true" inkscape:grid-bbox="true" inkscape:document-units="px" inkscape:current-layer="layer1" inkscape:cx="372.04724" gridspacingy="10.000000mm" gridspacingx="10.000000mm" bordercolor="#666666" gridtolerance="5.0000000mm" inkscape:cy="549.90119" borderopacity="1.0" gridoriginx="0.00000000mm" gridoriginy="0.00000000mm">
+		</sodipodi:namedview>
+	<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+		<g id="g1317">
+			
+				<linearGradient id="path6080_1_" gradientUnits="userSpaceOnUse" x1="424.873" y1="-273.124" x2="457.8692" y2="-280.5366" gradientTransform="matrix(0.7559 0 0 -1.3229 -321.5 -353.25)">
+				<stop  offset="0" style="stop-color:#000000"/>
+				<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+			</linearGradient>
+			<path id="path6080" fill="url(#path6080_1_)" d="M8.607,6.197v10.474h0.616v-0.615h0.616V15.44h0.615v-0.617h0.617h0.615v1.232
+				h0.616v1.232h0.617v1.232h0.615v0.617h1.232v-0.617h0.617v-1.232h-0.617v-1.232h-0.615v-1.232h-0.617v-1.232H16v-0.617h-0.615
+				v-0.615h-0.617v-0.617h-0.615v-0.615h-0.617V10.51H12.92V9.894h-0.617V9.277h-0.616V8.661h-0.615V8.045h-0.617V7.429H9.839V6.812
+				H9.223V6.197H8.607z"/>
+			<path id="rect3779" fill="#FFFFFF" d="M8.617,7.428v8.013h0.616v-0.617h0.616v-0.617h0.616v-0.615h0.616v1.232h0.616v1.232h0.616
+				v1.232h0.616v1.232h0.617h0.615v-1.232h-0.615v-1.232H12.93v-1.232h-0.616v-1.85h0.616h0.617h0.615v-0.616h-0.615v-0.616H12.93
+				v-0.615h-0.616V10.51h-0.616V9.894h-0.616V9.277h-0.616V8.661H9.849V8.045H9.233V7.428H8.617z"/>
+			<path id="rect1430" d="M8,6.196v10.475h0.616v-0.615h0.616V15.44H8.617V7.428h0.616V6.812H8.617V6.196H8z M9.233,7.428v0.617
+				h0.616V7.428H9.233z M9.849,8.045v0.616h0.616V8.045H9.849z M10.465,8.661v0.616h0.616V8.661H10.465z M11.082,9.277v0.616h0.616
+				V9.277H11.082z M11.698,9.894v0.616h0.616V9.894H11.698z M12.314,10.51v0.616h0.616V10.51H12.314z M12.93,11.126v0.615h0.617
+				v-0.615H12.93z M13.547,11.741v0.616h0.615v-0.616H13.547z M14.162,12.357v0.616h-1.848v0.617v1.232h0.616v-1.232h2.464v-0.617
+				h-0.615v-0.616H14.162z M12.93,14.823v1.232h0.617v-1.232H12.93z M13.547,16.056v1.232h0.615v-1.232H13.547z M14.162,17.288
+				v1.232h0.617v-1.232H14.162z M14.162,18.521H12.93v0.615h1.232V18.521z M12.93,18.521v-1.232h-0.616v1.232H12.93z M12.314,17.288
+				v-1.232h-0.616v1.232H12.314z M11.698,16.056v-1.232h-0.616v1.232H11.698z M11.082,14.823v-1.232h-0.616v0.615H9.849v0.617h0.616
+				H11.082z M9.849,14.823H9.233v0.617h0.616V14.823z"/>
+		</g>
+	</g>
+</g>
+</svg>

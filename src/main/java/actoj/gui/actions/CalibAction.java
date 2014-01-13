@@ -28,7 +28,7 @@ public class CalibAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Eye fit tool");
 		putValue(NAME, "Eye fit tool");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/calib.png")));
+			ActogramJ_.class.getResource("icons/FreerunningPeriod.png")));
 	}
 
 	@Override

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<rect x="0" width="24" height="24"/>
+<rect x="1" y="1" fill="#FFFFFF" width="22" height="22"/>
+<g>
+	<sodipodi:namedview  id="base">
+		<sodipodi:guide  id="sodipodi:guide619" orientation="horizontal" position="31.697161"></sodipodi:guide>
+	</sodipodi:namedview>
+	
+		<linearGradient id="path10_1_" gradientUnits="userSpaceOnUse" x1="3.1406" y1="21.7764" x2="3.239" y2="21.6811" gradientTransform="matrix(119.6954 0 0 -121.4613 -367.875 2651.125)">
+		<stop  offset="0" style="stop-color:#FCFCFC"/>
+		<stop  offset="1" style="stop-color:#AFB2B5"/>
+	</linearGradient>
+	
+		<path id="path10" sodipodi:nodetypes="cccccccccc" fill="url(#path10_1_)" fill-opacity="0.702" stroke="#1C6671" stroke-width="0.9252" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.99" d="
+		M6.706,5.863c0.066-0.17,0.295-0.341,0.492-0.315l5.932,1.139c0.459-0.358,1.132-0.794,1.825-0.686l1.008,0.125l1.273,0.222
+		c0.744,0.199,1.331,0.612,1.393,1.435l-0.008,9.908L6.66,14.303L6.706,5.863z"/>
+	<g id="g822" transform="matrix(1,0,0.170856,0.992675,-24.2946,0.673683)">
+		
+			<radialGradient id="path279_1_" cx="27.2859" cy="-0.9148" r="0.0772" gradientTransform="matrix(116.0662 29.2793 21.1314 -4.802 -3116.593 -788.2819)" gradientUnits="userSpaceOnUse">
+			<stop  offset="0" style="stop-color:#FCFCFC"/>
+			<stop  offset="1" style="stop-color:#AFB2B5"/>
+		</radialGradient>
+		
+			<path id="path279" sodipodi:nodetypes="ccccc" fill="url(#path279_1_)" stroke="#1C6671" stroke-width="1.0921" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.9922" d="
+			M28.282,14.089l11.731,3.061l-0.565,0.722l-11.808-3.05L28.282,14.089z"/>
+		
+			<path id="path208" sodipodi:nodetypes="ccccccccccc" fill="#FFFFFF" fill-opacity="0.6993" stroke="#1C6671" stroke-width="0.9252" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.9922" d="
+			M26.47,7.477c-0.096-0.384,0.125-0.751,0.504-0.711l5.518,1.087l0.162,1.107l2.401,0.517l-0.164-1.165l2.5,0.394
+			c0.322,0.099,0.551,0.304,0.712,0.772l1.355,8.434l-11.841-3.065L26.47,7.477z"/>
+		
+			<linearGradient id="path209_1_" gradientUnits="userSpaceOnUse" x1="18.5409" y1="34.0041" x2="18.5926" y2="33.8651" gradientTransform="matrix(-194.9733 -62.3748 -34.7757 17.9745 4837.4233 559.8616)">
+			<stop  offset="0" style="stop-color:#0C5C7D;stop-opacity:0.7804"/>
+			<stop  offset="1" style="stop-color:#CDFFFF;stop-opacity:0.6902"/>
+		</linearGradient>
+		<path id="path209" sodipodi:nodetypes="ccccccccccc" fill="url(#path209_1_)" fill-opacity="0.6993" d="M26.963,6.927l5.313,0.963
+			l0.239,1.143l2.603,0.527l-0.122-1.15l2.276,0.304c0.313,0.148,0.552,0.296,0.644,0.658l0.466,2.604L26.884,9.329l-0.322-1.915
+			C26.517,7.234,26.743,6.992,26.963,6.927z"/>
+		
+			<linearGradient id="path230_1_" gradientUnits="userSpaceOnUse" x1="23.5437" y1="18.7468" x2="23.6294" y2="18.6539" gradientTransform="matrix(110.1685 0 9.5461 -57.3999 -2744.165 1088.3164)">
+			<stop  offset="0" style="stop-color:#F5F5F5"/>
+			<stop  offset="1" style="stop-color:#949494"/>
+		</linearGradient>
+		<path id="path230" sodipodi:nodetypes="ccccc" fill="url(#path230_1_)" fill-opacity="0.6993" d="M27.378,11.971l11.48,2.864
+			l0.467,2.919L27.947,14.83L27.378,11.971z"/>
+		
+			<radialGradient id="path9_1_" cx="29.2263" cy="-11.1887" r="0.0772" gradientTransform="matrix(109.1759 27.5412 19.6422 -2.7471 -2940.6616 -822.7184)" gradientUnits="userSpaceOnUse">
+			<stop  offset="0" style="stop-color:#CDFFFF;stop-opacity:0.8745"/>
+			<stop  offset="1" style="stop-color:#0C5C7D;stop-opacity:0.8667"/>
+		</radialGradient>
+		
+			<path id="path9" sodipodi:nodetypes="ccccc" fill="url(#path9_1_)" stroke="#0C5D7D" stroke-width="0.4036" stroke-opacity="0.99" d="
+			M27.341,12.005l11.515,2.882l-0.059,0.678L27.25,12.694L27.341,12.005z"/>
+		
+			<linearGradient id="path281_1_" gradientUnits="userSpaceOnUse" x1="35.485" y1="19.2505" x2="35.6131" y2="19.2505" gradientTransform="matrix(3.8083 0 -11.2007 -65.3667 119.4696 1272.4227)">
+			<stop  offset="0" style="stop-color:#F5F5F5"/>
+			<stop  offset="1" style="stop-color:#949494"/>
+		</linearGradient>
+		<path id="path281" sodipodi:nodetypes="ccccc" fill="url(#path281_1_)" fill-opacity="0.6993" d="M38.454,10.948l0.319-0.087
+			l1.098,6.296l-0.285,0.289L38.454,10.948z"/>
+		
+			<linearGradient id="path313_1_" gradientUnits="userSpaceOnUse" x1="18.6634" y1="33.6362" x2="18.7136" y2="33.5011" gradientTransform="matrix(-201.8665 -64.9353 -35.9785 18.7202 5012.2935 595.545)">
+			<stop  offset="0" style="stop-color:#0C5C7D;stop-opacity:0.7804"/>
+			<stop  offset="1" style="stop-color:#CDFFFF;stop-opacity:0.6902"/>
+		</linearGradient>
+		<path id="path313" sodipodi:nodetypes="ccccc" fill="url(#path313_1_)" fill-opacity="0.8667" d="M38.836,14.861l-11.54-2.783
+			l-0.434-2.762l11.508,2.653L38.836,14.861z"/>
+	</g>
+</g>
+</svg>

@@ -32,7 +32,7 @@ public class ExportPDF extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Export PDF");
 		putValue(NAME, "Export PDF");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/exportpdf.png")));
+			ActogramJ_.class.getResource("icons/ExportPDF.png")));
 	}
 
 	@Override

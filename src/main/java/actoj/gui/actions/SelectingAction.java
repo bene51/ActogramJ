@@ -28,7 +28,7 @@ public class SelectingAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Selecting");
 		putValue(NAME, "Selection tool");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/selecting.png")));
+			ActogramJ_.class.getResource("icons/Select.png")));
 	}
 
 	@Override

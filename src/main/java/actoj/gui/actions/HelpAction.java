@@ -20,7 +20,7 @@ public class HelpAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Help");
 		putValue(NAME, "Help");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/help.png")));
+			ActogramJ_.class.getResource("icons/Help.png")));
 	}
 
 	@Override

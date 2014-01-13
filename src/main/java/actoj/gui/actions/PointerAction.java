@@ -28,7 +28,7 @@ public class PointerAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Pointer");
 		putValue(NAME, "Pointer tool");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/pointer.png")));
+			ActogramJ_.class.getResource("icons/Point.png")));
 	}
 
 	@Override

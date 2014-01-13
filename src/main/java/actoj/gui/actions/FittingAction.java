@@ -27,7 +27,7 @@ public class FittingAction extends AbstractAction {
 		putValue(LONG_DESCRIPTION, "Periodogram");
 		putValue(NAME, "Periodogram");
 		putValue(SMALL_ICON, new ImageIcon(
-			ActogramJ_.class.getResource("icons/fitting.png")));
+			ActogramJ_.class.getResource("icons/Periodogram.png")));
 	}
 
 	@Override
