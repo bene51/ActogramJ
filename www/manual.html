@@ -45,7 +45,7 @@ If you are using Fiji, all you need to do is to download <a href="versions/curre
 <li><b>On ImageJ:</b> (<a href="http://rsbweb.nih.gov/ij/">link</a>)<br>
 If you are using ImageJ, you need to download <a href="versions/current/ActogramJ_.jar">ActogramJ_.jar</a> and copy into ImageJ's plugins folder. Additionally you need <a href="itextpdf-5.1.1.jar">itextpdf-5.1.1.jar</a>, which also goes to the plugins folder. (Versions before v0.7 require <a href="itext-1.3.jar">itext-1.3.jar</a>.)
 </ul>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -67,7 +67,7 @@ Specify here the interval between measurements. In the example, this would be 1,
 </ul>
 <p>Here is an example: Imagine activity data is collected every minute to investigate the circadian rhythm of an animal. The interval duration is thus one minute, and since the period (1 day) contains 24 * 60 * 60 (= 1440) minutes, "Samples per period" is 1440.<br>
 Another example: Data is not collected each minute, but all 10 minutes. Here, the interval duration is 10 minutes, which means that in 1 day (= the period) 1440 / 10 = 144 samples are measured. </p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -79,7 +79,7 @@ Another example: Data is not collected each minute, but all 10 minutes. Here, th
 
 <p>The left hand side consists of a simple browser, which shows a folder for each file you loaded. The contents of each folder are the individual actograms of the corresponding file, numbered consecutively. In this browser, you can select one or more actograms, which will then be displayed in the canvas on the right hand side. To remove a folder (unload a file), you can right-click on it and choose "Remove actograms".</p>
 <p>At the bottom of the window there's a status bar. Amongst other information, it displays the current mouse pointer position while you move the mouse over an actogram.</p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr;  top</a></p>
 
 
 
@@ -114,7 +114,7 @@ This defines the ratio between width and height of the displayed actograms. <br>
 <li><b>Unit of freerunning period:</b><br>
 When you infer the freerunning period manually (see later), its value is shown in the status bar. Here you can choose the units in which the value is displayed.<br><br>
 </ul>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -128,14 +128,14 @@ the intervals where this influence is either on or off:</p>
 <p align=center><img src="EnvironmentalBarDialog.png"/></p>
 <p>By clicking on 'Add a new interval', you can specify various intervals in which the external variable is on or off. Additionally, you can change the color for the 'on' and 'off' state. The figure above shows e.g. an external influence 'light' with an 'on' interval from 360 to 1080 (from an entire period length of 1440 minutes, conforming to the example introduced earlier). The color for the 'on' state was changed to yellow. The result is illustrated in the following figure:</p>
 <p align=center><img src="ActogramWithEnvironmentalBar.png"/></p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
 
 <h3><a name=export>6. Exporting actograms to pdf</a></h3>
 <p>It is possible to export one or more actograms to pdf. To do so, click on the menu item "File"&rarr"Export PDF" or on the corresponding icon in the tool bar. This will render all actograms which are shown on the right canvas into a single pdf file. All bars, like the calibration bar and optionally environmental bars, will be exported, too. In particular, the currently used zoom level will be used to render the actograms into pdf. To create a file with higher resolution, you may want to adjust the zoom level before.</p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -158,7 +158,7 @@ Two methods are available, to create either a Gaussian kernel with a specified s
 </ul>
 <p>The resulting actograms of such calculations are stored in a seperate folder "Calculated" in the browser. The figure below shows the result of applying the "Average" operator with an automatically generated Gaussian kernel with standard deviation (sigma) of 100.</p>
 <p align=center><img src="SmoothedActogram.png"/></p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -169,7 +169,7 @@ Two methods are available, to create either a Gaussian kernel with a specified s
 <p>ActogramJ can currently be in three modes. These modes are "pointing" (the default), "selecting" or "freerunning period". Enter now the "freerunning period" mode by selecting "Edit"&rarr"Period tool" from the menu or click on the corresponding icon in the tool bar. You can now draw a triangle by dragging the mouse over the corresponding area in an actogram:</p>
 <p align=center><img src="FreerunningPeriodManually.png"/></p>
 <p>Vertically, the number of cycles is indicated. Horizontally, the time delay is indicated. The freerunning period can be seen in the status bar (27.17h) in the figure above).</p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -223,7 +223,7 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 </blockquote>
 </ul>
 </p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -234,7 +234,7 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 <img src="AverageActivityDialog.png" /><br>
 <p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
 <img src="AverageActivityDiagram.png" /><br>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -242,14 +242,14 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 <h3><a name="normalization">11. Normalizing actograms</a></h3>
 <p>Sometimes one wishes to compare several actograms, where one may show an overall high activity level while the other one has an overall low activity. To facilitate comparison, one would like to normalize the overall activity.</p>
 <p>This can be done by clicking on "Analyze"&rarr"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 <h3><a name="api">12. Developer documentation</a></h3>
 Users can download the full source code and extend it as needed. Beginning
 with version 0.6, the complete source code is contained in the JAR archives.
 API documentation can be found <a href="api/index.html" target="_BLANK">here</a>.
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 
@@ -272,7 +272,7 @@ API documentation can be found <a href="api/index.html" target="_BLANK">here</a>
 <tr><td>[9]<td>Schimmel M: <b>Emphasizing difficulties in the detection of rhythms with Lomb-Scargle periodograms.</b> Biol Rhythm Res (2001) <b>32</b>:341-345.
 </table>
 
-<p align=right><a href=#top>&uarr top</a></p>
+<p align=right><a href=#top>&uarr; top</a></p>
 
 
 </body>
