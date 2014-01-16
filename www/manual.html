@@ -53,7 +53,7 @@ If you are using ImageJ, you need to download <a href="versions/current/Actogram
 
 <h3><a name="opening">2. Opening an actogram file</a></h3>
 <p>ActogramJ supports actogram files in ASCII format, which store the activity data in columns. A file usually contains at least as many columns as there are independant measurements, i.e. if the activity of 10 flies is measured over time, there would be at least 10 columns, one for each fly. The number of rows in the file corresponds to the number of measurements taken for each fly. If a file contains additional information at the top or bottom (which does not belong to the tabular structure described above), it is still possible to open these files.</p> 
-<p>To open an actogram file, choose "File"&rarr"Open" from the menu bar or click on the "Open" icon in the tool bar. A dialog comes up which lets you choose one or multiple files. Upon your selection, the first selected file will then show up in a preview window, and you can enter some parameters regarding the files to be opened:</p>
+<p>To open an actogram file, choose "File"&rarr;"Open" from the menu bar or click on the "Open" icon in the tool bar. A dialog comes up which lets you choose one or multiple files. Upon your selection, the first selected file will then show up in a preview window, and you can enter some parameters regarding the files to be opened:</p>
 <p align=center><img src="OpenDialog.png"/></p>
 <ul>
 <li><b>Columns:</b> <br>
@@ -134,7 +134,7 @@ the intervals where this influence is either on or off:</p>
 
 
 <h3><a name=export>6. Exporting actograms to pdf</a></h3>
-<p>It is possible to export one or more actograms to pdf. To do so, click on the menu item "File"&rarr"Export PDF" or on the corresponding icon in the tool bar. This will render all actograms which are shown on the right canvas into a single pdf file. All bars, like the calibration bar and optionally environmental bars, will be exported, too. In particular, the currently used zoom level will be used to render the actograms into pdf. To create a file with higher resolution, you may want to adjust the zoom level before.</p>
+<p>It is possible to export one or more actograms to pdf. To do so, click on the menu item "File"&rarr;"Export PDF" or on the corresponding icon in the tool bar. This will render all actograms which are shown on the right canvas into a single pdf file. All bars, like the calibration bar and optionally environmental bars, will be exported, too. In particular, the currently used zoom level will be used to render the actograms into pdf. To create a file with higher resolution, you may want to adjust the zoom level before.</p>
 <p align=right><a href=#top>&uarr; top</a></p>
 
 
@@ -143,7 +143,7 @@ the intervals where this influence is either on or off:</p>
 
 <h3><a name=calculations>7. Calculations on actograms</a></h3>
 <p>Simple transformations and calculations can be applied to actograms. These transformations will always be applied to all actograms shown in the actogram canvas.</p>
-<p>To envoke calculations, click on "Analyze"&rarr"Calculate" or on the corresponding icon in the tool bar. The following dialog will appear:</p>
+<p>To envoke calculations, click on "Analyze"&rarr;"Calculate" or on the corresponding icon in the tool bar. The following dialog will appear:</p>
 <p align=center><img src="CalculateDialog.png"/></p>
 <p>The following operations are currently available:</p>
 <ul>
@@ -166,7 +166,7 @@ Two methods are available, to create either a Gaussian kernel with a specified s
 
 <h3><a name=fp>8. Determining the freerunning period manually</a></h3>
 <p>The freerunning period can either be determined automatically or manually. This section describes how to do so manually.</p>
-<p>ActogramJ can currently be in three modes. These modes are "pointing" (the default), "selecting" or "freerunning period". Enter now the "freerunning period" mode by selecting "Edit"&rarr"Period tool" from the menu or click on the corresponding icon in the tool bar. You can now draw a triangle by dragging the mouse over the corresponding area in an actogram:</p>
+<p>ActogramJ can currently be in three modes. These modes are "pointing" (the default), "selecting" or "freerunning period". Enter now the "freerunning period" mode by selecting "Edit"&rarr;"Period tool" from the menu or click on the corresponding icon in the tool bar. You can now draw a triangle by dragging the mouse over the corresponding area in an actogram:</p>
 <p align=center><img src="FreerunningPeriodManually.png"/></p>
 <p>Vertically, the number of cycles is indicated. Horizontally, the time delay is indicated. The freerunning period can be seen in the status bar (27.17h) in the figure above).</p>
 <p align=right><a href=#top>&uarr; top</a></p>
@@ -176,8 +176,8 @@ Two methods are available, to create either a Gaussian kernel with a specified s
 
 
 <h3><a name="periodogram">9. Determining the freerunning period automatically</a></h3>
-The freerunning period can also be determined automatically. For this, you need to enter "selecting mode" ("Edit"&rarr"Selection tool") and select a region over which the freerunning period is to be determined.</p>
-<p>After selecting a region, choose "Analyze"&rarr"Periodogram" from the menu or click on the corresponding icon in the tool bar. A dialog opens, which asks for a few parameters:</p>
+The freerunning period can also be determined automatically. For this, you need to enter "selecting mode" ("Edit"&rarr;"Selection tool") and select a region over which the freerunning period is to be determined.</p>
+<p>After selecting a region, choose "Analyze"&rarr;"Periodogram" from the menu or click on the corresponding icon in the tool bar. A dialog opens, which asks for a few parameters:</p>
 <p>Please make sure to also read our brief <a href="review.html" target="_BLANK">Review</a> of the four implemented periodogram methods, as well as the <a href="cautions.html" target="_BLANK">cautions</a> applying particularly to the Chi-Square method.</p>
 
 <p align=center><img src="PeriodogramDialog.png"/></p>
@@ -232,7 +232,7 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 <p>A natural way for visualizing the activity over the length of one period is to create an average activity pattern. This is done by subdividing the entire actogram into equal intervals, then sum them up and devide the result by the number of cycles. The result is an average activity diagram for a single animal.</p>
 
 <img src="AverageActivityDialog.png" /><br>
-<p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
+<p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr;"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
 <img src="AverageActivityDiagram.png" /><br>
 <p align=right><a href=#top>&uarr; top</a></p>
 
@@ -241,7 +241,7 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 
 <h3><a name="normalization">11. Normalizing actograms</a></h3>
 <p>Sometimes one wishes to compare several actograms, where one may show an overall high activity level while the other one has an overall low activity. To facilitate comparison, one would like to normalize the overall activity.</p>
-<p>This can be done by clicking on "Analyze"&rarr"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
+<p>This can be done by clicking on "Analyze"&rarr;"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
 <p align=right><a href=#top>&uarr; top</a></p>
 
 
