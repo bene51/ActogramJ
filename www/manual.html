@@ -30,10 +30,12 @@
 <li><a href="#calculations">7. Calculations on actograms</a></h3>
 <li><a href="#fp">8. Determining the freerunning period manually</a></h3>
 <li><a href="#periodogram">9. Determining the freerunning period automatically</a>
-<li><a href="#averageactivity">10. Displaying an average activity pattern</a>
-<li><a href="#normalization">11. Normalizing actograms</a>
-<li><a href="#api">12. Developer documentation</a>
-<li><a href="#references">13. References</a>
+<li><a href="#acrophase">10. Calculating acrophases and activity on-/offsets</a>
+<li><a href="#markers">11. Editing markers</a>
+<li><a href="#averageactivity">12. Displaying an average activity pattern</a>
+<li><a href="#normalization">13. Normalizing actograms</a>
+<li><a href="#api">14. Developer documentation</a>
+<li><a href="#references">15. References</a>
 </ul>
 
 
@@ -228,24 +230,80 @@ where M is the mean of all N values, &sigma;<sup>2</sup> is the variance of all 
 
 
 
-<h3><a name="averageactivity">10. Displaying an average activity pattern</a></h3>
-<p>A natural way for visualizing the activity over the length of one period is to create an average activity pattern. This is done by subdividing the entire actogram into equal intervals, then sum them up and devide the result by the number of cycles. The result is an average activity diagram for a single animal.</p>
+<h3><a name="acrophase">10. Calculating acrophases and activity on-/offsets</a></h3>
+<p>Acrophase, activity on- and offset are preferred measures for tracking a
+characteristic moment of the circadian cycle along successive periods. To calculate the acrophase in ActogramJ, first select the time interval for which it should be calculated. Choose then "Analyze"&rarr;"Acrophase" from the ActogramJ menu. For each selected period, the acrophase is indicated in a small blue triangle. Additionally, a regression line is calculated and shown:</p>
+<p align="center"><img src="acrophase.png" /></p>
+<p>The acrophase is calculated as the radial center of mass:</p>
+<img src="AcrophaseFormula.png" /><br>
+<p>as described in [6].</p>
+<br><br>
+<p>Similarly, activity on- and offsets can be calculated. Again, select an area of interest choose this time "Analyze"&rarr;"Activity on- and offset" from the menu. Unlike the acrophase marker, the calculation of activity on- and offsets requires usually some smoothing of the original data. A dialog asks for the corresponding parameters:</p>
+<p align="center"><img src="onoffsetparams.png" /></p>
+<ul>
+<li><b>Smoothing gaussian std dev:</b><br>
+The standard deviation of a smoothing Gaussian distribution.<br><br>
+<li><b>Threshold:</b><br>
+A threshold for activities to be considered 'active': You can choose between
+<ul>
+<li><b>Median (including zero activity)</b> The median of all activity values is used as threshold.
+<li><b>Median (without zero activity)</b> The median of all non-negative activity values is used as threshold.
+<li><b>Mean</b> The mean of all activity values is used as threshold.
+<li><b>Zero</b> Zero is used as a threshold.
+<li><b>Manual</b> The threshold value can be chosen manually.
+</ul>
+</ul>
+<!--p>Details about how the On-/Offset marker is calculated can be found here TODO.</p-->
+<p>Activity on- and offsets are shown in red:</p>
+<p align="center"><img src="onoffsets.png" /></p>
 
-<img src="AverageActivityDialog.png" /><br>
-<p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr;"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
-<img src="AverageActivityDiagram.png" /><br>
 <p align=right><a href=#top>&uarr; top</a></p>
 
 
 
 
-<h3><a name="normalization">11. Normalizing actograms</a></h3>
+<h3><a name="markers">11. Editing markers</a></h3>
+<p>To change the way markers (like the acrophase and activity on-/offset markers) are displayed you can click on the corresponding actogram in the left panel:
+<p align="center"><img src="markercontextmenu.png" /></p>
+<p>To remove a marker, just click on "Remove marker" and select the marker to remove from the displayed list.</p>
+<p>To edit a marker, click on "Edit marker":</p>
+<p align="center"><img src="EditMarkerDialog.png" /></p>
+<p>These are the individual items in the dialog:<p>
+<ul>
+<li>A list of markers at the top. Choose the one you want to edit.<br><br>
+<li>The color in which the marker is displayed.<br><br>
+<li>The thickness of the regression line.<br><br>
+<li>A list of all marker positions. By right-clicking on a particular one you can delete it (in case you want to correct the regression line for outliers).<br><br>
+<li>Uncheck 'Show regression' if you don't want to show the regression line.<br><br>
+<li>Specify the column in which markers and regression line are displayed.<br><br>
+</ul>
+<p>Any changes to the dialog will directly update the markers in the actogram. You can revert all changes by clicking on "Cancel"</p>
+
+<p align=right><a href=#top>&uarr; top</a></p>
+
+
+
+
+<h3><a name="averageactivity">12. Displaying an average activity pattern</a></h3>
+<p>A natural way for visualizing the activity over the length of one period is to create an average activity pattern. This is done by subdividing the entire actogram into equal intervals, then sum them up and devide the result by the number of cycles. The result is an average activity diagram for a single animal.</p>
+
+<p align="center"><img src="AverageActivityDialog.png" /></p>
+<p>To create an average activity pattern in ActogramJ, first select a region of interest in an actogram, using the selection tool. One may then wish to determine the period length, either manually or automatically, as described in the sections above. After doing so, click on "Analyze"&rarr;"Periodogram". A dialog opens which asks for the <b>period length</b> and the <b>standard deviation</b> of a smoothing Gaussian kernel. For the period length, enter the number you determined before. The standard deviation defines the degree of optional prior smoothing before creating the average activity pattern:</p>
+<p align="center"><img src="AverageActivityDiagram.png" /></p>
+<p align=right><a href=#top>&uarr; top</a></p>
+
+
+
+
+<h3><a name="normalization">13. Normalizing actograms</a></h3>
 <p>Sometimes one wishes to compare several actograms, where one may show an overall high activity level while the other one has an overall low activity. To facilitate comparison, one would like to normalize the overall activity.</p>
 <p>This can be done by clicking on "Analyze"&rarr;"Normalize". Like the calculation functions, this works on all displayed actograms. A dialog opens which asks you for the on which should serve as a reference actogram. From this actogram, the overall activity is calculated. All other actograms are then scaled such that their overall activity matches the one of the reference actogram.</p>
 <p align=right><a href=#top>&uarr; top</a></p>
 
 
-<h3><a name="api">12. Developer documentation</a></h3>
+
+
+<h3><a name="api">14. Developer documentation</a></h3>
 Users can download the full source code and extend it as needed. Beginning
 with version 0.6, the complete source code is contained in the JAR archives.
 API documentation can be found <a href="api/index.html" target="_BLANK">here</a>.
@@ -254,7 +312,7 @@ API documentation can be found <a href="api/index.html" target="_BLANK">here</a>
 
 
 
-<h3><a name="references">13. References</a></h3>
+<h3><a name="references">15. References</a></h3>
 <table border=0>
 <tr><td>[1]<td>Van Dongen HP, Olofsen E, VanHartevelt JH, Kruyt EW: <b>A procedure of multiple period searching in unequally spaced time-series with the Lomb-Scargle method.</b> Biol Rhythm Res 1999, <b>30</b>(2):149-77.
 </tr>
@@ -266,10 +324,12 @@ API documentation can be found <a href="api/index.html" target="_BLANK">here</a>
 </tr>
 <tr><td>[5]<td>Canal-Corretger MM, Vilaplana J, Cambras T, D&iacute;ez-Noguera A: <b>Functioning of the rat circadian system is modified by light applied in critical postnatal days.</b> Am J Physiol Regul Integr Comp Physiol 2001, <b>280</b>(4):R1023-30.
 </tr>
-<tr><td>[6]<td>Glynn EF, Chen J and Mushegian AR: <b>Detecting periodic patterns in unevenly spaced gene expression time series using Lomb-Scargle periodograms.</b> Bioinformatics (2006) <b>22</b>:310-316.
-<tr><td>[7]<td>Lomb N: <b>Least-squares frequency analysis of unequally spaced data.</b> Astrophys Space Sci (1976) <b>39</b>:447-462.
-<tr><td>[8]<td>Plautz JD, Straume M, Stanewsky R, Jamison CF, Brandes C, Dowse HB, Hall JC and Kay SA: <b>Quantitative analysis of Drosophila period gene transcription in living animals.</b> J Biol Rhythms (1997) <b>12</b>:204-217.
-<tr><td>[9]<td>Schimmel M: <b>Emphasizing difficulties in the detection of rhythms with Lomb-Scargle periodograms.</b> Biol Rhythm Res (2001) <b>32</b>:341-345.
+<tr><td>[6]<td>D&iacute;ez-Noguera A: <b>Methods for serial analysis of long time series in the study of biological rhythms.</b> J Circ Rhythms 2013, <b>11</b>:7.
+<td>
+<tr><td>[7]<td>Glynn EF, Chen J and Mushegian AR: <b>Detecting periodic patterns in unevenly spaced gene expression time series using Lomb-Scargle periodograms.</b> Bioinformatics (2006) <b>22</b>:310-316.
+<tr><td>[8]<td>Lomb N: <b>Least-squares frequency analysis of unequally spaced data.</b> Astrophys Space Sci (1976) <b>39</b>:447-462.
+<tr><td>[9]<td>Plautz JD, Straume M, Stanewsky R, Jamison CF, Brandes C, Dowse HB, Hall JC and Kay SA: <b>Quantitative analysis of Drosophila period gene transcription in living animals.</b> J Biol Rhythms (1997) <b>12</b>:204-217.
+<tr><td>[10]<td>Schimmel M: <b>Emphasizing difficulties in the detection of rhythms with Lomb-Scargle periodograms.</b> Biol Rhythm Res (2001) <b>32</b>:341-345.
 </table>
 
 <p align=right><a href=#top>&uarr; top</a></p>
