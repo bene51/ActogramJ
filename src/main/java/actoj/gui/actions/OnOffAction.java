@@ -23,9 +23,9 @@ public class OnOffAction extends AbstractAction {
 
 	public OnOffAction(ImageCanvas canvas) {
 		this.canvas = canvas;
-		putValue(SHORT_DESCRIPTION, "Activity on and offset");
-		putValue(LONG_DESCRIPTION, "Activity on and offset");
-		putValue(NAME, "Activity on and offset");
+		putValue(SHORT_DESCRIPTION, "Activity on- and offset");
+		putValue(LONG_DESCRIPTION, "Activity on- and offset");
+		putValue(NAME, "Activity on- and offset");
 		putValue(SMALL_ICON, new ImageIcon(
 			ActogramJ_.class.getResource("icons/OnOffset.png"))); // TODO create and fill in icon
 	}
