@@ -17,8 +17,26 @@
 <div id=header></div>
 <h5>&copy Benjamin Schmid and Taishi Yoshii</h5>
 
+<h3>Source code</h3>
+<p>is hosted on <a target="blank" href="https://github.com/bene51/ActogramJ">github</a>.</p>
+
 <h3>Versions and Changes</h3>
 <ul>
+  <li><b>Version v0.9</b> (<a href="versions/v0.8/ActogramJ_.jar">download</a>)<br>
+  <ul>
+    <li>Make ActogramJ a Maven project, so it can be compiled with Fiji's new
+        compilation workflow.
+    <li>New icons.
+    <li>Restore pointer mode (pointing, selection, or drawing a freerunning
+        period triangle) when changing the displayed actogram.
+    <li>Clamp the selection in case the mouse is moved outside of the actogram
+        data (instead of not drawing the selection at all).
+    <li>Introduce markers.
+    <li>Calculate the acrophases over a selection (and optionally fit a regression
+        line to them).
+    <li>Calculate the on-/offsets over a selection (and optionally fit regression
+        lines to them).
+  </ul><br><br>
   <li><b>Version v0.8</b> (<a href="versions/v0.8/ActogramJ_.jar">download</a>)<br>
   <ul>
     <li>Fix a bug when exporting multiple actograms to pdf.
