@@ -1,3 +1,18 @@
+Version v0.9:
+-------------
+* Make ActogramJ a Maven project, so it can be compiled with Fiji's new
+  compilation workflow.
+* New icons.
+* Restore pointer mode (pointing, selection, or drawing a freerunning period
+  triangle) when changing the displayed actogram.
+* Clamp the selection in case the mouse is moved outside of the actogram data
+  (instead of not drawing the selection at all).
+* Introduce markers
+* Calculate the acrophases over a selection (and optionally fit a regression
+  line to them).
+* Calculate the on-/offsets over a selection (and optionally fit regression
+  lines to them).
+
 Version v0.8:
 -------------
 * Fix a bug when exporting multiple actograms to pdf.
