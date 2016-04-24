@@ -1,3 +1,7 @@
+Version v1.0:
+-------------
+* Fix an issue with Java 7 that causes an IllegalStateException.
+
 Version v0.9:
 -------------
 * Make ActogramJ a Maven project, so it can be compiled with Fiji's new
