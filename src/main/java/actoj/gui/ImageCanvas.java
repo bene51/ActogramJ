@@ -458,7 +458,9 @@ public class ImageCanvas extends JPanel {
 		clear();
 		addAll(ac);
 		invalidate();
-		validateTree();
+		synchronized(getTreeLock()) {
+			validateTree();
+		}
 		getParent().doLayout();
 		repaint();
 	}
@@ -474,7 +476,9 @@ public class ImageCanvas extends JPanel {
 		addAll(ac);
 
 		invalidate();
-		validateTree();
+		synchronized(getTreeLock()) {
+			validateTree();
+		}
 		getParent().doLayout();
 		repaint();
 	}
