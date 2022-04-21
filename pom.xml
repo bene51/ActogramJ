@@ -13,7 +13,7 @@
 	</parent>
 	
 	<groupId>sc.fiji</groupId>
-	<artifactId>ActogramJ</artifactId>
+	<artifactId>ActogramJ_</artifactId>
 	<version>1.0</version>
 
 	<name>ActogramJ</name>
