@@ -1,8 +1,5 @@
 package actoj.gui;
 
-import ij.IJ;
-import ij.gui.GenericDialog;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -27,6 +24,9 @@ import javax.swing.tree.TreePath;
 import actoj.core.Actogram;
 import actoj.core.ActogramGroup;
 import actoj.core.ExternalVariable;
+import ij.IJ;
+import ij.gui.GenericDialog;
+import ij.io.SaveDialog;
 
 @SuppressWarnings("serial")
 public class TreeView extends JPanel implements TreeSelectionListener {
@@ -155,6 +155,18 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 			}
 		});
 		popup.add(item);
+		item = new JMenuItem("Export markers");
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(actogramClicked != null) {
+					exportMarkers(actogramClicked, actogramGroupClicked);
+					actogramClicked = null;
+					actogramGroupClicked = null;
+				}
+			}
+		});
+		popup.add(item);
 		item = new JMenuItem("Remove marker");
 		item.addActionListener(new ActionListener() {
 			@Override
@@ -185,6 +197,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 				Object o = p.getLastPathComponent();
 				if(o != null && o instanceof Actogram && e.isPopupTrigger()) {
 					actogramClicked = (Actogram)o;
+					actogramGroupClicked = (ActogramGroup)p.getParentPath().getLastPathComponent();
 					popup.show(e.getComponent(), e.getX(), e.getY());
 				}
 			}
@@ -252,6 +265,27 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		ag.removeMarker(idx);
 
 		fireMarkersChanged();
+	}
+
+	private static class Line {
+
+	}
+
+	public void exportMarkers(Actogram ag, ActogramGroup parent) {
+		int nMarkers = ag.nMarkers();
+		if(nMarkers == 0) {
+			IJ.showMessage("No marker");
+			return;
+		}
+		String defaultName = String.valueOf(parent.name) + ag.name + "_markers.csv";
+		SaveDialog sd = new SaveDialog("Export markers", defaultName, ".csv");
+		try {
+			ag.exportMarkers(String.valueOf(sd.getDirectory()) + sd.getFileName());
+		} catch(Exception ex) {
+			IJ.error(ex.getMessage());
+			ex.printStackTrace();
+			return;
+		}
 	}
 
 	public void changeMarkerColor(Actogram ag) {

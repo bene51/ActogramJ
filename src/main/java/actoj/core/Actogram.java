@@ -1,7 +1,12 @@
 package actoj.core;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import ij.IJ;
 
 /**
  * Representation of the data of one actogram.
@@ -115,6 +120,59 @@ public class Actogram {
 
 	public void replaceMarker(int i, MarkerList ml) {
 		markers.set(i, ml);
+	}
+
+	public void exportMarkers(String path) throws IOException {
+		if(this.markers.size() == 0) {
+			IJ.error("No markers");
+			return;
+		}
+		TimeInterval T = new TimeInterval(this.SAMPLES_PER_PERIOD * this.interval.millis);
+
+		int nRows = 0;
+		int nCols = this.markers.size() + 1;
+
+		for(MarkerList m : this.markers) {
+			double pos = m.getCalibration() * m.getPosition(m.size() - 1);
+			int period = (int) Math.floor(pos / T.millis);
+			if (period > nRows)
+				nRows = period;
+		}
+		nRows++;
+
+		String[][] data = new String[nRows][nCols];
+
+		for(int markerListIndex = 0; markerListIndex < this.markers.size(); markerListIndex++) {
+			MarkerList ml = this.markers.get(markerListIndex);
+			for(int posI : ml) {
+				double pos = ml.getCalibration() * posI;
+				int period = (int) Math.floor(pos / T.millis);
+				double millisWithinPeriod = pos - period * T.millis;
+				data[period][markerListIndex + 1] = (new TimeInterval(millisWithinPeriod)).toString();
+				data[period][0] = Integer.toString(period);
+			}
+		}
+
+		PrintStream out = new PrintStream(new FileOutputStream(path));
+
+		out.print("Period");
+		for (MarkerList m : this.markers)
+			out.print("\t" + m.getName());
+		out.println();
+
+		for (int row = 0; row < data.length; row++) {
+			if (data[row][0] != null) {
+				out.print(data[row][0]);
+				for (int col = 1; col < (data[row]).length; col++) {
+					String s = data[row][col];
+					if (s == null)
+						s = "*";
+					out.print("\t" + s);
+				}
+				out.println();
+			}
+		}
+		out.close();
 	}
 
 	/**
